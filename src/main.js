@@ -2,11 +2,11 @@
 
 const FILM_COUNT = 5;
 const FILM_EXTRA_SECTION_COUNT = 2;
-const FILM_EXTRA_COUNT = 2
+const FILM_EXTRA_COUNT = 2;
 
 const siteHeaderElement = document.querySelector(`.header`);
-const siteMainElement = document.querySelector('.main');
-const siteFooterElement = document.querySelector('.footer');
+const siteMainElement = document.querySelector(`.main`);
+const siteFooterElement = document.querySelector(`.footer`);
 
 
 const createUserTitle = () => {
@@ -32,7 +32,7 @@ const createSiteMenu = () => {
       <a href="#stats" class="main-navigation__additional">Stats</a>
     </nav>`
   );
-}
+};
 
 const createSiteSort = () => {
   return (
@@ -43,7 +43,7 @@ const createSiteSort = () => {
       <li><a href="#" class="sort__button">Sort by rating</a></li>
     </ul>`
   );
-}
+};
 
 const createFilms = () => {
   return (
@@ -57,7 +57,7 @@ const createFilms = () => {
       </section>
     </section>`
   );
-}
+};
 
 const createFilmCard = () => {
   return (
@@ -79,13 +79,13 @@ const createFilmCard = () => {
       </form>
     </article>`
   );
-}
+};
 
 const createButtonShowMore = () => {
   return (
     `<button class="films-list__show-more">Show more</button>`
   );
-}
+};
 
 const createFilmExtra = () => {
   return (
@@ -96,14 +96,14 @@ const createFilmExtra = () => {
       </div>
     </section>`
   );
-}
+};
 
 const createFilmStats = () => {
   return (
     `<!-- Количество фильмов -->
     <p>130 291 movies inside</p>`
   );
-}
+};
 
 
 const render = (container, template, place = `beforeend`) => {
@@ -115,8 +115,8 @@ render(siteMainElement, createSiteMenu());
 render(siteMainElement, createSiteSort());
 render(siteMainElement, createFilms());
 
-const filmsElement = siteMainElement.querySelector('.films');
-let filmListContainer = filmsElement.querySelector('.films-list__container');
+const filmsElement = siteMainElement.querySelector(`.films`);
+let filmListContainer = filmsElement.querySelector(`.films-list__container`);
 
 for (let i = 0; i < FILM_COUNT; i++) {
   render(filmListContainer, createFilmCard());
@@ -128,11 +128,11 @@ for (let i = 0; i < FILM_EXTRA_SECTION_COUNT; i++) {
   render(filmListContainer, createFilmExtra());
 }
 
-const filmExtraElementList = filmsElement.querySelectorAll('.films-list--extra');
+const filmExtraElementList = filmsElement.querySelectorAll(`.films-list--extra`);
 
 for (let i = 0; i < filmExtraElementList.length; i++) {
-  filmListContainer = filmExtraElementList[i].querySelector('.films-list__container');
-  for (let i = 0; i < FILM_EXTRA_COUNT; i++) {
+  filmListContainer = filmExtraElementList[i].querySelector(`.films-list__container`);
+  for (let j = 0; j < FILM_EXTRA_COUNT; i++) {
     render(filmListContainer, createFilmCard());
   }
 }
