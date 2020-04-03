@@ -1,4 +1,4 @@
-export const createSiteSort = () => {
+const createSiteSort = () => {
   return (
     `<ul class="sort">
       <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
@@ -7,3 +7,5 @@ export const createSiteSort = () => {
     </ul>`
   );
 };
+
+export {createSiteSort};

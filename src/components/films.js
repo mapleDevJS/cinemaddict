@@ -1,4 +1,4 @@
-export const createFilms = () => {
+const createFilms = () => {
   return (
     `<section class="films">
       <section class="films-list">
@@ -10,3 +10,5 @@ export const createFilms = () => {
     </section>`
   );
 };
+
+export {createFilms};

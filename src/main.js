@@ -1,4 +1,11 @@
-"use strict";
+import {createUserTitle} from "./components/user-title.js";
+import {createSiteMenu} from "./components/menu.js";
+import {createSiteSort} from "./components/sort.js";
+import {createFilms} from "./components/films.js";
+import {createFilmCard} from "./components/filmcard.js";
+import {createButtonShowMore} from "./components/button-show-more.js";
+import {createFilmExtra} from "./components/film-extra.js";
+import {createFilmStats} from "./components/stats.js";
 
 const FILM_COUNT = 5;
 const FILM_EXTRA_SECTION_COUNT = 2;
@@ -34,7 +41,8 @@ const filmExtraElementList = filmsElement.querySelectorAll(`.films-list--extra`)
 
 for (let i = 0; i < filmExtraElementList.length; i++) {
   filmListContainer = filmExtraElementList[i].querySelector(`.films-list__container`);
-  for (let j = 0; j < FILM_EXTRA_COUNT; i++) {
+  console.log(filmListContainer);
+  for (let j = 0; j < FILM_EXTRA_COUNT; j++) {
     render(filmListContainer, createFilmCard());
   }
 }
