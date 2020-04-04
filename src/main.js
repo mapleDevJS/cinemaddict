@@ -1,15 +1,8 @@
 import {createUserTitle} from "./components/user-title.js";
 import {createSiteMenu} from "./components/menu.js";
 import {createSiteSort} from "./components/sort.js";
-import {createFilms} from "./components/films.js";
-import {createFilmCard} from "./components/filmcard.js";
-import {createButtonShowMore} from "./components/button-show-more.js";
-import {createFilmExtra} from "./components/film-extra.js";
+import {createFilmList} from "./components/film-list.js";
 import {createFilmStats} from "./components/stats.js";
-
-const FILM_COUNT = 5;
-const FILM_EXTRA_SECTION_COUNT = 2;
-const FILM_EXTRA_COUNT = 2;
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
@@ -22,28 +15,5 @@ const render = (container, template, place = `beforeend`) => {
 render(siteHeaderElement, createUserTitle());
 render(siteMainElement, createSiteMenu());
 render(siteMainElement, createSiteSort());
-render(siteMainElement, createFilms());
-
-const filmsElement = siteMainElement.querySelector(`.films`);
-let filmListContainer = filmsElement.querySelector(`.films-list__container`);
-
-for (let i = 0; i < FILM_COUNT; i++) {
-  render(filmListContainer, createFilmCard());
-}
-
-render(filmsElement, createButtonShowMore());
-
-for (let i = 0; i < FILM_EXTRA_SECTION_COUNT; i++) {
-  render(filmListContainer, createFilmExtra());
-}
-
-const filmExtraElementList = filmsElement.querySelectorAll(`.films-list--extra`);
-
-for (const element of filmExtraElementList) {
-  for (let j = 0; j < FILM_EXTRA_COUNT; j++) {
-    filmListContainer = element.querySelector(`.films-list__container`);
-    render(filmListContainer, createFilmCard());
-  }
-}
-
+render(siteMainElement, createFilmList());
 render(siteFooterElement, createFilmStats());
