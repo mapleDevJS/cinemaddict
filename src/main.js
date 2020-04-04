@@ -39,10 +39,9 @@ for (let i = 0; i < FILM_EXTRA_SECTION_COUNT; i++) {
 
 const filmExtraElementList = filmsElement.querySelectorAll(`.films-list--extra`);
 
-for (let i = 0; i < filmExtraElementList.length; i++) {
-  filmListContainer = filmExtraElementList[i].querySelector(`.films-list__container`);
-  console.log(filmListContainer);
+for (const element of filmExtraElementList) {
   for (let j = 0; j < FILM_EXTRA_COUNT; j++) {
+    filmListContainer = element.querySelector(`.films-list__container`);
     render(filmListContainer, createFilmCard());
   }
 }
