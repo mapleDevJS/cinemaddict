@@ -1,3 +1,11 @@
+export const renderFilmCards = (cardsQuantity) => {
+  let markup = ``;
+  for (let i = 0; i < cardsQuantity; i++) {
+    markup += createFilmCard();
+  }
+  return markup;
+};
+
 export const createFilmCard = () => {
   return (
     `<article class="film-card">
@@ -19,3 +27,5 @@ export const createFilmCard = () => {
     </article>`
   );
 };
+
+
