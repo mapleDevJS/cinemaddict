@@ -1,4 +1,4 @@
-import {createFilmCard} from "./film-card.js";
+import {renderFilmCards} from "./film-card.js";
 import {createButtonShowMore} from "./button-showmore.js";
 import {createFilmExtra} from "./film-list-extra.js";
 
@@ -19,7 +19,7 @@ export const createFilmList = () => {
       <section class="films-list">
         <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
         <div class="films-list__container">
-          ${getFilmCards()}
+          ${renderFilmCards(QUANTITY_FILMS_IN_CARD)}
         </div>
         ${createButtonShowMore()}
       </section>
