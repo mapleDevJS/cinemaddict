@@ -5,17 +5,9 @@ import {createFilmExtra} from "./film-list-extra.js";
 const QUANTITY_FILMS_IN_CARD = 5;
 const QUANTITY_FILMEXTRA_SECTIONS = 2;
 
-const getFilmCards = () => {
+const renderFilmExtras = (sectionQuntity) => {
   let markup = ``;
-  for (let i = 0; i < QUANTITY_FILMS_IN_CARD; i++) {
-    markup += createFilmCard();
-  }
-  return markup;
-};
-
-const getFilmExtras = () => {
-  let markup = ``;
-  for (let i = 0; i < QUANTITY_FILMEXTRA_SECTIONS; i++) {
+  for (let i = 0; i < sectionQuntity; i++) {
     markup += createFilmExtra();
   }
   return markup;
@@ -31,7 +23,7 @@ export const createFilmList = () => {
         </div>
         ${createButtonShowMore()}
       </section>
-      ${getFilmExtras()}
+      ${renderFilmExtras(QUANTITY_FILMEXTRA_SECTIONS)}
     </section>`
   );
 };
