@@ -23,7 +23,7 @@ const getFilmExtras = () => {
   return markup;
 };
 
-const createFilmList = () => {
+export const createFilmList = () => {
   return (
     `<section class="films">
       <section class="films-list">
@@ -37,5 +37,3 @@ const createFilmList = () => {
     </section>`
   );
 };
-
-export {createFilmList};
