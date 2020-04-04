@@ -2,14 +2,12 @@ import {createFilmCard} from "./film-card.js";
 import {createButtonShowMore} from "./button-showmore.js";
 import {createFilmExtra} from "./film-list-extra.js";
 
-const Count = {
-  FILM: 5,
-  EXTRA_SECTION: 2
-};
+const QUANTITY_FILMS_IN_CARD = 5;
+const QUANTITY_FILMEXTRA_SECTIONS = 2;
 
 const getFilmCards = () => {
   let markup = ``;
-  for (let i = 0; i < Count.FILM; i++) {
+  for (let i = 0; i < QUANTITY_FILMS_IN_CARD; i++) {
     markup += createFilmCard();
   }
   return markup;
@@ -17,7 +15,7 @@ const getFilmCards = () => {
 
 const getFilmExtras = () => {
   let markup = ``;
-  for (let i = 0; i < Count.EXTRA_SECTION; i++) {
+  for (let i = 0; i < QUANTITY_FILMEXTRA_SECTIONS; i++) {
     markup += createFilmExtra();
   }
   return markup;
