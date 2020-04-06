@@ -1,9 +1,8 @@
+import {QUANTITY_FILMS_IN_CARD} from "./film-card.js";
+import {QUANTITY_FILMEXTRA_SECTIONS} from "./film-list-extra.js";
 import {renderFilmCards} from "./film-card.js";
 import {createButtonShowMore} from "./button-showmore.js";
 import {createFilmExtra} from "./film-list-extra.js";
-
-const QUANTITY_FILMS_IN_CARD = 5;
-const QUANTITY_FILMEXTRA_SECTIONS = 2;
 
 const renderFilmExtras = (sectionQuntity) => {
   let markup = ``;

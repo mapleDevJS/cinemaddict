@@ -1,3 +1,6 @@
+export const QUANTITY_FILMS_IN_CARD = 5;
+export const QUANTITY_FILMS_IN_EXTRA_SECTION = 2;
+
 export const renderFilmCards = (cardsQuantity) => {
   let markup = ``;
   for (let i = 0; i < cardsQuantity; i++) {
