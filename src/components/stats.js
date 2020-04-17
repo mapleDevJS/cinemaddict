@@ -1,5 +1,6 @@
-export const createFilmStats = () => {
+export const createFilmStats = (films) => {
+  const total = films.length;
   return (
-    `<p>130 291 movies inside</p>`
+    `<p>${total} movies inside</p>`
   );
 };
