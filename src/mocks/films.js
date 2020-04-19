@@ -1,5 +1,5 @@
-import {MONTH_NAMES} from "../helpers/consts";
-import {getRandomItem, getRandomIntInclusive, getRandomBoolean} from "../helpers/utils";
+import {MONTH_NAMES} from "../util/consts";
+import {getRandomItem, getRandomIntInclusive, getRandomBoolean} from "../util/util";
 
 const SENTENCE_QUANTITY = {
   MIN: 1,

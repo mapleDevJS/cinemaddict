@@ -1,4 +1,4 @@
-import {getRandomIntInclusive} from "../helpers/utils";
+import {getRandomIntInclusive} from "../util/util";
 
 const ProfileRank = {
   NOVICE: {
