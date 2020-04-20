@@ -7,6 +7,7 @@ import {createFilmStats} from "./components/stats";
 import {generateFilms} from "./mocks/films";
 import {createFilmCard} from "./components/film-card";
 import {addListenerOnShowMoreButton} from "./components/button-showmore";
+import {render} from "./util/util";
 
 const QUANTITY_FILMS = {
   TOTAL: 17,
@@ -18,9 +19,9 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);
 
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
-};
+// const render = (container, template, place = `beforeend`) => {
+//   container.insertAdjacentHTML(place, template);
+// };
 
 const createFilmCards = (start, end) => {
   let markup = ``;
