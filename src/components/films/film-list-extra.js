@@ -1,5 +1,5 @@
-import {createFilmCard} from "../components/film-card";
-import {sortArrayOfObjectsByKey} from "../util/util";
+import {createFilmCard} from "./film-card";
+import {sortArrayOfObjectsByKey} from "../../util/util";
 
 let SECTION_NAMES = new Map([
   [`rating`, `Top Rated`],

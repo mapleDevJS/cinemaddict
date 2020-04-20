@@ -1,12 +1,12 @@
 import {createUserTitle} from "./components/user-title";
 import {createSiteMenu} from "./components/menu";
 import {createSiteSort} from "./components/sort";
-import {createFilmList} from "./components/film-list";
-import {createFilmDetailsTemplate} from "./components/film-details";
+import {createFilmList} from "./components/films/film-list";
+import {createFilmDetailsTemplate} from "./components/films/film-details";
 import {createFilmStats} from "./components/stats";
 import {generateFilms} from "./mocks/films";
-import {createFilmCard} from "./components/film-card";
-import {addListenerOnShowMoreButton} from "./components/button-showmore";
+import {createFilmCard} from "./components/films/film-card";
+import {addListenerOnShowMoreButton} from "./components/films/button-showmore";
 import {render} from "./util/util";
 
 const QUANTITY_FILMS = {
@@ -51,4 +51,4 @@ render(siteMainElement, createSiteSort());
 render(siteMainElement, createFilmList(films, createFilmCards(0, QUANTITY_FILMS.ON_START)));
 render(siteFooterElement, createFilmStats(films));
 // render(siteFooterElement, createFilmDetailsTemplate(films[0], 0), `afterend`);
-addListenerOnShowMoreButton(renderFilmCards);
+// addListenerOnShowMoreButton(renderFilmCards);
