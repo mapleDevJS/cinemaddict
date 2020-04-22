@@ -7,11 +7,6 @@ const RenderPosition = {
 
 export const getRandomBoolean = () => Math.random() > 0.5;
 
-const getRandomIntegerNumber = (max) => {
-  return Math.floor(Math.random() * max);
-};
-
-
 export const getRandomItem = (array) => {
   return shuffle(array.slice()).shift();
 };
@@ -39,7 +34,7 @@ export const getPlurals = (count, variants) => {
 
 export const getFullDate = (date) => {
   return `${date.getDate()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
-}
+};
 
 export const sortArrayOfObjectsByKey = (key, order = `desc`) => {
   return function innerSort(a, b) {
