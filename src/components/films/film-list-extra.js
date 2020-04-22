@@ -1,41 +1,29 @@
-import {createFilmCard} from "./film-card";
-import {sortArrayOfObjectsByKey} from "../../util/util";
+import {createElement} from "../../util/dom-util";
 
-let SECTION_NAMES = new Map([
-  [`rating`, `Top Rated`],
-  [`comments`, `Most commented`]
-]
-);
-
-const createFilmCards = (films, quantity) => {
-  let markup = ``;
-  for (let i = 0; i < quantity; i++) {
-    markup += createFilmCard(films[i]);
-
+export default class FilmListExtra {
+  constructor(title) {
+    this._title = title;
+    this._element = null;
   }
-  return markup;
-};
 
-const getTopFilms = (films, key) => {
-  return films.sort(sortArrayOfObjectsByKey(key)).slice(0, 2);
-};
-
-const createSectionMarkup = (name, filmCards) => {
-  return (
-    `<section class="films-list--extra">
-        <h2 class="films-list__title">${name}</h2>
-        <div class="films-list__container">
-          ${filmCards}
-        </div>
-    </section>`);
-};
-
-export const createExtraSections = (films) => {
-  let markup = ``;
-  let filmCards = ``;
-  for (let [key, value] of SECTION_NAMES) {
-    filmCards = createFilmCards(getTopFilms(films, key), 2);
-    markup += createSectionMarkup(value, filmCards);
+  getTemplate() {
+    return (
+      `<section class="films-list--extra">
+        <h2 class="films-list__title">${this._title}</h2>
+        <div class="films-list__container"></div>
+      </section>`
+    );
   }
-  return markup;
-};
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
