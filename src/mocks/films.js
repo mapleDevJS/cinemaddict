@@ -1,4 +1,3 @@
-import {MONTH_NAMES} from "../util/consts";
 import {getRandomItem, getRandomIntInclusive, getRandomBoolean} from "../util/util";
 
 const SENTENCE_QUANTITY = {
@@ -145,6 +144,8 @@ const ACTORS_QUANTITY = {
 
 const DESCRIPTIONS = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
+const EMOJI = [`smile`, `sleeping`, `puke`, `angry`];
+
 const getRandomName = () => {
   return `${getRandomItem(FIRST_NAMES)} ${getRandomItem(LAST_NAMES)}`;
 };
@@ -168,7 +169,6 @@ const getRandomListOfGenres = (quantity) => {
   for (let i = 1; i <= max; i++) {
     genres.push(getRandomItem(GENRES));
   }
-  // return genres.join(`, `);
   return genres;
 };
 
@@ -204,10 +204,7 @@ const generateFilm = () => {
     director: getRandomName(),
     writers: getRandomListOfNames(WRITERS_QUANTITY),
     actors: getRandomListOfNames(ACTORS_QUANTITY),
-    release: getRandomDate(RELEASE_DATE.FIRST, RELEASE_DATE.LAST).getDate() + ` `
-      + MONTH_NAMES[getRandomDate(RELEASE_DATE.FIRST, RELEASE_DATE.LAST).getMonth()] + ` `
-      + getRandomDate(new Date(RELEASE_DATE.FIRST), RELEASE_DATE.LAST).getFullYear(),
-
+    release: getRandomDate(RELEASE_DATE.FIRST, RELEASE_DATE.LAST),
     runtime: getRandomDuration(),
     country: getRandomItem(COUNTRIES),
     genres: getRandomListOfGenres(GENRES_QUANTITY),
@@ -222,8 +219,6 @@ const generateFilm = () => {
 export const generateFilms = (count) => {
   return new Array(count).fill(``).map(generateFilm);
 };
-
-const EMOJI = [`smile`, `sleeping`, `puke`, `angry`];
 
 const getCommentDate = (date) => {
   return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
