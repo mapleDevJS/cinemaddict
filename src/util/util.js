@@ -1,11 +1,19 @@
+import {MONTH_NAMES} from "../util/consts";
+
+const RenderPosition = {
+  AFTER_END: `afterend`,
+  BEFORE_END: `beforeend`
+};
+
 export const getRandomBoolean = () => Math.random() > 0.5;
 
-export const getRandomIntegerNumber = (max) => {
+const getRandomIntegerNumber = (max) => {
   return Math.floor(Math.random() * max);
 };
 
+
 export const getRandomItem = (array) => {
-  return array[Math.floor(Math.random() * array.length)];
+  return shuffle(array.slice()).shift();
 };
 
 export const getRandomIntInclusive = (min, max) => {
@@ -14,12 +22,7 @@ export const getRandomIntInclusive = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const RenderPosition = {
-  AFTER_BEGIN: `afterbegin`,
-  BEFORE_END: `beforeend`
-};
-
-export const shuffle = (array) => {
+const shuffle = (array) => {
   let j;
 
   for (let i = array.length - 1; i > 0; i--) {
@@ -29,6 +32,14 @@ export const shuffle = (array) => {
 
   return array;
 };
+
+export const getPlurals = (count, variants) => {
+  return (count === 1) ? variants[0] : variants[1];
+};
+
+export const getFullDate = (date) => {
+  return `${date.getDate()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+}
 
 export const sortArrayOfObjectsByKey = (key, order = `desc`) => {
   return function innerSort(a, b) {
@@ -54,7 +65,7 @@ export const sortArrayOfObjectsByKey = (key, order = `desc`) => {
 
 export const render = (container, element, place = RenderPosition.BEFORE_END) => {
   switch (place) {
-    case RenderPosition.AFTER_BEGIN:
+    case RenderPosition.AFTER_END:
       container.prepend(element);
       break;
     case RenderPosition.BEFORE_END:
