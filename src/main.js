@@ -69,13 +69,13 @@ const renderFilmCard = (filmListContainer, film) => {
 
   closeButton.addEventListener(`click`, onFilmDetailsClose);
 
-  render(filmListContainer, filmCardComponent.getElement());
+  render(filmListContainer, filmCardComponent);
 };
 
 const renderFilmList = (filmListComponent) => {
   const filmListElement = filmListComponent.getElement().querySelector(`.films-list`);
   if (films.length === 0) {
-    render(filmListElement, new NoFilms().getElement());
+    render(filmListElement, new NoFilms());
     return;
   }
 
@@ -88,7 +88,7 @@ const renderFilmList = (filmListComponent) => {
     });
 
   const buttonShowMoreComponent = new ButtonShowMore();
-  render(filmListElement, buttonShowMoreComponent.getElement());
+  render(filmListElement, buttonShowMoreComponent);
 
   const onShowMoreButtonClick = () => {
     const prevTasksCount = showingTasksCount;
@@ -108,12 +108,12 @@ const renderFilmList = (filmListComponent) => {
 
 const films = generateFilms(QUANTITY_FILMS.TOTAL);
 
-render(siteHeaderElement, new UserTitle().getElement());
-render(siteMainElement, new Menu(films).getElement());
-render(siteMainElement, new Sort().getElement());
+render(siteHeaderElement, new UserTitle());
+render(siteMainElement, new Menu(films));
+render(siteMainElement, new Sort());
 
 const filmListComponent = new FilmList(films);
-render(siteMainElement, filmListComponent.getElement());
+render(siteMainElement, filmListComponent);
 
 renderFilmList(filmListComponent);
 
@@ -124,7 +124,7 @@ const getTopFilms = (key) => {
 const renderFilmExtraSections = () => {
   SECTION_NAMES.forEach((name, key) => {
     const filmListExtraComponent = new FilmListExtra(name);
-    render(siteMainElement.querySelector(`.films`), filmListExtraComponent.getElement());
+    render(siteMainElement.querySelector(`.films`), filmListExtraComponent);
 
     const filmListContainer = filmListExtraComponent.getElement().querySelector(`.films-list__container`);
     getTopFilms(key).forEach((film) => renderFilmCard(filmListContainer, film));
@@ -133,4 +133,4 @@ const renderFilmExtraSections = () => {
 };
 
 renderFilmExtraSections();
-render(siteFooterElement, new Stats(films).getElement());
+render(siteFooterElement, new Stats(films));
