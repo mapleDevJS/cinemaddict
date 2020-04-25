@@ -1,5 +1,5 @@
 import {createElement} from "../../util/dom-util";
-import {getPlurals, getFullDate} from "../../util/util";
+import {pluralize, getFullDate} from "../../util/util";
 
 const CARD_CONTROLS = new Map([
   [`watchlist`, `Add to watchlist`],
@@ -13,6 +13,16 @@ const EMOJIS = [
   `puke`,
   `angry`
 ];
+
+// const FilmInfo = {
+//   director: `Director`,
+//   writers: `Writer`,
+//   actors: `Actor`,
+//   release: `Release`,
+//   runtime: `Runtime`,
+//   country: `Country`,
+//   genres: `Genre`
+// };
 
 export default class FilmDetails {
   constructor(film) {
@@ -28,6 +38,14 @@ export default class FilmDetails {
     }, ``);
   }
 
+  _getGenresMarkup() {
+    return this._film.genres.map((genre) => {
+      return (
+        `<span class="film-details__genre">${genre}</span>`
+      );
+    }).join(`\n`);
+  }
+
   _getFilmDetails() {
     const dataList = [
       {
@@ -35,11 +53,11 @@ export default class FilmDetails {
         value: this._film.director
       },
       {
-        name: getPlurals(this._film.writers.length, [`Writer`, `Writers`]),
+        name: pluralize(this._film.writers.length, [`Writer`, `Writers`]),
         value: this._film.writers
       },
       {
-        name: getPlurals(this._film.actors.length, [`Actor`, `Actors`]),
+        name: pluralize(this._film.actors.length, [`Actor`, `Actors`]),
         value: this._film.actors
       },
       {
@@ -55,55 +73,58 @@ export default class FilmDetails {
         value: this._film.country
       },
       {
-        name: getPlurals(this._film.genres.length, [`Genre`, `Genres`]),
+        name: pluralize(this._film.genres.length, [`Genre`, `Genres`]),
         value: this._getGenresMarkup()
       },
     ];
 
-    const rowsMarkup = dataList
-      .reduce((prev, {name, value}) => {
+
+    // return Object.keys(FilmInfo)
+    //   .map((key) => {
+    //     return (
+    //       `<tr class="film-details__row">
+    //          <td class="film-details__term">${FilmInfo[key]}</td>
+    //          <td class="film-details__cell">${this._film[key]}</td>
+    //       </tr>`
+    //     );
+    //   }).join(`\n`);
+
+    return dataList
+      .map(({name, value}) => {
         return (
-          `${prev}<tr class="film-details__row">
+          `<tr class="film-details__row">
             <td class="film-details__term">${name}</td>
             <td class="film-details__cell">${value}</td>
           </tr>`
         );
-      }, ``);
-
-    return (
-      `<table class="film-details__table">
-        ${rowsMarkup}
-      </table>`
-    );
+      }).join(`\n`);
   }
 
-  _getComments() {
+  _getEmoji(emoji) {
     return (
-      `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" checked>
-      <label class="film-details__emoji-label" for="emoji-smile">
-        <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-      </label>`
-    );
-  }
-
-  _getEmojiControls() {
-    return EMOJIS.map((emoji) =>
       `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
         <label class="film-details__emoji-label" for="emoji-${emoji}">
         <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji ${emoji}">
       </label>`
+    );
+  }
+
+  _getEmojiMarkup() {
+    return EMOJIS.map((emoji) =>
+      this._getEmoji(emoji)
     ).join(`\n`);
   }
 
-  _getCardControls() {
-    let markup = ``;
-    CARD_CONTROLS.forEach((value, key) => {
-      markup +=
+  _getButton(key, value) {
+    return (
       `<input type="checkbox" class="film-details__control-input visually-hidden" id="${key}" name="${key}">
-      <label for="${key}" class="film-details__control-label film-details__control-label--${key}">${value}</label>`;
-    });
+      <label for="${key}" class="film-details__control-label film-details__control-label--${key}">${value}</label>`);
+  }
 
-    return markup;
+  _getButtonsMarkup() {
+    return [...CARD_CONTROLS.entries()]
+      .map(([value, key]) => this._getButton(value, key))
+      .join(`\n`);
   }
 
   getTemplate() {
@@ -144,7 +165,7 @@ export default class FilmDetails {
           </div>
 
           <section class="film-details__controls">
-            ${this._getCardControls()}
+            ${this._getButtonsMarkup()}
           </section>
         </div>
 
@@ -164,7 +185,7 @@ export default class FilmDetails {
               </label>
 
               <div class="film-details__emoji-list">
-                ${this._getEmojiControls()}
+                ${this._getEmojiMarkup()}
               </div>
             </div>
           </section>
