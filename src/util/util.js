@@ -28,7 +28,7 @@ const shuffle = (array) => {
   return array;
 };
 
-export const getPlurals = (count, variants) => {
+export const pluralize = (count, variants) => {
   return (count === 1) ? variants[0] : variants[1];
 };
 
