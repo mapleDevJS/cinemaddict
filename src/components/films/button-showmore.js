@@ -1,4 +1,5 @@
 import {createElement} from "../../util/dom-util";
+
 export default class ButtonShowMore {
   constructor() {
     this._element = null;
