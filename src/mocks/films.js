@@ -1,4 +1,4 @@
-import {getRandomItem, getRandomIntInclusive, getRandomBoolean, getFullDate} from "../util/util";
+import {getRandomItem, getRandomIntInclusive, getRandomBoolean} from "../util/util";
 
 const SENTENCE_QUANTITY = {
   MIN: 1,
