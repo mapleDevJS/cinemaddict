@@ -1,10 +1,5 @@
 import {MONTH_NAMES} from "../util/consts";
 
-const RenderPosition = {
-  AFTER_END: `afterend`,
-  BEFORE_END: `beforeend`
-};
-
 export const getRandomBoolean = () => Math.random() > 0.5;
 
 export const getRandomItem = (array) => {
@@ -56,15 +51,4 @@ export const sortArrayOfObjectsByKey = (key, order = `desc`) => {
       (order === `desc`) ? (comparison * -1) : comparison
     );
   };
-};
-
-export const render = (container, element, place = RenderPosition.BEFORE_END) => {
-  switch (place) {
-    case RenderPosition.AFTER_END:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFORE_END:
-      container.append(element);
-      break;
-  }
 };
