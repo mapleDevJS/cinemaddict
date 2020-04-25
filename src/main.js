@@ -8,7 +8,8 @@ import FilmCard from "./components/films/film-card";
 import NoFilms from "./components/films/no-films";
 import ButtonShowMore from "./components/films/button-showmore";
 import {generateFilms} from "./mocks/films";
-import {render, sortArrayOfObjectsByKey} from "./util/util";
+import {sortArrayOfObjectsByKey} from "./util/util";
+import {render} from "./util/dom-util";
 import FilmDetails from "./components/films/film-details";
 
 const QUANTITY_FILMS = {
