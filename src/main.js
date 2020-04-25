@@ -5,6 +5,7 @@ import Stats from "./components/stats";
 import FilmList from "./components/films/film-list";
 import FilmListExtra from "./components/films/film-list-extra";
 import FilmCard from "./components/films/film-card";
+import NoFilms from "./components/films/no-films";
 import ButtonShowMore from "./components/films/button-showmore";
 import {generateFilms} from "./mocks/films";
 import {render, sortArrayOfObjectsByKey} from "./util/util";
@@ -72,6 +73,11 @@ const renderFilmCard = (filmListContainer, film) => {
 
 const renderFilmList = (filmListComponent) => {
   const filmListElement = filmListComponent.getElement().querySelector(`.films-list`);
+  if (films.length === 0) {
+    render(filmListElement, new NoFilms().getElement());
+    return;
+  }
+
   const filmListContainer = filmListComponent.getElement().querySelector(`.films-list__container`);
 
   let showingTasksCount = QUANTITY_FILMS.ON_START;
