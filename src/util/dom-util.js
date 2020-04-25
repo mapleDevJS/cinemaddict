@@ -12,7 +12,7 @@ export const createElement = (template) => {
 
 export const render = (container, component, place = RenderPosition.BEFORE_END) => {
   switch (place) {
-    case RenderPosition.AFTER_BEGIN:
+    case RenderPosition.AFTER_END:
       container.prepend(component.getElement());
       break;
     case RenderPosition.BEFORE_END:
