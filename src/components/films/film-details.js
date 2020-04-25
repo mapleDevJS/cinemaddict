@@ -1,5 +1,5 @@
-import {createElement} from "../../util/dom-util";
 import {pluralize, getFullDate} from "../../util/util";
+import Abstract from "../abstract";
 
 const CARD_CONTROLS = new Map([
   [`watchlist`, `Add to watchlist`],
@@ -24,8 +24,9 @@ const EMOJIS = [
 //   genres: `Genre`
 // };
 
-export default class FilmDetails {
+export default class FilmDetails extends Abstract {
   constructor(film) {
+    super();
     this._film = film;
     this._element = null;
   }
@@ -193,17 +194,5 @@ export default class FilmDetails {
       </form>
     </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

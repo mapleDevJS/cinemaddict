@@ -1,4 +1,4 @@
-import {createElement} from "../util/dom-util";
+import Abstract from "./abstract";
 
 const FILTER_NAMES = [
   `all`,
@@ -7,10 +7,10 @@ const FILTER_NAMES = [
   `favourites`
 ];
 
-export default class Menu {
+export default class Menu extends Abstract {
   constructor(films) {
+    super();
     this._films = films;
-    this._element = null;
   }
 
   _generateFilters() {
@@ -53,17 +53,5 @@ export default class Menu {
         <a href="#stats" class="main-navigation__additional">Stats</a>
       </nav>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

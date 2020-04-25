@@ -1,10 +1,6 @@
-import {createElement} from "../../util/dom-util";
+import Abstract from "../abstract";
 
-export default class FilmList {
-  constructor() {
-    // this._films = films;
-    this._element = null;
-  }
+export default class FilmList extends Abstract {
 
   getTemplate() {
     return (
@@ -19,17 +15,5 @@ export default class FilmList {
 
       </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

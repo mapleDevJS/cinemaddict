@@ -1,5 +1,5 @@
-import {createElement} from "../../util/dom-util";
 import {pluralize} from "../../util/util";
+import Abstract from "../abstract";
 
 const CARD_CONTROLS = new Map([
   [`add-to-watchlist`, `Add to watchlist`],
@@ -7,19 +7,11 @@ const CARD_CONTROLS = new Map([
   [`favorite`, `Mark as favorite`]
 ]);
 
-export default class FilmCard {
+export default class FilmCard extends Abstract {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
   }
-
-  // _getButtons() {
-  //   let markup = ``;
-  //   CARD_CONTROLS.forEach((value, key) => {
-  //     markup += `<button class="film-card__controls-item button film-card__controls-item--${key}">${value}</button>`;
-  //   });
-  //   return markup;
-  // }
 
   _getButton(key, value) {
     return `<button class="film-card__controls-item button film-card__controls-item--${key}">${value}</button>`;
@@ -49,17 +41,5 @@ export default class FilmCard {
         </form>
       </article>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

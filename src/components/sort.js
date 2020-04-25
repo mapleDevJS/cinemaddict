@@ -1,4 +1,4 @@
-import {createElement} from "../util/dom-util";
+import Abstract from "./abstract";
 
 const SORT_TYPES = [
   `by default`,
@@ -6,11 +6,7 @@ const SORT_TYPES = [
   `by rating`
 ];
 
-export default class Sort {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Sort extends Abstract {
   _getSortItems() {
     return SORT_TYPES.map((type) =>
       `<li><a href="#" class="sort__button sort__button--active">Sort ${type}</a></li>`
@@ -23,17 +19,5 @@ export default class Sort {
         ${this._getSortItems()}
       </ul>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
