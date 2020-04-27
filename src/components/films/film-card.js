@@ -1,4 +1,4 @@
-import {pluralize} from "../../util/util";
+import {pluralize, getFullDate} from "../../util/util";
 import Abstract from "../abstract";
 
 const CARD_CONTROLS = new Map([
@@ -29,7 +29,7 @@ export default class FilmCard extends Abstract {
         <h3 class="film-card__title">${this._film.title}</h3>
         <p class="film-card__rating">${this._film.rating}</p>
         <p class="film-card__info">
-          <span class="film-card__year">${this._film.release}</span>
+          <span class="film-card__year">${getFullDate(this._film.release)}</span>
           <span class="film-card__duration">${this._film.runtime}</span>
           <span class="film-card__genre">${this._film.genres.shift()}</span>
         </p>
@@ -41,5 +41,20 @@ export default class FilmCard extends Abstract {
         </form>
       </article>`
     );
+  }
+
+  setPosterClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__poster`)
+      .addEventListener(`click`, handler);
+  }
+
+  setTitleClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__title`)
+      .addEventListener(`click`, handler);
+  }
+
+  setCommentsClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__comments`)
+      .addEventListener(`click`, handler);
   }
 }
