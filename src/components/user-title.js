@@ -1,5 +1,5 @@
 import {getRandomIntInclusive} from "../util/util";
-import {createElement} from "../util/dom-util";
+import Abstract from "./abstract";
 
 const ProfileRank = {
   NOVICE: {
@@ -16,12 +16,7 @@ const ProfileRank = {
   }
 };
 
-export default class UserTitle {
-  constructor() {
-    this._element = null;
-  }
-
-
+export default class UserTitle extends Abstract {
   _getProfileRank() {
     const rank = getRandomIntInclusive(0, 30);
 
@@ -47,18 +42,6 @@ export default class UserTitle {
         <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
       </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
