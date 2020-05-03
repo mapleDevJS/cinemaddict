@@ -27,6 +27,10 @@ export const pluralize = (count, variants) => {
   return (count === 1) ? variants[0] : variants[1];
 };
 
+export const getDateFromString = (date) => {
+  return new Date(date).valueOf();
+};
+
 export const getFullDate = (date) => {
   return `${date.getDate()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
 };
