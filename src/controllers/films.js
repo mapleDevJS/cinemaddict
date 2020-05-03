@@ -1,12 +1,11 @@
 import NoFilms from "../components/films/no-films";
-import FilmDetails from "../components/films/film-details";
-import FilmCard from "../components/films/film-card";
 import FilmsListExtra from "../components/films/films-list-extra";
 import {sortArrayOfObjectsByKey, getDateFromString} from "../util/util";
 import {render, remove} from "../util/dom-util";
 import {SortType} from "../components/sort";
 import {QUANTITY_FILMS} from "../util/consts";
 import ButtonShowMore from "../components/films/button-showmore";
+import MovieController from "./movie-controller";
 
 const SECTION_NAMES = new Map([
   [`rating`, `Top Rated`],
@@ -22,13 +21,10 @@ export default class FilmsController {
     this._noFilmsComponent = new NoFilms();
     this._buttonShowMore = new ButtonShowMore();
 
-    this._body = document.querySelector(`body`);
     this._filmsList = container.getElement().querySelector(`.films-list`);
     this._filmsListContainer = container.getElement().querySelector(`.films-list__container`);
 
     this._shownFilmsCount = QUANTITY_FILMS.ON_START;
-
-    // this._sortComponent.typeChangeHandler((sort) => this.render(this.films, sort));
   }
 
   _getTopFilms(films, key) {
@@ -66,37 +62,9 @@ export default class FilmsController {
   }
 
   _renderFilmCards(container, films) {
+    const movieController = new MovieController(container);
     films.forEach((film) => {
-      const filmDetailsComponent = new FilmDetails(film);
-      const openPopup = () => {
-        render(this._body, filmDetailsComponent);
-        filmDetailsComponent.setCloseButtonClickHandler(onFilmDetailsClose);
-      };
-
-      const onEscKeyDown = (evt) => {
-        const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-        if (isEscKey) {
-          onFilmDetailsClose();
-          document.removeEventListener(`keydown`, onEscKeyDown);
-        }
-      };
-
-      const onFilmDetailsClose = () => {
-        remove(filmDetailsComponent);
-      };
-
-      const onFilmCardElementClick = () => {
-        openPopup();
-        document.addEventListener(`keydown`, onEscKeyDown);
-      };
-
-      let filmCardComponent = new FilmCard(film);
-      render(container, filmCardComponent);
-
-      filmCardComponent.setPosterClickHandler(onFilmCardElementClick);
-      filmCardComponent.setTitleClickHandler(onFilmCardElementClick);
-      filmCardComponent.setCommentsClickHandler(onFilmCardElementClick);
+      movieController.render(film);
     });
   }
 
