@@ -16,11 +16,13 @@ const films = generateFilms(QUANTITY_FILMS.TOTAL);
 
 render(siteHeaderElement, new UserTitle());
 render(siteMainElement, new Menu(films));
-render(siteMainElement, new Sort());
+
+const sortComponent = new Sort();
+render(siteMainElement, sortComponent);
 
 const filmsComponent = new Films();
 render(siteMainElement, filmsComponent);
-const filmsController = new FilmsController(filmsComponent);
+const filmsController = new FilmsController(filmsComponent, sortComponent);
 filmsController.render(films);
 
 render(siteFooterElement, new Stats(films));

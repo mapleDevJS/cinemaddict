@@ -3,7 +3,7 @@ import {MONTH_NAMES} from "../util/consts";
 export const getRandomBoolean = () => Math.random() > 0.5;
 
 export const getRandomItem = (array) => {
-  return shuffle(array.slice()).shift();
+  return array.length === 1 ? array : shuffle(array.slice()).shift();
 };
 
 export const getRandomIntInclusive = (min, max) => {
@@ -25,6 +25,10 @@ const shuffle = (array) => {
 
 export const pluralize = (count, variants) => {
   return (count === 1) ? variants[0] : variants[1];
+};
+
+export const getDateFromString = (date) => {
+  return new Date(date).valueOf();
 };
 
 export const getFullDate = (date) => {
