@@ -1,6 +1,6 @@
 import Abstract from "./abstract";
 
-export const SORT_TYPES = {
+export const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
   RATING: `rating`
@@ -10,14 +10,17 @@ export default class Sort extends Abstract {
   constructor() {
     super();
 
-    this._typeChangeHandler = null;
-    this._currentSortType = `DEFAULT`;
+    // this._typeChangeHandler = null;
+    this._currentSortType = SortType.DEFAULT;
   }
 
   _getSortItem(key, value) {
     return (
       `<li>
-        <a href="#" data-sort-type="${key}" class="sort__button ${this._currentSortType === key ? `sort__button--active` : ``}">
+        <a href="#"
+          data-sort-type="${key}"
+          class="sort__button ${this._currentSortType === value ? `sort__button--active` : ``}"
+        >
           Sort by ${value}
         </a>
       </li>`
@@ -25,8 +28,8 @@ export default class Sort extends Abstract {
   }
 
   _getSortMarkup() {
-    return Object.keys(SORT_TYPES).map((key) => {
-      return this._getSortItem(key, SORT_TYPES[key]);
+    return Object.keys(SortType).map((key) => {
+      return this._getSortItem(key, SortType[key]);
     })
     .join(`\n`);
   }
@@ -39,24 +42,47 @@ export default class Sort extends Abstract {
     );
   }
 
-  getElement() {
-    const element = super.getElement();
-    element.addEventListener(`click`, this._handleClick);
-    return element;
+  // getElement() {
+  //   const element = super.getElement();
+  //   element.addEventListener(`click`, this._handleClick);
+  //   return element;
+  // }
+
+  // _handleClick(evt) {
+  //   evt.preventDefault();
+
+  //   this._currentSortType = SortType[evt.target.dataset.sortType];
+
+  //   if (typeof this._typeChangeHandler === `function`) {
+  //     this._typeChangeHandler(this._currentSortType);
+  //   }
+  // }
+
+  // setTypeChangeHandler(handler) {
+  //   handler(this._currenSortType);
+  // }
+
+  getSortType() {
+    return this._currentSortType;
   }
 
-  _getSortType(evt) {
-    return evt.target.dataset.sortType;
-  }
+  setSortTypeChangeHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
 
-  _handleClick(evt) {
-    evt.preventDefault();
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
 
-    if (typeof this._typeChangeHandler !== `function`) {
-      return;
-    }
+      const sortType = SortType[evt.target.dataset.sortType];
 
-    this._currentSortType = this._getSortType(evt);
-    this._typeChangeHandler(this._currentSortType);
+      if (this._currentSortType === sortType) {
+        return;
+      }
+
+      this._currentSortType = sortType;
+
+      handler(this._currentSortType);
+    });
   }
 }
