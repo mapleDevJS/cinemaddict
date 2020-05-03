@@ -1,57 +1,62 @@
 import Abstract from "./abstract";
 
 export const SORT_TYPES = {
-  DEFAULT: `by default`,
-  DATE: `by date`,
-  RATING: `by rating`
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
 };
 
 export default class Sort extends Abstract {
   constructor() {
     super();
 
-    this._currenSortType = SORT_TYPES.DEFAULT;
+    this._typeChangeHandler = null;
+    this._currentSortType = `DEFAULT`;
   }
 
-  _getSortItems() {
-    // return SORT_TYPES.map((type) =>
-    //   `<li><a href="#" class="sort__button sort__button--active">Sort ${type}</a></li>`
-    // ).join(`\n`);
+  _getSortItem(key, value) {
+    return (
+      `<li>
+        <a href="#" data-sort-type="${key}" class="sort__button ${this._currentSortType === key ? `sort__button--active` : ``}">
+          Sort by ${value}
+        </a>
+      </li>`
+    );
+  }
 
-    let markup = ``;
-    for (let [key, value] of Object.entries(SORT_TYPES)) {
-      markup += `<li><a href="#" data-sort-type="${key}" class="sort__button sort__button--active">Sort ${value}</a></li>`;
-    }
-    return markup;
+  _getSortMarkup() {
+    return Object.keys(SORT_TYPES).map((key) => {
+      return this._getSortItem(key, SORT_TYPES[key]);
+    })
+    .join(`\n`);
   }
 
   getTemplate() {
     return (
       `<ul class="sort">
-        ${this._getSortItems()}
+        ${this._getSortMarkup()}
       </ul>`
     );
   }
 
-  setSortTypeChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
+  getElement() {
+    const element = super.getElement();
+    element.addEventListener(`click`, this._handleClick);
+    return element;
+  }
 
-      if (evt.target.tagName !== `A`) {
-        return;
-      }
+  _getSortType(evt) {
+    return evt.target.dataset.sortType;
+  }
 
-      // const sortType = evt.target.dataset.sortType;
-      const sortType = evt.target.dataset.sortType;
+  _handleClick(evt) {
+    evt.preventDefault();
 
+    if (typeof this._typeChangeHandler !== `function`) {
+      return;
+    }
 
-      if (this._currenSortType === sortType) {
-        return;
-      }
-
-      this._currenSortType = sortType;
-
-      handler(this._currenSortType);
-    });
+    this._currentSortType = this._getSortType(evt);
+    this._typeChangeHandler(this._currentSortType);
   }
 }
