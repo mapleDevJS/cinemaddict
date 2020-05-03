@@ -1,6 +1,6 @@
 import FilmDetails from "../components/films/film-details";
 import FilmCard from "../components/films/film-card";
-import {render} from "../util/dom-util";
+import {render, remove} from "../util/dom-util";
 
 export default class MovieController {
   constructor(container) {
