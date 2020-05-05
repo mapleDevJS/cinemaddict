@@ -1,5 +1,5 @@
 import {pluralize, getFullDate} from "../../util/util";
-import Abstract from "../abstract";
+import AbstractSmart from "../abstract-smart";
 
 const CARD_CONTROLS = new Map([
   [`watchlist`, `Add to watchlist`],
@@ -24,11 +24,42 @@ const EMOJIS = [
 //   genres: `Genre`
 // };
 
-export default class FilmDetails extends Abstract {
+export default class FilmDetails extends AbstractSmart {
   constructor(film) {
     super();
     this._film = film;
-    this._element = null;
+    // this._element = null;
+  }
+
+  getEmojiContainer() {
+    return this.getElement().querySelector(`.film-details__add-emoji-label`);
+  }
+
+  _getCommentMarkup(comment) {
+    const {emoji, text, author, date} = comment;
+    return (
+      `<li class="film-details__comment">
+          <span class="film-details__comment-emoji">
+            <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
+          </span>
+          <div>
+            <p class="film-details__comment-text">${text}</p>
+            <p class="film-details__comment-info">
+              <span class="film-details__comment-author">${author}</span>
+              <span class="film-details__comment-day">${date}</span>
+              <button class="film-details__comment-delete">Delete</button>
+            </p>
+          </div>
+        </li>`
+    );
+  }
+
+  _getComments() {
+    return (
+      this._film.comments.map((comment) => {
+        return this._getCommentMarkup(comment);
+      }).join(`\n`)
+    );
   }
 
   _getGenresMarkup() {
@@ -78,17 +109,6 @@ export default class FilmDetails extends Abstract {
         value: this._getGenresMarkup()
       },
     ];
-
-
-    // return Object.keys(FilmInfo)
-    //   .map((key) => {
-    //     return (
-    //       `<tr class="film-details__row">
-    //          <td class="film-details__term">${FilmInfo[key]}</td>
-    //          <td class="film-details__cell">${this._film[key]}</td>
-    //       </tr>`
-    //     );
-    //   }).join(`\n`);
 
     return dataList
       .map(({name, value}) => {
@@ -174,7 +194,9 @@ export default class FilmDetails extends Abstract {
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._film.comments.length}</span></h3>
 
-            <ul class="film-details__comments-list"></ul>
+            <ul class="film-details__comments-list">
+              ${this._getComments()}
+            </ul>
 
             <div class="film-details__new-comment">
               <div for="add-emoji" class="film-details__add-emoji-label">
@@ -182,7 +204,7 @@ export default class FilmDetails extends Abstract {
               </div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">Great movie!</textarea>
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
               </label>
 
               <div class="film-details__emoji-list">
@@ -196,23 +218,32 @@ export default class FilmDetails extends Abstract {
     );
   }
 
-  setCloseButtonClickHandler(handler) {
+  setCloseButtonClickListener(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
   }
 
-  setAddToWatchlistClickHandler(handler) {
-    this.getElement().querySelector(`watchlist`)
+  setAddToWatchlistClickListener(handler) {
+    this.getElement().querySelector(`#watchlist`)
       .addEventListener(`click`, handler);
   }
 
-  setAlreadyWatchedClickHandler(handler) {
-    this.getElement().querySelector(`watched`)
+  setAlreadyWatchedClickListener(handler) {
+    this.getElement().querySelector(`#watched`)
       .addEventListener(`click`, handler);
   }
 
-  setAddToFavouriteClickHandler(handler) {
-    this.getElement().querySelector(`favorite`)
+  setAddToFavouriteClickListener(handler) {
+    this.getElement().querySelector(`#favorite`)
       .addEventListener(`click`, handler);
+  }
+
+  setEmojiClickListener(handler) {
+    this.getElement().querySelector(`.film-details__emoji-list`)
+    .addEventListener(`change`, handler);
+  }
+
+  recoveryListeners() {
+    this._subscribeOnEvents();
   }
 }
