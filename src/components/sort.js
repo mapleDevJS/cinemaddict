@@ -10,7 +10,6 @@ export default class Sort extends Abstract {
   constructor() {
     super();
 
-    // this._typeChangeHandler = null;
     this._currentSortType = SortType.DEFAULT;
   }
 
@@ -42,31 +41,11 @@ export default class Sort extends Abstract {
     );
   }
 
-  // getElement() {
-  //   const element = super.getElement();
-  //   element.addEventListener(`click`, this._handleClick);
-  //   return element;
-  // }
-
-  // _handleClick(evt) {
-  //   evt.preventDefault();
-
-  //   this._currentSortType = SortType[evt.target.dataset.sortType];
-
-  //   if (typeof this._typeChangeHandler === `function`) {
-  //     this._typeChangeHandler(this._currentSortType);
-  //   }
-  // }
-
-  // setTypeChangeHandler(handler) {
-  //   handler(this._currenSortType);
-  // }
-
   getSortType() {
     return this._currentSortType;
   }
 
-  setSortTypeChangeHandler(handler) {
+  setSortTypeChangeListener(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
