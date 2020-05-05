@@ -6,7 +6,7 @@ import Films from "./components/films/films";
 import {generateFilms} from "./mocks/films";
 import {render} from "./util/dom-util";
 import {QUANTITY_FILMS} from "./util/consts";
-import FilmsController from "./controllers/films";
+import PageController from "./controllers/page-controller";
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
@@ -22,7 +22,7 @@ render(siteMainElement, sortComponent);
 
 const filmsComponent = new Films();
 render(siteMainElement, filmsComponent);
-const filmsController = new FilmsController(filmsComponent, sortComponent);
-filmsController.render(films);
+const pageController = new PageController(filmsComponent, sortComponent);
+pageController.render(films);
 
 render(siteFooterElement, new Stats(films));
