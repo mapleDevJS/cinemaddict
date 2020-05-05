@@ -7,6 +7,10 @@ export default class FilmsListExtra extends Abstract {
     this._title = title;
   }
 
+  getFilmsListContainer() {
+    return this.getElement().querySelector(`.films-list__container`);
+  }
+
   getTemplate() {
     return (
       `<section class="films-list--extra">
