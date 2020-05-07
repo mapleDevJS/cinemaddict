@@ -30,8 +30,6 @@ const DURATION = {
   MAX: 180
 };
 
-const MINUTES_IN_HOUR = 60;
-
 const AGES = [`0+`, `6+`, `12+`, `16+`, `18+`];
 
 const TITLES = [
@@ -181,19 +179,6 @@ const getRandomDate = () => {
   return new Date(RELEASE_DATE.FIRST.getTime() + Math.random() * (RELEASE_DATE.LAST.getTime() - RELEASE_DATE.FIRST.getTime()));
 };
 
-const getRandomDuration = () => {
-  const duration = getRandomIntInclusive(DURATION.MIN, DURATION.MAX);
-  return (duration > MINUTES_IN_HOUR) ? `${getHours(duration)}h ${getMinutes(duration)}m` : `${duration}m`;
-};
-
-const getHours = (duration) => {
-  return Math.floor(duration / MINUTES_IN_HOUR);
-};
-
-const getMinutes = (duration) => {
-  return (duration % MINUTES_IN_HOUR);
-};
-
 const generateFilm = () => {
   return {
     title: getRandomItem(TITLES).title,
@@ -205,7 +190,7 @@ const generateFilm = () => {
     writers: getRandomListOfNames(WRITERS_QUANTITY),
     actors: getRandomListOfNames(ACTORS_QUANTITY),
     release: getRandomDate(RELEASE_DATE.FIRST, RELEASE_DATE.LAST),
-    runtime: getRandomDuration(),
+    runtime: getRandomIntInclusive(DURATION.MIN, DURATION.MAX),
     country: getRandomItem(COUNTRIES),
     genres: getRandomListOfGenres(GENRES_QUANTITY),
     description: getRandomDescription(DESCRIPTIONS),
@@ -220,16 +205,12 @@ export const generateFilms = (count) => {
   return new Array(count).fill(``).map(generateFilm);
 };
 
-const getCommentDate = (date) => {
-  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-};
-
 const generateComment = () => {
   return {
     text: getRandomDescription(DESCRIPTIONS),
     emoji: getRandomItem(EMOJI),
     author: getRandomName(),
-    date: getCommentDate(new Date()),
+    date: getRandomDate(),
   };
 };
 
