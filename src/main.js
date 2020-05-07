@@ -14,7 +14,7 @@ const siteFooterElement = document.querySelector(`.footer`);
 
 const films = generateFilms(QUANTITY_FILMS.TOTAL);
 
-render(siteHeaderElement, new UserTitle());
+render(siteHeaderElement, new UserTitle(films));
 render(siteMainElement, new Menu(films));
 
 const sortComponent = new Sort();
