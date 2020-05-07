@@ -1,4 +1,5 @@
 import NoFilms from "../components/films/no-films";
+import FilmsList from "../components/films/films-list";
 import FilmsListExtra from "../components/films/films-list-extra";
 import ButtonShowMore from "../components/films/button-showmore";
 import MovieController from "./movie-controller";
@@ -7,7 +8,7 @@ import {SortType} from "../components/sort";
 import {sortArrayOfObjectsByKey, getDateFromString} from "../util/util";
 import {QUANTITY_FILMS} from "../util/consts";
 
-const SECTION_NAMES = new Map([
+const SECTIONS = new Map([
   [`rating`, `Top Rated`],
   [`comments`, `Most commented`]
 ]);
@@ -25,8 +26,9 @@ export default class PageController {
     this._noFilmsComponent = new NoFilms();
     this._buttonShowMore = new ButtonShowMore();
 
-    this._filmsList = container.getFilmsList();
-    this._filmsListContainer = container.getFilmsListContainer();
+    this._filmsListComponent = new FilmsList();
+    this._filmsList = this._filmsListComponent.getElement();
+    this._filmsListContainer = this._filmsListComponent.getFilmsListContainer();
 
     this._shownFilmsCount = QUANTITY_FILMS.ON_START;
 
@@ -43,6 +45,8 @@ export default class PageController {
       render(container, this._noFilmsComponent);
       return;
     }
+
+    render(container, this._filmsListComponent);
 
     const newFilms = this._renderFilmCards(this._filmsListContainer, this._films.slice(0, this._shownFilmsCount), this._onDataChange, this._onViewChange);
     this._shownMovieControllers = this._shownMovieControllers.concat(newFilms);
@@ -96,7 +100,7 @@ export default class PageController {
   }
 
   _renderFilmExtraSections(container, films, onDataChange, onViewChange) {
-    SECTION_NAMES.forEach((name, key) => {
+    SECTIONS.forEach((name, key) => {
       const filmsListExtraComponent = new FilmsListExtra(name);
       render(container, filmsListExtraComponent);
 
@@ -143,7 +147,7 @@ export default class PageController {
     const sortedFilms = this._getSortedFilms(this._films, this._sortComponent.getSortType(), prevFilmsCount, this._shownFilmsCount);
     const newFilms = this._renderFilmCards(this._filmsListContainer, sortedFilms, this._onDataChange, this._onViewChange);
 
-    this._shownMovieControllers.concat(newFilms);
+    this._shownMovieControllers = this._shownMovieControllers.concat(newFilms);
 
     if (this._shownFilmsCount >= films.length) {
       remove(this._buttonShowMore);
