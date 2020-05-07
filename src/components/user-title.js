@@ -1,4 +1,3 @@
-import {getRandomIntInclusive} from "../util/util";
 import Abstract from "./abstract";
 
 const ProfileRank = {
@@ -17,8 +16,18 @@ const ProfileRank = {
 };
 
 export default class UserTitle extends Abstract {
+  constructor(films) {
+    super();
+    this._films = films;
+  }
+
   _getProfileRank() {
-    const rank = getRandomIntInclusive(0, 30);
+    const rank = this._films.reduce((acc, film) => {
+      if (film.isInHistory) {
+        acc++;
+      }
+      return acc;
+    }, 0);
 
     switch (true) {
       case (rank >= ProfileRank.NOVICE.from && rank <= ProfileRank.FUN.from - 1):
