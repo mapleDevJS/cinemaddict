@@ -1,11 +1,12 @@
 import {pluralize, getFullDate} from "../../util/util";
 import AbstractSmart from "../abstract-smart";
+import moment from "moment";
 
-const CARD_CONTROLS = new Map([
-  [`watchlist`, `Add to watchlist`],
-  [`watched`, `Already watched`],
-  [`favorite`, `Add to favorites`]
-]);
+const CARD_CONTROLS = [
+  [`isInWatchlist`, `watchlist`, `Add to watchlist`],
+  [`isInHistory`, `watched`, `Mark as watched`],
+  [`isInFavorites`, `favorite`, `Mark as favorite`]
+];
 
 const EMOJIS = [
   `smile`,
@@ -14,138 +15,14 @@ const EMOJIS = [
   `angry`
 ];
 
-// const FilmInfo = {
-//   director: `Director`,
-//   writers: `Writer`,
-//   actors: `Actor`,
-//   release: `Release`,
-//   runtime: `Runtime`,
-//   country: `Country`,
-//   genres: `Genre`
-// };
-
 export default class FilmDetails extends AbstractSmart {
   constructor(film) {
     super();
+
     this._film = film;
-    // this._element = null;
-  }
+    // this._closeButtonClickListener = null;
 
-  getEmojiContainer() {
-    return this.getElement().querySelector(`.film-details__add-emoji-label`);
-  }
-
-  _getCommentMarkup(comment) {
-    const {emoji, text, author, date} = comment;
-    return (
-      `<li class="film-details__comment">
-          <span class="film-details__comment-emoji">
-            <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
-          </span>
-          <div>
-            <p class="film-details__comment-text">${text}</p>
-            <p class="film-details__comment-info">
-              <span class="film-details__comment-author">${author}</span>
-              <span class="film-details__comment-day">${date}</span>
-              <button class="film-details__comment-delete">Delete</button>
-            </p>
-          </div>
-        </li>`
-    );
-  }
-
-  _getComments() {
-    return (
-      this._film.comments.map((comment) => {
-        return this._getCommentMarkup(comment);
-      }).join(`\n`)
-    );
-  }
-
-  _getGenresMarkup() {
-    return this._film.genres.reduce((prev, item) => {
-      return (
-        `${prev}<span class="film-details__genre">${item}</span>`
-      );
-    }, ``);
-  }
-
-  _getGenresMarkup() {
-    return this._film.genres.map((genre) => {
-      return (
-        `<span class="film-details__genre">${genre}</span>`
-      );
-    }).join(`\n`);
-  }
-
-  _getFilmDetails() {
-    const dataList = [
-      {
-        name: `Director`,
-        value: this._film.director
-      },
-      {
-        name: pluralize(this._film.writers.length, [`Writer`, `Writers`]),
-        value: this._film.writers
-      },
-      {
-        name: pluralize(this._film.actors.length, [`Actor`, `Actors`]),
-        value: this._film.actors
-      },
-      {
-        name: `Release`,
-        value: getFullDate(this._film.release)
-      },
-      {
-        name: `Runtime`,
-        value: this._film.runtime
-      },
-      {
-        name: `Country`,
-        value: this._film.country
-      },
-      {
-        name: pluralize(this._film.genres.length, [`Genre`, `Genres`]),
-        value: this._getGenresMarkup()
-      },
-    ];
-
-    return dataList
-      .map(({name, value}) => {
-        return (
-          `<tr class="film-details__row">
-            <td class="film-details__term">${name}</td>
-            <td class="film-details__cell">${value}</td>
-          </tr>`
-        );
-      }).join(`\n`);
-  }
-
-  _getEmoji(emoji) {
-    return (
-      `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
-        <label class="film-details__emoji-label" for="emoji-${emoji}">
-        <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji ${emoji}">
-      </label>`
-    );
-  }
-
-  _getEmojiMarkup() {
-    return EMOJIS.map((emoji) =>
-      this._getEmoji(emoji)
-    ).join(`\n`);
-  }
-
-  _getButton(key, value) {
-    return (
-      `<input type="checkbox" class="film-details__control-input visually-hidden" id="${key}" name="${key}">
-      <label for="${key}" class="film-details__control-label film-details__control-label--${key}">${value}</label>`);
-  }
-
-  _getButtonsMarkup() {
-    return [...CARD_CONTROLS.entries()]
-      .map(([value, key]) => this._getButton(value, key))
-      .join(`\n`);
+    // this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -218,32 +95,137 @@ export default class FilmDetails extends AbstractSmart {
     );
   }
 
-  setCloseButtonClickListener(handler) {
+  getEmojiContainer() {
+    return this.getElement().querySelector(`.film-details__add-emoji-label`);
+  }
+
+  setCloseButtonClickListener(listener) {
     this.getElement().querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, handler);
+      .addEventListener(`click`, listener);
   }
 
-  setAddToWatchlistClickListener(handler) {
+  setAddToWatchlistClickListener(listener) {
     this.getElement().querySelector(`#watchlist`)
-      .addEventListener(`click`, handler);
+      .addEventListener(`click`, listener);
   }
 
-  setAlreadyWatchedClickListener(handler) {
+  setAlreadyWatchedClickListener(listener) {
     this.getElement().querySelector(`#watched`)
-      .addEventListener(`click`, handler);
+      .addEventListener(`click`, listener);
   }
 
-  setAddToFavouriteClickListener(handler) {
+  setAddToFavouriteClickListener(listener) {
     this.getElement().querySelector(`#favorite`)
-      .addEventListener(`click`, handler);
+      .addEventListener(`click`, listener);
   }
 
-  setEmojiClickListener(handler) {
+  setEmojiClickListener(listener) {
     this.getElement().querySelector(`.film-details__emoji-list`)
-    .addEventListener(`change`, handler);
+    .addEventListener(`change`, listener);
   }
 
-  recoveryListeners() {
-    this._subscribeOnEvents();
+  _getCommentMarkup({emoji, text, author, date}) {
+    return (
+      `<li class="film-details__comment">
+          <span class="film-details__comment-emoji">
+            <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
+          </span>
+          <div>
+            <p class="film-details__comment-text">${text}</p>
+            <p class="film-details__comment-info">
+              <span class="film-details__comment-author">${author}</span>
+              <span class="film-details__comment-day">${moment(date).format(`YYYY[/]MM[/]DD hh:mm`)}</span>
+              <button class="film-details__comment-delete">Delete</button>
+            </p>
+          </div>
+        </li>`
+    );
+  }
+
+  _getComments() {
+    return this._film.comments.map(this._getCommentMarkup).join(`\n`);
+  }
+
+  _getGenresMarkup() {
+    return this._film.genres.map((genre) => {
+      return (
+        `<span class="film-details__genre">${genre}</span>`
+      );
+    }).join(`\n`);
+  }
+
+  _getFilmDetails() {
+    const dataList = [
+      {
+        name: `Director`,
+        value: this._film.director
+      },
+      {
+        name: pluralize(this._film.writers.length, [`Writer`, `Writers`]),
+        value: this._film.writers
+      },
+      {
+        name: pluralize(this._film.actors.length, [`Actor`, `Actors`]),
+        value: this._film.actors
+      },
+      {
+        name: `Release`,
+        value: getFullDate(this._film.release)
+      },
+      {
+        name: `Runtime`,
+        value: this._film.runtime
+      },
+      {
+        name: `Country`,
+        value: this._film.country
+      },
+      {
+        name: pluralize(this._film.genres.length, [`Genre`, `Genres`]),
+        value: this._getGenresMarkup()
+      },
+    ];
+
+    return dataList
+      .map(({name, value}) => {
+        return (
+          `<tr class="film-details__row">
+            <td class="film-details__term">${name}</td>
+            <td class="film-details__cell">${value}</td>
+          </tr>`
+        );
+      }).join(`\n`);
+  }
+
+  _getEmoji(emoji) {
+    return (
+      `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
+        <label class="film-details__emoji-label" for="emoji-${emoji}">
+        <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji ${emoji}">
+      </label>`
+    );
+  }
+
+  _getEmojiMarkup() {
+    return EMOJIS.map((emoji) =>
+      this._getEmoji(emoji)
+    ).join(`\n`);
+  }
+
+  _isChecked(checkingClass) {
+    return this._film[checkingClass] ? `checked` : ``;
+  }
+
+  _getButton(checkingClass, key, value) {
+    return (
+      `<input type="checkbox" class="film-details__control-input visually-hidden" id="${key}" name="${key}" ${this._isChecked(checkingClass)}>
+      <label for="${key}" class="film-details__control-label film-details__control-label--${key}">${value}</label>`
+    );
+  }
+
+  _getButtonsMarkup() {
+    return CARD_CONTROLS
+      .map(([checkingClass, key, value]) => this._getButton(checkingClass, key, value))
+      .join(`\n`);
   }
 }
