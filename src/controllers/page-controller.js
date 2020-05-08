@@ -77,7 +77,7 @@ export default class PageController {
   }
 
   _getTopFilms(films, key) {
-    return films.sort(sortArrayOfObjectsByKey(key)).slice(0, TOP_FILMS_NUMBER);
+    return films.slice().sort(sortArrayOfObjectsByKey(key)).slice(0, TOP_FILMS_NUMBER);
   }
 
   _getSortedFilms(films, sortType, from, to) {
