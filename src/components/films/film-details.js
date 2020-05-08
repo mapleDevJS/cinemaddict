@@ -20,9 +20,6 @@ export default class FilmDetails extends AbstractSmart {
     super();
 
     this._film = film;
-    // this._closeButtonClickListener = null;
-
-    // this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -100,28 +97,41 @@ export default class FilmDetails extends AbstractSmart {
   }
 
   setCloseButtonClickListener(listener) {
+    this.closeButtonClickListener = listener;
     this.getElement().querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, listener);
+      .addEventListener(`click`, this.closeButtonClickListener);
   }
 
   setAddToWatchlistClickListener(listener) {
+    this.addToWatchlistClickListener = listener;
     this.getElement().querySelector(`#watchlist`)
-      .addEventListener(`click`, listener);
+      .addEventListener(`click`, this.addToWatchlistClickListener);
   }
 
   setAlreadyWatchedClickListener(listener) {
+    this.alreadyWatchedClickListener = listener;
     this.getElement().querySelector(`#watched`)
-      .addEventListener(`click`, listener);
+      .addEventListener(`click`, this.alreadyWatchedClickListener);
   }
 
   setAddToFavouriteClickListener(listener) {
+    this.addToFavouriteClickListener = listener;
     this.getElement().querySelector(`#favorite`)
-      .addEventListener(`click`, listener);
+      .addEventListener(`click`, this.addToFavouriteClickListener);
   }
 
   setEmojiClickListener(listener) {
+    this.emojiClickListener = listener;
     this.getElement().querySelector(`.film-details__emoji-list`)
-    .addEventListener(`change`, listener);
+    .addEventListener(`change`, this.emojiClickListener);
+  }
+
+  recoveryListeners() {
+    this.setCloseButtonClickListener(this.closeButtonClickListener);
+    this.setAddToWatchlistClickListener(this.addToWatchlistClickListener);
+    this.setAlreadyWatchedClickListener(this.alreadyWatchedClickListener);
+    this.setAddToFavouriteClickListener(this.addToFavouriteClickListener);
+    this.setEmojiClickListener(this.emojiClickListener);
   }
 
   _getCommentMarkup({emoji, text, author, date}) {

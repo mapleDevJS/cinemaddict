@@ -22,8 +22,8 @@ export default class FilmCard extends Abstract {
         <p class="film-card__rating">${this._film.rating}</p>
         <p class="film-card__info">
           <span class="film-card__year">${moment(this._film.release).year()}</span>
-          <span class="film-card__duration">${moment().minutes(this._film.runtime).format(`h[h] mm[m]`)}</span>
-          <span class="film-card__genre">${this._film.genres.shift()}</span>
+          <span class="film-card__duration">${this._getFilmDuration()}</span>
+          <span class="film-card__genre">${this._film.genres[0]}</span>
         </p>
         <img src="./images/posters/${this._film.poster}" alt="" class="film-card__poster">
         <p class="film-card__description">${this._getDescription()}</p>
@@ -52,17 +52,32 @@ export default class FilmCard extends Abstract {
 
   setAddToWatchlistClickListener(listener) {
     this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
-      .addEventListener(`click`, listener);
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        listener();
+      });
   }
 
   setAlreadyWatchedClickListener(listener) {
     this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`)
-      .addEventListener(`click`, listener);
+    .addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      listener();
+    });
   }
 
   setAddToFavouriteClickListener(listener) {
     this.getElement().querySelector(`.film-card__controls-item--favorite`)
-      .addEventListener(`click`, listener);
+    .addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      listener();
+    });
+  }
+
+  _getFilmDuration() {
+    return this._film.runtime >= 60
+      ? moment.utc(moment.duration(this._film.runtime, `minutes`).asMilliseconds()).format(`h[h] mm[m]`)
+      : `${this._film.runtime}m`;
   }
 
   _getDescription() {
