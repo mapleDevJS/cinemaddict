@@ -1,4 +1,3 @@
-import Abstract from "./abstract";
 import AbstractSmart from "./abstract-smart";
 
 export const SortType = {
