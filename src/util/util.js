@@ -1,4 +1,5 @@
-import {MONTH_NAMES} from "../util/consts";
+// import {MONTH_NAMES} from "../util/consts";
+import moment from "moment";
 
 export const getRandomBoolean = () => Math.random() > 0.5;
 
@@ -32,7 +33,7 @@ export const getDateFromString = (date) => {
 };
 
 export const getFullDate = (date) => {
-  return `${date.getDate()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+  return moment(date).format(`Do MMMM YYYY`);
 };
 
 export const sortArrayOfObjectsByKey = (key, order = `desc`) => {

@@ -13,6 +13,38 @@ export default class Sort extends Abstract {
     this._currentSortType = SortType.DEFAULT;
   }
 
+  getTemplate() {
+    return (
+      `<ul class="sort">
+        ${this._getSortMarkup()}
+      </ul>`
+    );
+  }
+
+  getSortType() {
+    return this._currentSortType;
+  }
+
+  setSortTypeChangeListener(listener) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
+
+      const sortType = SortType[evt.target.dataset.sortType];
+
+      if (this._currentSortType === sortType) {
+        return;
+      }
+
+      this._currentSortType = sortType;
+
+      listener(this._currentSortType);
+    });
+  }
+
   _getSortItem(key, value) {
     return (
       `<li>
@@ -31,37 +63,5 @@ export default class Sort extends Abstract {
       return this._getSortItem(key, SortType[key]);
     })
     .join(`\n`);
-  }
-
-  getTemplate() {
-    return (
-      `<ul class="sort">
-        ${this._getSortMarkup()}
-      </ul>`
-    );
-  }
-
-  getSortType() {
-    return this._currentSortType;
-  }
-
-  setSortTypeChangeListener(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
-      if (evt.target.tagName !== `A`) {
-        return;
-      }
-
-      const sortType = SortType[evt.target.dataset.sortType];
-
-      if (this._currentSortType === sortType) {
-        return;
-      }
-
-      this._currentSortType = sortType;
-
-      handler(this._currentSortType);
-    });
   }
 }
