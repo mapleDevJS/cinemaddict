@@ -30,6 +30,7 @@ export default class MovieController {
 
     const onFilmCardElementClick = () => {
       this._mode = Mode.DETAILS;
+      this._filmDetailsComponent.recoveryListeners();
       this._body.appendChild(this._filmDetailsComponent.getElement());
       document.addEventListener(`keydown`, this._onEscKeyDown);
     };
