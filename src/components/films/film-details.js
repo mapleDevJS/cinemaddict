@@ -126,7 +126,7 @@ export default class FilmDetails extends AbstractSmart {
     .addEventListener(`change`, this.emojiClickListener);
   }
 
-  recoveryListeners() {
+  recoverListeners() {
     this.setCloseButtonClickListener(this.closeButtonClickListener);
     this.setAddToWatchlistClickListener(this.addToWatchlistClickListener);
     this.setAlreadyWatchedClickListener(this.alreadyWatchedClickListener);

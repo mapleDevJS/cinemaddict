@@ -1,8 +1,8 @@
 import Abstract from "./abstract";
 
 export default class AbstractSmart extends Abstract {
-  recoveryListeners() {
-    throw new Error(`Abstract method not implemented: recoveryListeners`);
+  recoverListeners() {
+    throw new Error(`Abstract method not implemented: recoverListeners`);
   }
 
   rerender() {
@@ -15,6 +15,6 @@ export default class AbstractSmart extends Abstract {
 
     parent.replaceChild(newElement, oldElement);
 
-    this.recoveryListeners();
+    this.recoverListeners();
   }
 }

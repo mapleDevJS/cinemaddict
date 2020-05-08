@@ -15,9 +15,9 @@ export default class MovieController {
     this._mode = Mode.DEFAULT;
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
+
     this._body = document.querySelector(`body`);
 
-    this._onFilmDetailsCloseButtonClick = this._onFilmDetailsCloseButtonClick.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
@@ -28,62 +28,55 @@ export default class MovieController {
     this._filmCardComponent = new FilmCard(film);
     this._filmDetailsComponent = new FilmDetails(film);
 
-    const onFilmCardElementClick = () => {
-      this._mode = Mode.DETAILS;
-      this._filmDetailsComponent.recoveryListeners();
-      this._body.appendChild(this._filmDetailsComponent.getElement());
-      document.addEventListener(`keydown`, this._onEscKeyDown);
-    };
-
     this._filmCardComponent.setPosterClickListener(() => {
-      this._onViewChange();
-      onFilmCardElementClick();
+      this._openFilmDetails();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
     this._filmCardComponent.setTitleClickListener(() => {
-      this._onViewChange();
-      onFilmCardElementClick();
+      this._openFilmDetails();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
     this._filmCardComponent.setCommentsClickListener(() => {
-      this._onViewChange();
-      onFilmCardElementClick();
+      this._openFilmDetails();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
     this._filmCardComponent.setAddToWatchlistClickListener(() => {
-      this._onDataChange(film, Object.assign({}, film, {
+      this._onDataChange(this, film, Object.assign({}, film, {
         isInWatchlist: !film.isInWatchlist,
       }));
     });
 
     this._filmCardComponent.setAlreadyWatchedClickListener(() => {
-      this._onDataChange(film, Object.assign({}, film, {
+      this._onDataChange(this, film, Object.assign({}, film, {
         isInHistory: !film.isInHistory,
       }));
     });
 
     this._filmCardComponent.setAddToFavouriteClickListener(() => {
-      this._onDataChange(film, Object.assign({}, film, {
+      this._onDataChange(this, film, Object.assign({}, film, {
         isInFavorites: !film.isInFavorites,
       }));
     });
 
-    this._filmDetailsComponent.setCloseButtonClickListener(this._onFilmDetailsCloseButtonClick);
+    this._filmDetailsComponent.setCloseButtonClickListener(() => this._closeFilmDetails());
 
     this._filmDetailsComponent.setAddToWatchlistClickListener(() => {
-      this._onDataChange(film, Object.assign({}, film, {
+      this._onDataChange(this, film, Object.assign({}, film, {
         isInWatchlist: !film.isInWatchlist,
       }));
     });
 
     this._filmDetailsComponent.setAlreadyWatchedClickListener(() => {
-      this._onDataChange(film, Object.assign({}, film, {
+      this._onDataChange(this, film, Object.assign({}, film, {
         isInHistory: !film.isInHistory,
       }));
     });
 
     this._filmDetailsComponent.setAddToFavouriteClickListener(() => {
-      this._onDataChange(film, Object.assign({}, film, {
+      this._onDataChange(this, film, Object.assign({}, film, {
         isInFavorites: !film.isInFavorites,
       }));
     });
@@ -104,22 +97,29 @@ export default class MovieController {
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      remove(this._filmDetailsComponent);
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      this._closeFilmDetails();
     }
   }
 
-  _onFilmDetailsCloseButtonClick() {
+  _closeFilmDetails() {
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
     remove(this._filmDetailsComponent);
+    this._mode = Mode.DEFAULT;
+  }
+
+  _openFilmDetails() {
+    this._onViewChange();
+    this._body.appendChild(this._filmDetailsComponent.getElement());
     this._mode = Mode.DETAILS;
+    this._filmDetailsComponent.recoverListeners();
+    document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _onEscKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      this._onFilmDetailsCloseButtonClick();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      this._closeFilmDetails();
     }
   }
 }

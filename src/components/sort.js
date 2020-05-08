@@ -1,4 +1,4 @@
-import Abstract from "./abstract";
+import AbstractSmart from "./abstract-smart";
 
 export const SortType = {
   DEFAULT: `default`,
@@ -6,11 +6,12 @@ export const SortType = {
   RATING: `rating`
 };
 
-export default class Sort extends Abstract {
+export default class Sort extends AbstractSmart {
   constructor() {
     super();
 
     this._currentSortType = SortType.DEFAULT;
+    this._sortTypeChangeListener = null;
   }
 
   getTemplate() {
@@ -21,11 +22,16 @@ export default class Sort extends Abstract {
     );
   }
 
+  recoverListeners() {
+    this.setSortTypeChangeListener(this._sortTypeChangeListener);
+  }
+
   getSortType() {
     return this._currentSortType;
   }
 
   setSortTypeChangeListener(listener) {
+    this._sortTypeChangeListener = listener;
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
@@ -42,6 +48,7 @@ export default class Sort extends Abstract {
       this._currentSortType = sortType;
 
       listener(this._currentSortType);
+      super.rerender();
     });
   }
 
