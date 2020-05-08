@@ -21,8 +21,9 @@ const sortComponent = new Sort();
 render(siteMainElement, sortComponent);
 
 const filmsComponent = new Films();
-render(siteMainElement, filmsComponent);
 const pageController = new PageController(filmsComponent, sortComponent);
+
+render(siteMainElement, filmsComponent);
 pageController.render(films);
 
 render(siteFooterElement, new Stats(films));
