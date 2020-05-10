@@ -7,7 +7,7 @@ const FILTER_NAMES = [
   `favourites`
 ];
 
-export default class Menu extends Abstract {
+export default class Filter extends Abstract {
   constructor(films) {
     super();
     this._films = films;

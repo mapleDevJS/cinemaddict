@@ -181,6 +181,7 @@ const getRandomDate = () => {
 
 const generateFilm = () => {
   return {
+    id: String(new Date() + Math.random()),
     title: getRandomItem(TITLES).title,
     original: getRandomItem(TITLES).original,
     poster: getRandomItem(POSTERS),
