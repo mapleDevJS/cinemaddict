@@ -21,9 +21,7 @@ export const QUANTITY_FILMS = {
 
 export const FilterType = {
   ALL: `all`,
-  ARCHIVE: `archive`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
   FAVORITES: `favorites`,
-  OVERDUE: `overdue`,
-  REPEATING: `repeating`,
-  TODAY: `today`,
 };
