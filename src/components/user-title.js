@@ -16,9 +16,9 @@ const ProfileRank = {
 };
 
 export default class UserTitle extends Abstract {
-  constructor(films) {
+  constructor(moviesModel) {
     super();
-    this._films = films;
+    this._films = moviesModel.films;
   }
 
   _getProfileRank() {
