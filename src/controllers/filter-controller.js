@@ -1,5 +1,5 @@
-import Filter from "../components/filter/filter";
-import {FilterType} from "../util/consts";
+import Filter from "../components/filter";
+import {FilterType, FilterNames} from "../util/consts";
 
 import {render, replace} from "../util/dom-util";
 import {getFilmsByFilter} from "../util/filter";
@@ -20,12 +20,14 @@ export default class FilterController {
 
   render() {
     const container = this._container;
-    const allFilms = this._moviesModel.filteredTasks;
+    const films = this._moviesModel.films;
+
     const filters = Object.values(FilterType).map((filterType) => {
       return {
-        name: filterType,
-        count: getFilmsByFilter(allFilms, filterType).length,
-        checked: filterType === this._activeFilterType,
+        type: filterType,
+        name: FilterNames[filterType.toUpperCase()],
+        count: getFilmsByFilter(films, filterType).length,
+        active: filterType === this._activeFilterType,
       };
     });
     const oldComponent = this._filterComponent;
@@ -41,8 +43,13 @@ export default class FilterController {
   }
 
   _onFilterChange(filterType) {
+    if (this._activeFilterType === filterType) {
+      return;
+    }
+
     this._moviesModel.setFilter(filterType);
     this._activeFilterType = filterType;
+    this.render();
   }
 
   _onDataChange() {

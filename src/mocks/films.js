@@ -1,4 +1,5 @@
-import {getRandomItem, getRandomIntInclusive, getRandomBoolean} from "../util/util";
+import {getRandomItem, getRandomIntInclusive, getRandomBoolean, shuffle} from "../util/util";
+import {QUANTITY_FILMS} from "../util/consts";
 
 const SENTENCE_QUANTITY = {
   MIN: 1,
@@ -144,7 +145,7 @@ const DESCRIPTIONS = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. C
 
 const EMOJI = [`smile`, `sleeping`, `puke`, `angry`];
 
-const getRandomName = () => {
+export const getRandomName = () => {
   return `${getRandomItem(FIRST_NAMES)} ${getRandomItem(LAST_NAMES)}`;
 };
 
@@ -179,9 +180,19 @@ const getRandomDate = () => {
   return new Date(RELEASE_DATE.FIRST.getTime() + Math.random() * (RELEASE_DATE.LAST.getTime() - RELEASE_DATE.FIRST.getTime()));
 };
 
-const generateFilm = () => {
+const getCommentsId = (comments) => {
+  const commentsdId = [];
+  comments
+    .map((comment) => {
+      commentsdId.push(comment.id);
+    });
+  return commentsdId;
+};
+
+const generateFilm = (comments) => {
   return {
     id: String(new Date() + Math.random()),
+    comments: getCommentsId(shuffle(comments)).slice(0, getRandomIntInclusive(COMMENTS_QUANTITY.MIN, COMMENTS_QUANTITY.MAX)),
     title: getRandomItem(TITLES).title,
     original: getRandomItem(TITLES).original,
     poster: getRandomItem(POSTERS),
@@ -195,26 +206,26 @@ const generateFilm = () => {
     country: getRandomItem(COUNTRIES),
     genres: getRandomListOfGenres(GENRES_QUANTITY),
     description: getRandomDescription(DESCRIPTIONS),
-    comments: generateComments(getRandomIntInclusive(COMMENTS_QUANTITY.MIN, COMMENTS_QUANTITY.MAX)),
     isInWatchlist: getRandomBoolean(),
     isInHistory: getRandomBoolean(),
     isInFavorites: getRandomBoolean(),
   };
 };
 
-export const generateFilms = (count) => {
-  return new Array(count).fill(``).map(generateFilm);
+export const generateFilms = (comments) => {
+  return new Array(QUANTITY_FILMS.TOTAL).fill(``).map(() => generateFilm(comments));
 };
 
-const generateComment = () => {
+const generateOneComment = () => {
   return {
-    text: getRandomDescription(DESCRIPTIONS),
-    emoji: getRandomItem(EMOJI),
+    id: String(new Date() + Math.random()),
     author: getRandomName(),
+    comment: getRandomDescription(DESCRIPTIONS),
     date: getRandomDate(),
+    emotion: getRandomItem(EMOJI),
   };
 };
 
-const generateComments = (count) => {
-  return new Array(count).fill(``).map(generateComment);
+export const generateComments = () => {
+  return new Array(QUANTITY_FILMS.TOTAL * COMMENTS_QUANTITY.MAX).fill(``).map(generateOneComment);
 };

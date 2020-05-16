@@ -1,50 +1,19 @@
 import Abstract from "./abstract";
 
-const FILTER_NAMES = [
-  `all`,
-  `watchlist`,
-  `history`,
-  `favourites`
-];
-
 export default class Filter extends Abstract {
-  constructor(films) {
+  constructor(filters) {
     super();
-    this._films = films;
+
+    this._filters = filters;
   }
 
-  _generateFilters() {
-    const filtersByName = {
-      all: this._films,
-      watchlist: this._films.filter((film) => film.isInWatchlist),
-      history: this._films.filter((film) => film.isInHistory),
-      favourites: this._films.filter((film) => film.isInFavorites),
-    };
-
-    const filtersCount = FILTER_NAMES.reduce((list, name) => {
-      list[name] = filtersByName[name].length;
-      return list;
-    }, {});
-
-    return FILTER_NAMES.map((type) => {
-      const name = type.charAt(0).toUpperCase() + type.slice(1);
-      const count = filtersCount[type] || 0;
-
-      return {
-        type,
-        name,
-        count
-      };
-    });
-  }
-
-  _getFilters({type, name, count}) {
-    return `<a href="#${type}" class="main-navigation__item">${name} <span class="main-navigation__item-count">${count}</span></a>`;
+  static getFilterNameByHash(hash) {
+    return hash.substring(1, hash.length);
   }
 
   getTemplate() {
-    const filters = this._generateFilters();
-    const filtersMarkup = filters.map((filter) => this._getFilters(filter)).join(`\n`);
+    const filtersMarkup = this._filters.map((filter) => this._createFilterMarkup(filter)).join(`\n`);
+
     return (
       `<nav class="main-navigation">
         <div class="main-navigation__items">
@@ -52,6 +21,32 @@ export default class Filter extends Abstract {
         </div>
         <a href="#stats" class="main-navigation__additional">Stats</a>
       </nav>`
+    );
+  }
+
+  setFilterChangeListener(listener) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
+
+      const filterName = Filter.getFilterNameByHash(evt.target.hash);
+
+      listener(filterName);
+    });
+  }
+
+  _createFilterMarkup({type, name, count, active}) {
+    return (
+      `<a href="#${type}"
+        class="main-navigation__item ${active ? `main-navigation__item--active` : ``}">
+          ${name}
+        <span class="main-navigation__item-count">
+          ${count}
+        </span>
+      </a>`
     );
   }
 }

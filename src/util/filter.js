@@ -1,31 +1,23 @@
 import {FilterType} from "./consts";
 
-export const getNotWatchedFilms = (films) => {
-  return films.filter((film) => !film.isInHistory);
-};
-
-export const getWatchlistFilms = (films) => {
-  return films.filter((film) => film.isInWatchlist);
-};
-
-export const getHistoryFilms = (films) => {
-  return films.filter((film) => film.isInHistory);
-};
-
-export const getFavoriteFilms = (films) => {
-  return films.filter((film) => film.isInFavorites);
+const Filter = {
+  ALL: (film) => !film.isInHistory,
+  WATCHLIST: (film) => film.isInWatchlist,
+  HISTORY: (film) => film.isInHistory,
+  FAVORITES: (film) => film.isInFavorites
 };
 
 export const getFilmsByFilter = (films, filterType) => {
   switch (filterType) {
     case FilterType.ALL:
-      return getNotWatchedFilms(films);
+      return films.filter(Filter.ALL);
     case FilterType.WATCHLIST:
-      return getWatchlistFilms(films);
+      return films.filter(Filter.WATCHLIST);
     case FilterType.HISTORY:
-      return getHistoryFilms(getNotWatchedFilms(films));
+      return films.filter(Filter.HISTORY);
     case FilterType.FAVORITES:
-      return getFavoriteFilms(getNotWatchedFilms(films));
+      return films.filter(Filter.FAVORITES);
   }
+
   return films;
 };

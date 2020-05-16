@@ -1,4 +1,3 @@
-// import {MONTH_NAMES} from "../util/consts";
 import moment from "moment";
 
 export const getRandomBoolean = () => Math.random() > 0.5;
@@ -13,7 +12,7 @@ export const getRandomIntInclusive = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const shuffle = (array) => {
+export const shuffle = (array) => {
   let j;
 
   for (let i = array.length - 1; i > 0; i--) {

@@ -4,6 +4,7 @@ import {FilterType} from "../util/consts";
 export default class MoviesModel {
   constructor() {
     this._films = [];
+    this._comments = [];
     this._activeFilterType = FilterType.ALL;
 
     this._dataChangeListeners = [];
@@ -28,18 +29,23 @@ export default class MoviesModel {
     this._callListeners(this._filterChangeListeners);
   }
 
-  removeFilm(id) {
-    const index = this._films.findIndex((it) => it.id === id);
+  removeComment(id) {
+    const index = this.comments.findIndex((it) => it.id === id);
 
     if (index === -1) {
       return false;
     }
 
-    this._films = [].concat(this._films.slice(0, index), this._films.slice(index + 1));
+    this.comments = [].concat(this.comments.slice(0, index), this.comments.slice(index + 1));
 
     this._callListeners(this._dataChangeListeners);
 
     return true;
+  }
+
+  addComment(comment) {
+    this.comments = [].concat(comment, this.comments);
+    this._callListeners(this._dataChangeListeners);
   }
 
   updateFilm(id, film) {
@@ -54,11 +60,6 @@ export default class MoviesModel {
     this._callListeners(this._dataChangeListeners);
 
     return true;
-  }
-
-  addFilm(film) {
-    this._films = [].concat(film, this._fims);
-    this._callListeners(this._dataChangeListeners);
   }
 
   setFilterChangeListener(listener) {

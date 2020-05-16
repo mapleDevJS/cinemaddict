@@ -1,6 +1,8 @@
 import {pluralize, getFullDate} from "../../util/util";
 import AbstractSmart from "../abstract-smart";
 import moment from "moment";
+import {encode} from 'he';
+import {getRandomName} from "../../mocks/films";
 
 const CARD_CONTROLS = [
   [`isInWatchlist`, `watchlist`, `Add to watchlist`],
@@ -16,10 +18,11 @@ const EMOJIS = [
 ];
 
 export default class FilmDetails extends AbstractSmart {
-  constructor(film) {
+  constructor(film, comments) {
     super();
 
     this._film = film;
+    this._comments = comments;
   }
 
   getTemplate() {
@@ -96,6 +99,24 @@ export default class FilmDetails extends AbstractSmart {
     return this.getElement().querySelector(`.film-details__add-emoji-label`);
   }
 
+  getNewComment() {
+    const emojiElement = this.getElement().querySelector(`.film-details__add-emoji-label`).firstElementChild;
+    const emojiName = emojiElement.alt.substring((`emoji-`).length);
+
+    const comment = encode(this.getElement().querySelector(`.film-details__comment-input`).value);
+
+    // const date = moment().format();
+    const emotion = emojiElement ? emojiName : ``;
+
+    return {
+      id: String(new Date() + Math.random()),
+      comment,
+      emotion,
+      author: getRandomName(),
+      date: new Date(),
+    };
+  }
+
   setCloseButtonClickListener(listener) {
     this.closeButtonClickListener = listener;
     this.getElement().querySelector(`.film-details__close-btn`)
@@ -120,6 +141,23 @@ export default class FilmDetails extends AbstractSmart {
       .addEventListener(`click`, this.addToFavouriteClickListener);
   }
 
+  setDeleteCommentClickListener(listener) {
+    const commentButtonList = this._element.querySelectorAll(`.film-details__comment-delete`);
+
+    if (commentButtonList) {
+      Array.from(commentButtonList).forEach((button) => button.addEventListener(`click`, listener));
+    }
+
+    this.deleteButtonClickListener = listener;
+  }
+
+  setAddNewCommentListener(listener) {
+    const textCommentElement = this._element.querySelector(`.film-details__comment-input`);
+    textCommentElement.addEventListener(`keydown`, listener);
+
+    this.addNewCommentListener = listener;
+  }
+
   setEmojiClickListener(listener) {
     this.emojiClickListener = listener;
     this.getElement().querySelector(`.film-details__emoji-list`)
@@ -131,17 +169,19 @@ export default class FilmDetails extends AbstractSmart {
     this.setAddToWatchlistClickListener(this.addToWatchlistClickListener);
     this.setAlreadyWatchedClickListener(this.alreadyWatchedClickListener);
     this.setAddToFavouriteClickListener(this.addToFavouriteClickListener);
+    this.setDeleteCommentClickListener(this.deleteButtonClickListener);
+    this.setAddNewCommentListener(this.addNewCommentListener);
     this.setEmojiClickListener(this.emojiClickListener);
   }
 
-  _getCommentMarkup({emoji, text, author, date}) {
+  _getCommentMarkup({id, author, comment, date, emotion}) {
     return (
-      `<li class="film-details__comment">
+      `<li class="film-details__comment" data-comment-id="${id}">
           <span class="film-details__comment-emoji">
-            <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
+            <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">
           </span>
           <div>
-            <p class="film-details__comment-text">${text}</p>
+            <p class="film-details__comment-text">${comment}</p>
             <p class="film-details__comment-info">
               <span class="film-details__comment-author">${author}</span>
               <span class="film-details__comment-day">${moment(date).format(`YYYY[/]MM[/]DD hh:mm`)}</span>
@@ -153,7 +193,7 @@ export default class FilmDetails extends AbstractSmart {
   }
 
   _getComments() {
-    return this._film.comments.map(this._getCommentMarkup).join(`\n`);
+    return this._comments.map(this._getCommentMarkup).join(`\n`);
   }
 
   _getGenresMarkup() {
