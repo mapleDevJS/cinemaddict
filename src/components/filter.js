@@ -1,4 +1,5 @@
 import Abstract from "./abstract";
+import {FilterType} from "../util/consts";
 
 export default class Filter extends Abstract {
   constructor(filters) {
@@ -43,10 +44,19 @@ export default class Filter extends Abstract {
       `<a href="#${type}"
         class="main-navigation__item ${active ? `main-navigation__item--active` : ``}">
           ${name}
-        <span class="main-navigation__item-count">
-          ${count}
-        </span>
+        ${this._showCount(type, count)}
       </a>`
     );
+  }
+
+  _showCount(type, count) {
+    if (type !== FilterType.ALL) {
+      return (
+        `<span class="main-navigation__item-count">
+          ${count}
+        </span>`
+      );
+    }
+    return ``;
   }
 }

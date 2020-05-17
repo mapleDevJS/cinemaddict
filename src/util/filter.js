@@ -1,7 +1,7 @@
 import {FilterType} from "./consts";
 
 const Filter = {
-  ALL: (film) => !film.isInHistory,
+  ALL: (film) => film,
   WATCHLIST: (film) => film.isInWatchlist,
   HISTORY: (film) => film.isInHistory,
   FAVORITES: (film) => film.isInFavorites
