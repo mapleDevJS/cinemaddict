@@ -105,7 +105,6 @@ export default class FilmDetails extends AbstractSmart {
 
     const comment = encode(this.getElement().querySelector(`.film-details__comment-input`).value);
 
-    // const date = moment().format();
     const emotion = emojiElement ? emojiName : ``;
 
     return {
@@ -184,7 +183,7 @@ export default class FilmDetails extends AbstractSmart {
             <p class="film-details__comment-text">${comment}</p>
             <p class="film-details__comment-info">
               <span class="film-details__comment-author">${author}</span>
-              <span class="film-details__comment-day">${moment(date).format(`YYYY[/]MM[/]DD hh:mm`)}</span>
+              <span class="film-details__comment-day">${moment(date).fromNow()}</span>
               <button class="film-details__comment-delete">Delete</button>
             </p>
           </div>
