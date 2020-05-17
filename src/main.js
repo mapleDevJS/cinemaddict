@@ -1,29 +1,39 @@
-import UserTitle from "./components/user-title";
-import Menu from "./components/menu";
+import UserRank from "./components/user-rank";
 import Sort from "./components/sort";
 import Stats from "./components/stats";
 import Films from "./components/films/films";
-import {generateFilms} from "./mocks/films";
-import {render} from "./util/dom-util";
-import {QUANTITY_FILMS} from "./util/consts";
+import MoviesModel from "./models/movies";
+import CommentsModel from "./models/comments";
+import FilterController from "./controllers/Filter-controller";
 import PageController from "./controllers/page-controller";
+import {generateFilms, generateComments} from "./mocks/films";
+import {render} from "./util/dom-util";
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);
 
-const films = generateFilms(QUANTITY_FILMS.TOTAL);
+const comments = generateComments();
+const films = generateFilms(comments);
 
-render(siteHeaderElement, new UserTitle(films));
-render(siteMainElement, new Menu(films));
+const moviesModel = new MoviesModel();
+moviesModel.films = films;
+
+const commentsModel = new CommentsModel();
+commentsModel.comments = comments;
+
+render(siteHeaderElement, new UserRank(moviesModel));
+
+const filterController = new FilterController(siteMainElement, moviesModel);
+filterController.render();
 
 const sortComponent = new Sort();
 render(siteMainElement, sortComponent);
 
 const filmsComponent = new Films();
-const pageController = new PageController(filmsComponent, sortComponent);
+const pageController = new PageController(filmsComponent, sortComponent, moviesModel, commentsModel);
 
 render(siteMainElement, filmsComponent);
-pageController.render(films);
+pageController.render();
 
-render(siteFooterElement, new Stats(films));
+render(siteFooterElement, new Stats(moviesModel));

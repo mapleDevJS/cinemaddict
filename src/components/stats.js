@@ -1,9 +1,9 @@
 import Abstract from "./abstract";
 
 export default class Stats extends Abstract {
-  constructor(films) {
+  constructor(moviesModel) {
     super();
-    this._films = films;
+    this._films = moviesModel.films;
   }
 
   getTemplate() {

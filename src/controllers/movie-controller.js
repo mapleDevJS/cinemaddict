@@ -2,16 +2,22 @@ import FilmDetails from "../components/films/film-details";
 import FilmCard from "../components/films/film-card";
 import {render, remove, replace} from "../util/dom-util";
 
-const Mode = {
+export const Mode = {
   DEFAULT: `default`,
   DETAILS: `details`,
 };
 
+const isCmdEnterKeysCode = (evt) => {
+  return evt.code === `Enter` && (evt.ctrlKey || evt.metaKey);
+};
+
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, commentsModel) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+    this._commentsModel = commentsModel;
+
     this._mode = Mode.DEFAULT;
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
@@ -21,12 +27,12 @@ export default class MovieController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
-  render(film) {
+  render(film, comments) {
     const oldFilmCardComponent = this._filmCardComponent;
     const oldFilmDetailsComponent = this._filmDetailsComponent;
 
     this._filmCardComponent = new FilmCard(film);
-    this._filmDetailsComponent = new FilmDetails(film);
+    this._filmDetailsComponent = new FilmDetails(film, comments);
 
     this._filmCardComponent.setPosterClickListener(() => {
       this._openFilmDetails();
@@ -81,6 +87,31 @@ export default class MovieController {
       }));
     });
 
+    this._filmDetailsComponent.setDeleteCommentClickListener((evt) => {
+      evt.preventDefault();
+
+      const commentElement = evt.target.closest(`.film-details__comment`);
+      const removeCommentId = commentElement.dataset.commentId;
+
+      const updatedComments = film.comments.filter((id) => {
+        return id !== removeCommentId;
+      });
+
+      this._onDataChange(this, film, Object.assign({}, film, {comments: updatedComments}));
+    });
+
+    this._filmDetailsComponent.setAddNewCommentListener((evt) => {
+      if (isCmdEnterKeysCode(evt)) {
+        const comment = this._filmDetailsComponent.getNewComment();
+
+        if (comment) {
+          this._commentsModel.addComment(comment);
+          const newCommentId = film.comments.concat(comment.id);
+          this._onDataChange(this, film, Object.assign({}, film, {comments: newCommentId}));
+        }
+      }
+    });
+
     this._filmDetailsComponent.setEmojiClickListener((evt) => {
       const currentEmoji = evt.target.value;
       const emojiContainer = this._filmDetailsComponent.getEmojiContainer();
@@ -101,10 +132,10 @@ export default class MovieController {
     }
   }
 
-  _closeFilmDetails() {
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  destroy() {
     remove(this._filmDetailsComponent);
-    this._mode = Mode.DEFAULT;
+    remove(this._filmCardComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _openFilmDetails() {
@@ -113,6 +144,12 @@ export default class MovieController {
     this._mode = Mode.DETAILS;
     this._filmDetailsComponent.recoverListeners();
     document.addEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _closeFilmDetails() {
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    remove(this._filmDetailsComponent);
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {
