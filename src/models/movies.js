@@ -29,25 +29,6 @@ export default class MoviesModel {
     this._callListeners(this._filterChangeListeners);
   }
 
-  removeComment(id) {
-    const index = this.comments.findIndex((it) => it.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
-    this.comments = [].concat(this.comments.slice(0, index), this.comments.slice(index + 1));
-
-    this._callListeners(this._dataChangeListeners);
-
-    return true;
-  }
-
-  addComment(comment) {
-    this.comments = [].concat(comment, this.comments);
-    this._callListeners(this._dataChangeListeners);
-  }
-
   updateFilm(id, film) {
     const index = this._films.findIndex((it) => it.id === id);
 

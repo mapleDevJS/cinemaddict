@@ -22,12 +22,12 @@ export default class Sort extends AbstractSmart {
     );
   }
 
-  recoverListeners() {
-    this.setSortTypeChangeListener(this._sortTypeChangeListener);
-  }
-
   getSortType() {
     return this._currentSortType;
+  }
+
+  recoverListeners() {
+    this.setSortTypeChangeListener(this._sortTypeChangeListener);
   }
 
   setSortTypeChangeListener(listener) {
@@ -52,7 +52,7 @@ export default class Sort extends AbstractSmart {
     });
   }
 
-  _getSortItem(key, value) {
+  _createSortItemMarkup(key, value) {
     return (
       `<li>
         <a href="#"
@@ -67,7 +67,7 @@ export default class Sort extends AbstractSmart {
 
   _getSortMarkup() {
     return Object.keys(SortType).map((key) => {
-      return this._getSortItem(key, SortType[key]);
+      return this._createSortItemMarkup(key, SortType[key]);
     })
     .join(`\n`);
   }

@@ -93,7 +93,6 @@ export default class MovieController {
       const commentElement = evt.target.closest(`.film-details__comment`);
       const removeCommentId = commentElement.dataset.commentId;
 
-
       const updatedComments = film.comments.filter((id) => {
         return id !== removeCommentId;
       });
@@ -139,18 +138,18 @@ export default class MovieController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
-  _closeFilmDetails() {
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
-    remove(this._filmDetailsComponent);
-    this._mode = Mode.DEFAULT;
-  }
-
   _openFilmDetails() {
     this._onViewChange();
     this._body.appendChild(this._filmDetailsComponent.getElement());
     this._mode = Mode.DETAILS;
     this._filmDetailsComponent.recoverListeners();
     document.addEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _closeFilmDetails() {
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    remove(this._filmDetailsComponent);
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {

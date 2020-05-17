@@ -14,7 +14,7 @@ export default class CommentsModel {
     this._callListeners(this._dataChangeListeners);
   }
 
-  getCommentsForFilm(film) {
+  getCommentsByFilm(film) {
     return film.comments.map((id) => {
       return this._comments.find((comment) => comment.id === id);
     });

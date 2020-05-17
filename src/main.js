@@ -1,4 +1,4 @@
-import UserTitle from "./components/user-title";
+import UserRank from "./components/user-rank";
 import Sort from "./components/sort";
 import Stats from "./components/stats";
 import Films from "./components/films/films";
@@ -22,7 +22,7 @@ moviesModel.films = films;
 const commentsModel = new CommentsModel();
 commentsModel.comments = comments;
 
-render(siteHeaderElement, new UserTitle(moviesModel));
+render(siteHeaderElement, new UserRank(moviesModel));
 
 const filterController = new FilterController(siteMainElement, moviesModel);
 filterController.render();

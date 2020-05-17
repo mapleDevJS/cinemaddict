@@ -9,6 +9,7 @@ const CARD_CONTROLS = [
 ];
 
 const MAX_DESCRIPTION_LENGTH = 140;
+const MINUTES_IN_HOUR = 60;
 export default class FilmCard extends Abstract {
   constructor(film) {
     super();
@@ -74,8 +75,24 @@ export default class FilmCard extends Abstract {
     });
   }
 
+  _createButtonMarkup(checkingClass, key, value) {
+    return (
+      `<button
+        class="
+          film-card__controls-item
+          button
+          film-card__controls-item--${key} ${this._isClassActive(checkingClass)}">
+        ${value}
+      </button>`
+    );
+  }
+
+  _isClassActive(checkingClass) {
+    return this._film[checkingClass] ? `film-card__controls-item--active` : ``;
+  }
+
   _getFilmDuration() {
-    return this._film.runtime >= 60
+    return this._film.runtime >= MINUTES_IN_HOUR
       ? moment.utc(moment.duration(this._film.runtime, `minutes`).asMilliseconds()).format(`h[h] mm[m]`)
       : `${this._film.runtime}m`;
   }
@@ -86,25 +103,9 @@ export default class FilmCard extends Abstract {
       : this._film.description;
   }
 
-  _getActiveClass(checkingClass) {
-    return this._film[checkingClass] ? `film-card__controls-item--active` : ``;
-  }
-
-  _getButton(checkingClass, key, value) {
-    return (
-      `<button
-        class="
-          film-card__controls-item
-          button
-          film-card__controls-item--${key} ${this._getActiveClass(checkingClass)}">
-        ${value}
-      </button>`
-    );
-  }
-
   _getButtonsMarkup() {
     return CARD_CONTROLS
-      .map(([checkingClass, key, value]) => this._getButton(checkingClass, key, value))
+      .map(([checkingClass, key, value]) => this._createButtonMarkup(checkingClass, key, value))
       .join(`\n`);
   }
 }

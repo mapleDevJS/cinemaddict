@@ -30,6 +30,7 @@ export default class FilterController {
         active: filterType === this._activeFilterType,
       };
     });
+
     const oldComponent = this._filterComponent;
 
     this._filterComponent = new Filter(filters);

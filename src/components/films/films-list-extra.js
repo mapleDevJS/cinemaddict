@@ -1,14 +1,9 @@
 import Abstract from "../abstract";
-import {createElement} from "../../util/dom-util";
 
 export default class FilmsListExtra extends Abstract {
   constructor(title) {
     super();
     this._title = title;
-  }
-
-  getFilmsListContainer() {
-    return this.getElement().querySelector(`.films-list__container`);
   }
 
   getTemplate() {
@@ -18,5 +13,9 @@ export default class FilmsListExtra extends Abstract {
         <div class="films-list__container"></div>
       </section>`
     );
+  }
+
+  getFilmsListContainer() {
+    return this.getElement().querySelector(`.films-list__container`);
   }
 }
