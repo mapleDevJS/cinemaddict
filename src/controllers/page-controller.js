@@ -11,7 +11,7 @@ import {QUANTITY_FILMS} from "../util/consts";
 const SECTIONS = {
   RATING: `Top Rated`,
   COMMENTS: `Most commented`
-}
+};
 
 const TOP_FILMS_NUMBER = 2;
 
