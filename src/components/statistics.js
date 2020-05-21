@@ -3,7 +3,7 @@ import {getUserRank} from "./user-rank";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 // import moment from "moment";
-import {FilterType, getFilmsByFilter} from "../util/filter";
+import {getFilmsByFilter} from "../util/filter";
 
 const filterNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
 const DEFAULT_FILTER = `all-time`;
@@ -21,11 +21,11 @@ export default class Statistics extends AbstractSmart {
   }
 
   getTemplate() {
-    const films = this._moviesModel.films;
+    const films = getFilmsByFilter(this._moviesModel.films, this._filter);
     const filterMarkup = this._createFilterMarkup(this._filter);
-    const watchedFilmsAmount = getFilmsByFilter(films, FilterType.HISTORY).length;
+    const watchedFilmsAmount = films.length;
     const userRank = getUserRank(films);
-    const watchedFilms = films.filter((film) => !film.isInHistory);
+    const watchedFilms = films.filter((film) => film.isInHistory);
     const totalFilmDuration = this._getTotalFilmDuration(watchedFilms);
     const filmsByGenres = this._getFilmsAmountByGenre(films);
     const topGenre = films.length ? filmsByGenres[0].genre : ``;
