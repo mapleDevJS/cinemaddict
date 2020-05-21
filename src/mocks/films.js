@@ -31,6 +31,11 @@ const DURATION = {
   MAX: 180
 };
 
+const WATCHING_DATE = {
+  FROM: new Date(2019, 0, 1),
+  TO: new Date()
+};
+
 const AGES = [`0+`, `6+`, `12+`, `16+`, `18+`];
 
 const TITLES = [
@@ -176,8 +181,8 @@ const getRandomDescription = (text) => {
   return text.split(`. `, numberOfSentence).join(`. `);
 };
 
-const getRandomDate = () => {
-  return new Date(RELEASE_DATE.FIRST.getTime() + Math.random() * (RELEASE_DATE.LAST.getTime() - RELEASE_DATE.FIRST.getTime()));
+const getRandomDate = (start, end) => {
+  return new Date(+start + Math.random() * (end - start));
 };
 
 const getCommentsId = (comments) => {
@@ -209,6 +214,7 @@ const generateFilm = (comments) => {
     isInWatchlist: getRandomBoolean(),
     isInHistory: getRandomBoolean(),
     isInFavorites: getRandomBoolean(),
+    watchingDate: getRandomDate(WATCHING_DATE.FROM, WATCHING_DATE.TO)
   };
 };
 
@@ -221,7 +227,7 @@ const generateOneComment = () => {
     id: String(new Date() + Math.random()),
     author: getRandomName(),
     comment: getRandomDescription(DESCRIPTIONS),
-    date: getRandomDate(),
+    date: getRandomDate(WATCHING_DATE.FROM, WATCHING_DATE.TO),
     emotion: getRandomItem(EMOJI),
   };
 };
