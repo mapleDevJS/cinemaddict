@@ -1,11 +1,12 @@
 import Abstract from "./abstract";
-import {FilterType} from "../util/consts";
+import {FilterType} from "../util/filter";
 
 export default class Filter extends Abstract {
-  constructor(filters) {
+  constructor(filters, extraFilters) {
     super();
 
     this._filters = filters;
+    this._extraFilters = extraFilters;
   }
 
   static getFilterNameByHash(hash) {
@@ -14,13 +15,14 @@ export default class Filter extends Abstract {
 
   getTemplate() {
     const filtersMarkup = this._filters.map((filter) => this._createFilterMarkup(filter)).join(`\n`);
+    const extraFilterMarkup = this._extraFilters.map((filter) => this._createExtraFilterMarkup(filter)).join(`\n`);
 
     return (
       `<nav class="main-navigation">
         <div class="main-navigation__items">
           ${filtersMarkup}
         </div>
-        <a href="#stats" class="main-navigation__additional">Stats</a>
+        ${extraFilterMarkup}
       </nav>`
     );
   }
@@ -35,6 +37,12 @@ export default class Filter extends Abstract {
 
       const filterName = Filter.getFilterNameByHash(evt.target.hash);
 
+
+      // if (filterName === ExtraFilterType.STATS) {
+      //   extralistener(filterName);
+      //   return;
+      // }
+
       listener(filterName);
     });
   }
@@ -45,6 +53,14 @@ export default class Filter extends Abstract {
         class="main-navigation__item ${active ? `main-navigation__item--active` : ``}">
           ${name}
         ${this._showCount(type, count)}
+      </a>`
+    );
+  }
+
+  _createExtraFilterMarkup({type, name, active}) {
+    return (
+      `<a href="#${type}" class="main-navigation__additional ${active ? `main-navigation__additional--active` : ``}">
+        ${name}
       </a>`
     );
   }
