@@ -37,3 +37,8 @@ render(siteMainElement, filmsComponent);
 pageController.render();
 
 render(siteFooterElement, new Stats(moviesModel));
+
+const statisticsComponent = new Statistics(moviesModel);
+render(siteMainElement, statisticsComponent);
+statisticsComponent.show(moviesModel.films);
+statisticsComponent.hide();
