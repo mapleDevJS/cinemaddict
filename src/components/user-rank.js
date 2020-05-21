@@ -1,4 +1,4 @@
-import Abstract from "./abstract";
+import AbstractSmart from "./abstract-smart";
 
 const UserRating = {
   NOVICE: {
@@ -38,19 +38,29 @@ export const getUserRank = (films) => {
   }
 };
 
-export default class UserRank extends Abstract {
+export default class UserRank extends AbstractSmart {
   constructor(moviesModel) {
     super();
-    this._films = moviesModel.films;
+
+    this._rank = getUserRank(moviesModel.films);
+
+    moviesModel.setDataChangeListener(() => this._onDataChange(moviesModel));
   }
 
   getTemplate() {
     return (
       `<section class="header__profile profile">
-        <p class="profile__rating">${getUserRank(this._films)}</p>
+        <p class="profile__rating">${this._rank}</p>
         <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
       </section>`
     );
   }
-}
 
+  recoverListeners() {
+  }
+
+  _onDataChange(moviesModel) {
+    this._rank = getUserRank(moviesModel.films);
+    super.rerender();
+  }
+}
