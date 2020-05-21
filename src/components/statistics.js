@@ -1,8 +1,7 @@
 import AbstractSmart from "./abstract-smart";
 import {getUserRank} from "./user-rank";
+import ChartData from "./chart-data";
 import Chart from "chart.js";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-// import moment from "moment";
 import {getFilmsByFilter} from "../util/filter";
 
 const filterNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
@@ -125,70 +124,9 @@ export default class Statistics extends AbstractSmart {
   }
 
   renderChart(films) {
-    const BAR_HEIGHT = 50;
-    const chartData = this._getFilmsAmountByGenre(films);
+    const chart = new ChartData(films);
 
-    const genresCtx = this._getGenresCtx();
-    genresCtx.height = BAR_HEIGHT * chartData.length;
-
-    const chart = {
-      plugins: [ChartDataLabels],
-      type: `horizontalBar`,
-      data: {
-        labels: chartData.map((it) => it.genre),
-        datasets: [{
-          data: chartData.map((it) => it.count),
-          backgroundColor: `#ffe800`,
-          hoverBackgroundColor: `#ffe800`,
-          anchor: `start`,
-          barThickness: 24
-        }]
-      },
-      options: {
-        plugins: {
-          datalabels: {
-            font: {
-              size: 20
-            },
-            color: `#ffffff`,
-            anchor: `start`,
-            align: `start`,
-            offset: 40,
-          }
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              fontColor: `#ffffff`,
-              padding: 100,
-              fontSize: 20
-            },
-            gridLines: {
-              display: false,
-              drawBorder: false
-            },
-          }],
-          xAxes: [{
-            ticks: {
-              display: false,
-              beginAtZero: true
-            },
-            gridLines: {
-              display: false,
-              drawBorder: false
-            },
-          }],
-        },
-        legend: {
-          display: false
-        },
-        tooltips: {
-          enabled: false
-        }
-      }
-    };
-
-    return new Chart(genresCtx, chart);
+    return new Chart(this._getGenresCtx(), chart);
   }
 
   show(updatedFilms) {
