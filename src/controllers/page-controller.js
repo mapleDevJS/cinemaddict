@@ -175,16 +175,27 @@ export default class PageController {
     }
   }
 
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
   _renderTopRatedFilms(container, films, onDataChange, onViewChange) {
     const topRatedFilms = getSortedFilms(films, SortType.RATING, 0, TOP_FILMS_NUMBER);
 
     const filmsListExtraComponent = new FilmsListExtra(SECTIONS.RATING);
     render(container, filmsListExtraComponent);
 
-    for (const film of films) {
-      if (parseFloat(film.rating, 10) === 0) {
-        return;
-      }
+    const totalRatings = films.reduce((total, film) => {
+      total += parseFloat(film.rating, 10);
+      return total;
+    }, 0);
+
+    if (totalRatings === 0) {
+      return;
     }
 
     const filmsListContainer = filmsListExtraComponent.getFilmsListContainer();

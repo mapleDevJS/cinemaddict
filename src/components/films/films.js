@@ -7,11 +7,11 @@ export default class Films extends Abstract {
     );
   }
 
-  getFilmsList() {
-    return this.getElement().querySelector(`.films-list`);
-  }
+  // getFilmsList() {
+  //   return this.getElement().querySelector(`.films-list`);
+  // }
 
-  getFilmsListContainer() {
-    return this.getElement().querySelector(`.films-list__container`);
-  }
+  // getFilmsListContainer() {
+  //   return this.getElement().querySelector(`.films-list__container`);
+  // }
 }

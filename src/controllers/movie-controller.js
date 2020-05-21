@@ -58,6 +58,7 @@ export default class MovieController {
     this._filmCardComponent.setAlreadyWatchedClickListener(() => {
       this._onDataChange(this, film, Object.assign({}, film, {
         isInHistory: !film.isInHistory,
+        watchingDate: new Date()
       }));
     });
 
