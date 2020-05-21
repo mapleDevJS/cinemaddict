@@ -5,7 +5,7 @@ import Films from "./components/films/films";
 import Statistics from "./components/statistics";
 import MoviesModel from "./models/movies";
 import CommentsModel from "./models/comments";
-import FilterController from "./controllers/Filter-controller";
+import FilterController from "./controllers/filter-controller";
 import PageController from "./controllers/page-controller";
 
 import {generateFilms, generateComments} from "./mocks/films";
