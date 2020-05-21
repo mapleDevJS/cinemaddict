@@ -175,6 +175,14 @@ export default class PageController {
     }
   }
 
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
   _renderTopRatedFilms(container, films, onDataChange, onViewChange) {
     const topRatedFilms = getSortedFilms(films, SortType.RATING, 0, TOP_FILMS_NUMBER);
 
