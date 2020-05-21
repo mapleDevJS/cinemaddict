@@ -36,7 +36,7 @@ export const getUserRank = (films) => {
     default:
       return (``);
   }
-}
+};
 
 export default class UserRank extends Abstract {
   constructor(moviesModel) {
