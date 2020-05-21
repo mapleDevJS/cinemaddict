@@ -181,10 +181,13 @@ export default class PageController {
     const filmsListExtraComponent = new FilmsListExtra(SECTIONS.RATING);
     render(container, filmsListExtraComponent);
 
-    for (const film of films) {
-      if (parseFloat(film.rating, 10) === 0) {
-        return;
-      }
+    const totalRatings = films.reduce((total, film) => {
+      total += parseFloat(film.rating, 10);
+      return total;
+    }, 0);
+
+    if (totalRatings === 0) {
+      return;
     }
 
     const filmsListContainer = filmsListExtraComponent.getFilmsListContainer();
