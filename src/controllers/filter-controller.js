@@ -47,6 +47,7 @@ export default class FilterController {
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
+      this.setOnMenuItemClick(this._onMenuItemClick);
     } else {
       render(container, this._filterComponent);
     }
