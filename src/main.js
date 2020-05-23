@@ -1,28 +1,28 @@
-import UserRank from "./components/user-rank";
+import CommentsModel from "./models/comments";
+import Films from "./components/films/films";
+import FilterController from "./controllers/filter-controller";
+import MoviesModel from "./models/movies";
+import PageController from "./controllers/page-controller";
 import Sort from "./components/sort";
 import Stats from "./components/stats";
-import Films from "./components/films/films";
 import Statistics from "./components/statistics";
-import MoviesModel from "./models/movies";
-import CommentsModel from "./models/comments";
-import FilterController from "./controllers/filter-controller";
-import PageController from "./controllers/page-controller";
+import UserRank from "./components/user-rank";
 
 import {generateFilms, generateComments} from "./mocks/films";
 import {render} from "./util/dom-util";
-
-const siteHeaderElement = document.querySelector(`.header`);
-const siteMainElement = document.querySelector(`.main`);
-const siteFooterElement = document.querySelector(`.footer`);
 
 const comments = generateComments();
 const films = generateFilms(comments);
 
 const moviesModel = new MoviesModel();
-moviesModel.films = films;
-
 const commentsModel = new CommentsModel();
+
+moviesModel.films = films;
 commentsModel.comments = comments;
+
+const siteHeaderElement = document.querySelector(`.header`);
+const siteMainElement = document.querySelector(`.main`);
+const siteFooterElement = document.querySelector(`.footer`);
 
 render(siteHeaderElement, new UserRank(moviesModel));
 
@@ -42,7 +42,7 @@ render(siteFooterElement, new Stats(moviesModel));
 
 const statisticsComponent = new Statistics(moviesModel);
 render(siteMainElement, statisticsComponent);
-statisticsComponent.show(moviesModel.films);
+
 statisticsComponent.hide();
 
 filterController.setOnMenuItemClick((menuItem) => {
