@@ -9,12 +9,11 @@ import Footer from "./components/footer";
 import Statistics from "./components/statistics";
 import UserRank from "./components/user-rank";
 
-// import {generateFilms, generateComments} from "./mocks/films";
 import {render} from "./util/dom-util";
 
-// const comments = generateComments();
-// const films = generateFilms(comments);
-const api = new API();
+const AUTHORIZATION = `Basic 10o37Jfjb2iu47yerhM#)`;
+
+const api = new API(AUTHORIZATION);
 
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
@@ -58,7 +57,7 @@ filterController.setOnMenuItemClick((menuItem) => {
   }
 });
 
-api.getTasks()
+api.getFilms()
   .then((films, comments) => {
     moviesModel.films = films;
     commentsModel.comments = comments;
