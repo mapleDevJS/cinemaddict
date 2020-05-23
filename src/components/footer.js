@@ -1,6 +1,6 @@
 import Abstract from "./abstract";
 
-export default class Stats extends Abstract {
+export default class Footer extends Abstract {
   constructor(moviesModel) {
     super();
     this._films = moviesModel.films;
