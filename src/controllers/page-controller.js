@@ -38,10 +38,12 @@ const getSortedFilms = (films, sortType, from, to) => {
 };
 
 export default class PageController {
-  constructor(container, sortComponent, moviesModel, commentsModel) {
+  constructor(container, sortComponent, moviesModel, commentsModel, api) {
     this._container = container;
     this._moviesModel = moviesModel;
     this._commentsModel = commentsModel;
+
+    this._api = api;
 
     this._shownMovieControllers = [];
     this._shownFilmsCount = QUANTITY_FILMS.ON_START;
@@ -129,11 +131,14 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldFilm, newFilm) {
-    const isSuccess = this._moviesModel.updateFilm(oldFilm.id, newFilm);
-
-    if (isSuccess) {
-      movieController.render(newFilm, this._commentsModel.getCommentsByFilm(newFilm));
-    }
+    this._api.updateFilm(oldFilm.id, newFilm)
+    .then((movieModel) => {
+      const isSuccess = this._moviesModel.updateFilm(oldFilm.id, movieModel);
+      if (isSuccess) {
+        movieController.render(movieModel, this._commentsModel.getCommentsByFilm(newFilm));
+        this._updateFilms(this._shownFilmsCount);
+      }
+    });
 
     if (oldFilm.comments.length !== newFilm.comments.length) {
       const container = this._container.getElement();

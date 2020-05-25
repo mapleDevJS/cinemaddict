@@ -13,7 +13,9 @@ import UserRank from "./components/user-rank";
 import {render, remove} from "./util/dom-util";
 
 const AUTHORIZATION = `Basic 10o37Jfjb2iu47yerhM#`;
-const api = new API(AUTHORIZATION);
+const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
+
+const api = new API(END_POINT, AUTHORIZATION);
 
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
@@ -34,7 +36,7 @@ const loadingComponent = new Loading();
 render(siteMainElement, loadingComponent);
 
 const filmsComponent = new Films();
-const pageController = new PageController(filmsComponent, sortComponent, moviesModel, commentsModel);
+const pageController = new PageController(filmsComponent, sortComponent, moviesModel, commentsModel, api);
 
 render(siteMainElement, filmsComponent);
 
