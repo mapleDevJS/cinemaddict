@@ -38,10 +38,12 @@ const getSortedFilms = (films, sortType, from, to) => {
 };
 
 export default class PageController {
-  constructor(container, sortComponent, moviesModel, commentsModel) {
+  constructor(container, sortComponent, moviesModel, commentsModel, api) {
     this._container = container;
     this._moviesModel = moviesModel;
     this._commentsModel = commentsModel;
+
+    this._api = api;
 
     this._shownMovieControllers = [];
     this._shownFilmsCount = QUANTITY_FILMS.ON_START;
@@ -94,7 +96,11 @@ export default class PageController {
     const newFilms = this._renderFilmCards(this._filmsListContainer, films.slice(0, this._shownFilmsCount), this._onDataChange, this._onViewChange);
     this._shownMovieControllers = this._shownMovieControllers.concat(newFilms);
 
-    this._shownFilmsCount = this._shownMovieControllers.length;
+    if (this._shownMovieControllers.length > QUANTITY_FILMS.ON_START) {
+      this._shownFilmsCount = this._shownMovieControllers.length;
+    } else {
+      this._shownFilmsCount = QUANTITY_FILMS.ON_START;
+    }
   }
 
   _renderFilmCards(container, films, onDataChange, onViewChange) {
@@ -119,16 +125,20 @@ export default class PageController {
 
   _updateFilms(count) {
     this._removeFilms();
+
     this._renderFilms(this._moviesModel.filteredFilms.slice(0, count));
     this._renderButtonShowMore();
   }
 
   _onDataChange(movieController, oldFilm, newFilm) {
-    const isSuccess = this._moviesModel.updateFilm(oldFilm.id, newFilm);
-
-    if (isSuccess) {
-      movieController.render(newFilm, this._commentsModel.getCommentsByFilm(newFilm));
-    }
+    this._api.updateFilm(oldFilm.id, newFilm)
+    .then((movie) => {
+      const isSuccess = this._moviesModel.updateFilm(oldFilm.id, movie);
+      if (isSuccess) {
+        movieController.render(movie, this._commentsModel.getCommentsByFilm(newFilm));
+        this._updateFilms(this._shownFilmsCount);
+      }
+    });
 
     if (oldFilm.comments.length !== newFilm.comments.length) {
       const container = this._container.getElement();

@@ -1,5 +1,6 @@
 import FilmDetails from "../components/films/film-details";
 import FilmCard from "../components/films/film-card";
+import Movie from "../models/movie";
 import {render, remove, replace} from "../util/dom-util";
 
 export const Mode = {
@@ -50,42 +51,49 @@ export default class MovieController {
     });
 
     this._filmCardComponent.setAddToWatchlistClickListener(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInWatchlist: !film.isInWatchlist,
-      }));
+      const newFilm = Movie.clone(film);
+      newFilm.isInWatchlist = !film.isInWatchlist;
+
+      this._onDataChange(this, film, newFilm);
     });
 
     this._filmCardComponent.setAlreadyWatchedClickListener(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInHistory: !film.isInHistory,
-        watchingDate: new Date()
-      }));
+      const newFilm = Movie.clone(film);
+      newFilm.isInHistory = !film.isInHistory;
+      newFilm.watchingDate = new Date();
+
+      this._onDataChange(this, film, newFilm);
     });
 
     this._filmCardComponent.setAddToFavouriteClickListener(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInFavorites: !film.isInFavorites,
-      }));
+      const newFilm = Movie.clone(film);
+      newFilm.isInFavorites = !film.isInFavorites;
+
+      this._onDataChange(this, film, newFilm);
+
     });
 
     this._filmDetailsComponent.setCloseButtonClickListener(() => this._closeFilmDetails());
 
     this._filmDetailsComponent.setAddToWatchlistClickListener(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInWatchlist: !film.isInWatchlist,
-      }));
+      const newFilm = Movie.clone(film);
+      newFilm.isInWatchlist = !film.isInWatchlist;
+
+      this._onDataChange(this, film, newFilm);
     });
 
     this._filmDetailsComponent.setAlreadyWatchedClickListener(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInHistory: !film.isInHistory,
-      }));
+      const newFilm = Movie.clone(film);
+      newFilm.isInHistory = !film.isInHistory;
+
+      this._onDataChange(this, film, newFilm);
     });
 
     this._filmDetailsComponent.setAddToFavouriteClickListener(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInFavorites: !film.isInFavorites,
-      }));
+      const newFilm = Movie.clone(film);
+      newFilm.isInFavorites = !film.isInFavorites;
+
+      this._onDataChange(this, film, newFilm);
     });
 
     this._filmDetailsComponent.setDeleteCommentClickListener((evt) => {
