@@ -1,25 +1,15 @@
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export default class ChartData {
-  constructor(films) {
-    this._films = films;
-  }
-
-  getChartData() {
-    const BAR_HEIGHT = 50;
-    const chartData = this._getFilmsAmountByGenre(this._films);
-
-    const genresCtx = this._getGenresCtx();
-    genresCtx.height = BAR_HEIGHT * chartData.length;
-
+  static create(genres, filmsByGenres) {
     return (
       {
         plugins: [ChartDataLabels],
         type: `horizontalBar`,
         data: {
-          labels: chartData.map((it) => it.genre),
+          labels: genres,
           datasets: [{
-            data: chartData.map((it) => it.count),
+            data: filmsByGenres.map((it) => it.count),
             backgroundColor: `#ffe800`,
             hoverBackgroundColor: `#ffe800`,
             anchor: `start`,

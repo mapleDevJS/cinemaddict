@@ -124,9 +124,14 @@ export default class Statistics extends AbstractSmart {
     return this.getElement().querySelector(`.statistic__chart`);
   }
 
-  renderChart(films) {
-    const chart = new ChartData(films);
-    return new Chart(this._getGenresCtx(), chart);
+  _renderChart(films) {
+    const filteredFilms = getFilmsByFilter(films, this._filter);
+    const filmsByGenres = this._getFilmsAmountByGenre(filteredFilms);
+    const genres = filmsByGenres.map((film) => film.genre);
+
+    const chartData = ChartData.create(genres, filmsByGenres);
+
+    return new Chart(this._getGenresCtx(), chartData);
   }
 
   show() {
@@ -142,20 +147,10 @@ export default class Statistics extends AbstractSmart {
   rerender() {
     super.rerender();
 
-    const films = getFilmsByFilter(this._moviesModel.films, this._filter);
-
     this._resetChart();
-    this._chart = this.renderChart(films);
+
+    this._chart = this._renderChart(this._moviesModel.films);
   }
-
-  // _renderChart() {
-  //   // console.log(this._moviesModel);
-
-  //   const films = getFilmsByFilter(this._moviesModel.films, this._filter);
-  //   this._resetChart();
-
-  //   this._chart = this.renderChart(films);
-  // }
 
   _resetChart() {
     if (this._chart) {

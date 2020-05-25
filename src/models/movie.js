@@ -20,14 +20,14 @@ export default class Movie {
     this.comments = data.comments;
     this.isInWatchlist = userDetails.watchlist;
     this.isInHistory = userDetails.already_watched;
-    this.isInFavorite = userDetails.favorite;
+    this.isInFavorites = userDetails.favorite;
     this.watchingDate = userDetails.watching_date;
   }
 
   toRAW(clone = false) {
     return {
       "id": this.id,
-      "comments": clone ? this.comments : this.comments.map(({id}) => id),
+      "comments": clone ? this.comments : this.comments.map((id) => id),
       "film_info": {
         "title": this.title,
         "alternative_title": this.original,
@@ -49,7 +49,7 @@ export default class Movie {
         "watchlist": this.isInWatchlist,
         "already_watched": this.isInHistory,
         "watching_date": this.watchingDate,
-        "favorite": this.isInFavorite
+        "favorite": this.isInFavorites
       }
     };
   }
@@ -59,7 +59,6 @@ export default class Movie {
   }
 
   static parseMovies(data) {
-    // console.log(data);
     return data.map(Movie.parseMovie);
   }
 

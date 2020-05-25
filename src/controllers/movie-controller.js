@@ -52,7 +52,7 @@ export default class MovieController {
 
     this._filmCardComponent.setAddToWatchlistClickListener(() => {
       const newFilm = Movie.clone(film);
-      newFilm.isInWatchList = !film.isInWatchList;
+      newFilm.isInWatchlist = !film.isInWatchlist;
 
       this._onDataChange(this, film, newFilm);
     });

@@ -132,10 +132,10 @@ export default class PageController {
 
   _onDataChange(movieController, oldFilm, newFilm) {
     this._api.updateFilm(oldFilm.id, newFilm)
-    .then((movieModel) => {
-      const isSuccess = this._moviesModel.updateFilm(oldFilm.id, movieModel);
+    .then((movie) => {
+      const isSuccess = this._moviesModel.updateFilm(oldFilm.id, movie);
       if (isSuccess) {
-        movieController.render(movieModel, this._commentsModel.getCommentsByFilm(newFilm));
+        movieController.render(movie, this._commentsModel.getCommentsByFilm(newFilm));
         this._updateFilms(this._shownFilmsCount);
       }
     });
