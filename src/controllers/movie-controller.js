@@ -51,24 +51,13 @@ export default class MovieController {
     });
 
     this._filmCardComponent.setAddToWatchlistClickListener(() => {
-      // this._onDataChange(this, film, Object.assign({}, film, {
-      //   isInWatchlist: !film.isInWatchlist,
-      // }));
-      console.log(film);
       const newFilm = Movie.clone(film);
-      console.log(newFilm);
       newFilm.isInWatchList = !film.isInWatchList;
-      console.log(newFilm.isInWatchList);
 
       this._onDataChange(this, film, newFilm);
     });
 
     this._filmCardComponent.setAlreadyWatchedClickListener(() => {
-      // this._onDataChange(this, film, Object.assign({}, film, {
-      //   isInHistory: !film.isInHistory,
-      //   watchingDate: new Date()
-      // }));
-
       const newFilm = Movie.clone(film);
       newFilm.isInHistory = !film.isInHistory;
       newFilm.watchingDate = new Date();
@@ -77,10 +66,6 @@ export default class MovieController {
     });
 
     this._filmCardComponent.setAddToFavouriteClickListener(() => {
-      // this._onDataChange(this, film, Object.assign({}, film, {
-      //   isInFavorites: !film.isInFavorites,
-      // }));
-
       const newFilm = Movie.clone(film);
       newFilm.isInFavorites = !film.isInFavorites;
 
@@ -91,10 +76,6 @@ export default class MovieController {
     this._filmDetailsComponent.setCloseButtonClickListener(() => this._closeFilmDetails());
 
     this._filmDetailsComponent.setAddToWatchlistClickListener(() => {
-      // this._onDataChange(this, film, Object.assign({}, film, {
-      //   isInWatchlist: !film.isInWatchlist,
-      // }));
-
       const newFilm = Movie.clone(film);
       newFilm.isInWatchlist = !film.isInWatchlist;
 
@@ -102,10 +83,6 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setAlreadyWatchedClickListener(() => {
-      // this._onDataChange(this, film, Object.assign({}, film, {
-      //   isInHistory: !film.isInHistory,
-      // }));
-
       const newFilm = Movie.clone(film);
       newFilm.isInHistory = !film.isInHistory;
 
@@ -113,10 +90,6 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setAddToFavouriteClickListener(() => {
-      // this._onDataChange(this, film, Object.assign({}, film, {
-      //   isInFavorites: !film.isInFavorites,
-      // }));
-
       const newFilm = Movie.clone(film);
       newFilm.isInFavorites = !film.isInFavorites;
 
