@@ -94,7 +94,11 @@ export default class PageController {
     const newFilms = this._renderFilmCards(this._filmsListContainer, films.slice(0, this._shownFilmsCount), this._onDataChange, this._onViewChange);
     this._shownMovieControllers = this._shownMovieControllers.concat(newFilms);
 
-    this._shownFilmsCount = this._shownMovieControllers.length;
+    if (this._shownMovieControllers.length > QUANTITY_FILMS.ON_START) {
+      this._shownFilmsCount = this._shownMovieControllers.length;
+    } else {
+      this._shownFilmsCount = QUANTITY_FILMS.ON_START;
+    }
   }
 
   _renderFilmCards(container, films, onDataChange, onViewChange) {
@@ -119,6 +123,7 @@ export default class PageController {
 
   _updateFilms(count) {
     this._removeFilms();
+
     this._renderFilms(this._moviesModel.filteredFilms.slice(0, count));
     this._renderButtonShowMore();
   }
