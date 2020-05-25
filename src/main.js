@@ -13,7 +13,6 @@ import UserRank from "./components/user-rank";
 import {render, remove} from "./util/dom-util";
 
 const AUTHORIZATION = `Basic 10o37Jfjb2iu47yerhM#`;
-
 const api = new API(AUTHORIZATION);
 
 const moviesModel = new MoviesModel();
@@ -38,35 +37,32 @@ const filmsComponent = new Films();
 const pageController = new PageController(filmsComponent, sortComponent, moviesModel, commentsModel);
 
 render(siteMainElement, filmsComponent);
-render(siteFooterElement, new Footer(moviesModel));
 
 const statisticsComponent = new Statistics(moviesModel);
 render(siteMainElement, statisticsComponent);
-
 statisticsComponent.hide();
-
-filterController.setOnMenuItemClick((menuItem) => {
-  if (menuItem === `stats`) {
-    pageController.hide();
-    sortComponent.hide();
-    statisticsComponent.show(moviesModel.films);
-  } else {
-    pageController.show();
-    sortComponent.show();
-    statisticsComponent.hide();
-  }
-});
 
 api.getFilms()
   .then((films) => {
-    console.log(films);
     moviesModel.films = films;
 
     api.getComments(films)
       .then((comments) => {
         commentsModel.comments = [].concat(...comments);
-        console.log(commentsModel.comments);
-        remove(loadingComponent);
         pageController.render();
+        render(siteFooterElement, new Footer(moviesModel));
+        remove(loadingComponent);
       });
   });
+
+filterController.setOnMenuItemClick((menuItem) => {
+  if (menuItem === `stats`) {
+    pageController.hide();
+    sortComponent.hide();
+    statisticsComponent.show();
+  } else {
+    statisticsComponent.hide();
+    sortComponent.show();
+    pageController.show();
+  }
+});

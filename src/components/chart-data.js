@@ -1,8 +1,8 @@
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export default class ChartData {
-  constructor(moviesModel) {
-    this._films = moviesModel.films;
+  constructor(films) {
+    this._films = films;
   }
 
   getChartData() {
