@@ -1,4 +1,4 @@
-import {getRandomItem, getRandomIntInclusive, getRandomBoolean, shuffle} from "../util/util";
+import {getRandomItem} from "../util/util";
 // import {QUANTITY_FILMS} from "../util/consts";
 
 // const SENTENCE_QUANTITY = {
