@@ -13,7 +13,9 @@ import UserRank from "./components/user-rank";
 import {render, remove} from "./util/dom-util";
 
 const AUTHORIZATION = `Basic 10o37Jfjb2iu47yerhM#`;
-const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
+const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
+
+const STATS = `stats`;
 
 const api = new API(END_POINT, AUTHORIZATION);
 
@@ -58,7 +60,7 @@ api.getFilms()
   });
 
 filterController.setOnMenuItemClick((menuItem) => {
-  if (menuItem === `stats`) {
+  if (menuItem === STATS) {
     pageController.hide();
     sortComponent.hide();
     statisticsComponent.show();

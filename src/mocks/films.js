@@ -1,4 +1,4 @@
-// import {getRandomItem, getRandomIntInclusive, getRandomBoolean, shuffle} from "../util/util";
+import {getRandomItem, getRandomIntInclusive, getRandomBoolean, shuffle} from "../util/util";
 // import {QUANTITY_FILMS} from "../util/consts";
 
 // const SENTENCE_QUANTITY = {
@@ -69,31 +69,31 @@
 //   }
 // ];
 
-// const FIRST_NAMES = [
-//   `James`,
-//   `John`,
-//   `Robert`,
-//   `Michael`,
-//   `William`,
-//   `Mary`,
-//   `Patricia`,
-//   `Jennifer`,
-//   `Linda`,
-//   `Elizabeth`
-// ];
+const FIRST_NAMES = [
+  `James`,
+  `John`,
+  `Robert`,
+  `Michael`,
+  `William`,
+  `Mary`,
+  `Patricia`,
+  `Jennifer`,
+  `Linda`,
+  `Elizabeth`
+];
 
-// const LAST_NAMES = [
-//   `Smith`,
-//   `Johnson`,
-//   `Williams`,
-//   `Brown`,
-//   `Jones`,
-//   `Miller`,
-//   `Davis`,
-//   `Garcia`,
-//   `Rodriguez`,
-//   `Wilson`
-// ];
+const LAST_NAMES = [
+  `Smith`,
+  `Johnson`,
+  `Williams`,
+  `Brown`,
+  `Jones`,
+  `Miller`,
+  `Davis`,
+  `Garcia`,
+  `Rodriguez`,
+  `Wilson`
+];
 
 // const COUNTRIES = [
 //   `United States`,
@@ -150,9 +150,9 @@
 
 // const EMOJI = [`smile`, `sleeping`, `puke`, `angry`];
 
-// export const getRandomName = () => {
-//   return `${getRandomItem(FIRST_NAMES)} ${getRandomItem(LAST_NAMES)}`;
-// };
+export const getRandomName = () => {
+  return `${getRandomItem(FIRST_NAMES)} ${getRandomItem(LAST_NAMES)}`;
+};
 
 // const getRandomRating = (min, max) => {
 //   return (Math.random() * (max - min) + min).toFixed(1);

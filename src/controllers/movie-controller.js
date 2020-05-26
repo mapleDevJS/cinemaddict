@@ -3,6 +3,9 @@ import FilmCard from "../components/films/film-card";
 import Movie from "../models/movie";
 import {render, remove, replace} from "../util/dom-util";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+const MILLISECONDS_COUNT = 1000;
+
 export const Mode = {
   DEFAULT: `default`,
   DETAILS: `details`,
@@ -13,17 +16,19 @@ const isCmdEnterKeysCode = (evt) => {
 };
 
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange, commentsModel) {
+  constructor(container, onDataChange, onViewChange, commentsModel, api) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._commentsModel = commentsModel;
 
+    this._api = api;
+
     this._mode = Mode.DEFAULT;
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
 
-    this._body = document.querySelector(`body`);
+    // this._body = document.querySelector(`body`);
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
@@ -96,29 +101,54 @@ export default class MovieController {
       this._onDataChange(this, film, newFilm);
     });
 
+    this._filmDetailsComponent.setAddNewCommentListener((evt) => {
+      this._filmDetailsComponent.getCommentInput().style.border = `none`;
+      if (isCmdEnterKeysCode(evt)) {
+        const newComment = this._filmDetailsComponent.getNewComment();
+        // const form = this._filmDetailsComponent.getForm();
+
+        if (newComment) {
+          const newFilm = Movie.clone(film);
+
+          this._api.createComment(newFilm.id, newComment)
+            .then(() => {
+              newFilm.comments.concat(newComment.id);
+              const formELements = this._filmDetailsComponent.getFormElements();
+              formELements.forEach((element) => {
+                element.setAttribute(`disabled`, `disabled`);
+              });
+
+              this._onDataChange(this, film, newFilm);
+            })
+            .catch(() => {
+              this.shake();
+              this._addCommentFieldBorder();
+            });
+        }
+      }
+    });
+
     this._filmDetailsComponent.setDeleteCommentClickListener((evt) => {
       evt.preventDefault();
+      const deleteButton = this._filmDetailsComponent.getDeleteButton();
+      const newFilm = Movie.clone(film);
 
       const commentElement = evt.target.closest(`.film-details__comment`);
       const removeCommentId = commentElement.dataset.commentId;
 
-      const updatedComments = film.comments.filter((id) => {
-        return id !== removeCommentId;
-      });
+      this._api.deleteComment(removeCommentId)
+        .then(() => {
+          newFilm.comments = film.comments.filter((id) => {
+            return id !== removeCommentId;
+          });
+          deleteButton.innerHTML = `Deleting...`;
+          deleteButton.setAttribute(`disabled`, `true`);
+        })
+        .catch(() => {
+          this._shakeComment(commentElement);
+        });
 
-      this._onDataChange(this, film, Object.assign({}, film, {comments: updatedComments}));
-    });
-
-    this._filmDetailsComponent.setAddNewCommentListener((evt) => {
-      if (isCmdEnterKeysCode(evt)) {
-        const comment = this._filmDetailsComponent.getNewComment();
-
-        if (comment) {
-          this._commentsModel.addComment(comment);
-          const newCommentId = film.comments.concat(comment.id);
-          this._onDataChange(this, film, Object.assign({}, film, {comments: newCommentId}));
-        }
-      }
+      this._onDataChange(this, film, newFilm);
     });
 
     this._filmDetailsComponent.setEmojiClickListener((evt) => {
@@ -149,7 +179,7 @@ export default class MovieController {
 
   _openFilmDetails() {
     this._onViewChange();
-    this._body.appendChild(this._filmDetailsComponent.getElement());
+    document.body.appendChild(this._filmDetailsComponent.getElement());
     this._mode = Mode.DETAILS;
     this._filmDetailsComponent.recoverListeners();
     document.addEventListener(`keydown`, this._onEscKeyDown);
@@ -159,6 +189,29 @@ export default class MovieController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     remove(this._filmDetailsComponent);
     this._mode = Mode.DEFAULT;
+  }
+
+  shake() {
+    this._filmDetailsComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
+    this._filmCardComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
+
+    setTimeout(() => {
+      this._filmDetailsComponent.getElement().style.animation = ``;
+      this._filmCardComponent.getElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  _shakeComment(currentComment) {
+    currentComment.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
+
+    setTimeout(() => {
+      currentComment.style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  _addCommentFieldBorder() {
+    this._filmDetailsComponent.getCommentInput().style.border = `2px solid red`;
+    this._filmDetailsComponent.getCommentInput().removeAttribute(`disabled`);
   }
 
   _onEscKeyDown(evt) {

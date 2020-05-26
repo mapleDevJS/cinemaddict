@@ -105,7 +105,7 @@ export default class PageController {
 
   _renderFilmCards(container, films, onDataChange, onViewChange) {
     return films.map((film) => {
-      const movieController = new MovieController(container, onDataChange, onViewChange, this._commentsModel);
+      const movieController = new MovieController(container, onDataChange, onViewChange, this._commentsModel, this._api);
       movieController.render(film, this._commentsModel.getCommentsByFilm(film));
       return movieController;
     });
@@ -131,23 +131,28 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldFilm, newFilm) {
+    // console.log(oldFilm, newFilm);
     this._api.updateFilm(oldFilm.id, newFilm)
     .then((movie) => {
       const isSuccess = this._moviesModel.updateFilm(oldFilm.id, movie);
       if (isSuccess) {
         movieController.render(movie, this._commentsModel.getCommentsByFilm(newFilm));
-        this._updateFilms(this._shownFilmsCount);
+        // this._updateFilms(this._shownFilmsCount);
+
       }
+
+      if (oldFilm.comments.length !== newFilm.comments.length) {
+        const container = this._container.getElement();
+        const films = this._moviesModel.films;
+
+        this._mostCommentedFilmsContainer.remove();
+
+        this._renderMostCommentedFilms(container, films, this._onDataChange, this._onViewChange);
+      }
+    })
+    .catch(() => {
+      movieController.shake();
     });
-
-    if (oldFilm.comments.length !== newFilm.comments.length) {
-      const container = this._container.getElement();
-      const films = this._moviesModel.films;
-
-      this._mostCommentedFilmsContainer.remove();
-
-      this._renderMostCommentedFilms(container, films, this._onDataChange, this._onViewChange);
-    }
   }
 
   _onViewChange() {

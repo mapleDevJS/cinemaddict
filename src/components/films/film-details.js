@@ -2,7 +2,6 @@ import {pluralize, getFullDate} from "../../util/util";
 import AbstractSmart from "../abstract-smart";
 import moment from "moment";
 import {encode} from 'he';
-import {getRandomName} from "../../mocks/films";
 
 const CARD_CONTROLS = [
   [`isInWatchlist`, `watchlist`, `Add to watchlist`],
@@ -76,9 +75,7 @@ export default class FilmDetails extends AbstractSmart {
             </ul>
 
             <div class="film-details__new-comment">
-              <div for="add-emoji" class="film-details__add-emoji-label">
-                <img src="images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
-              </div>
+              <div for="add-emoji" class="film-details__add-emoji-label"></div>
 
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -100,20 +97,37 @@ export default class FilmDetails extends AbstractSmart {
   }
 
   getNewComment() {
-    const emojiElement = this.getElement().querySelector(`.film-details__add-emoji-label`).firstElementChild;
-    const emojiName = emojiElement.alt.substring((`emoji-`).length);
+    const emojiElement = this.getEmojiContainer().firstElementChild;
 
-    const comment = encode(this.getElement().querySelector(`.film-details__comment-input`).value);
+    const emotion = emojiElement ? emojiElement.alt.substring((`emoji-`).length) : null;
 
-    const emotion = emojiElement ? emojiName : ``;
+    const newComment = encode(this.getElement().querySelector(`.film-details__comment-input`).value);
 
-    return {
-      id: String(new Date() + Math.random()),
-      comment,
-      emotion,
-      author: getRandomName(),
-      date: new Date(),
-    };
+    if (!emotion || !newComment) {
+      return null;
+    } else {
+      return {
+        newComment,
+        emotion,
+        date: new Date()
+      };
+    }
+  }
+
+  getForm() {
+    return document.querySelector(`.film-details__inner`);
+  }
+
+  getFormElements() {
+    return this.getForm.querySelectorAll(`button, input, textarea`);
+  }
+
+  getDeleteButton() {
+    return this.getElement().querySelector(`film-details__comment-delete`);
+  }
+
+  getCommentInput() {
+    return this.getElement().querySelector(`.film-details__comment-input`);
   }
 
   setCloseButtonClickListener(listener) {

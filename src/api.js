@@ -35,7 +35,7 @@ const API = class {
 
   getComments(films) {
     const promises = films.map((film) => {
-      return this._load({url: `/comments/${film.id}`})
+      return this._load({url: `comments/${film.id}`})
         .then((response) => response.json())
         .then(Comment.parseComments);
     });
@@ -43,9 +43,27 @@ const API = class {
     return Promise.all(promises);
   }
 
+  createComment(id, comment) {
+    return this._load({
+      url: `comments/${id}`,
+      method: Method.POST,
+      body: JSON.stringify(comment),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json())
+      .then(Comment.parseComment);
+  }
+
+  deleteComment(id) {
+    return this._load({
+      url: `comments/${id}`,
+      method: Method.DELETE
+    });
+  }
+
   updateFilm(id, data) {
     return this._load({
-      url: `/movies/${id}`,
+      url: `movies/${id}`,
       method: Method.PUT,
       body: JSON.stringify(data.toRAW()),
       headers: new Headers({"Content-Type": `application/json`})
