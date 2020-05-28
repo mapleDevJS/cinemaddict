@@ -11,11 +11,11 @@ export default class MoviesModel {
     this._filterChangeListeners = [];
   }
 
-  get filteredMovies() {
+  get movies() {
     return getMoviesByFilter(this._movies, this._activeFilterType);
   }
 
-  get movies() {
+  getAllMovies() {
     return this._movies;
   }
 

@@ -78,7 +78,6 @@ export default class MovieController {
       newMovie.isInFavorites = !movie.isInFavorites;
 
       this._onDataChange(movie, newMovie);
-
     });
 
     this._filmDetailsComponent.setCloseButtonClickListener(() => this._closeFilmDetails());

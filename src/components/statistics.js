@@ -120,8 +120,8 @@ export default class Statistics extends AbstractSmart {
     return this.getElement().querySelector(`.statistic__chart`);
   }
   _renderChart(movies) {
-    const filteredMovies = getMoviesByFilter(movies, this._filter);
-    const moviesByGenres = this._getMoviesAmountByGenre(filteredMovies);
+    movies = getMoviesByFilter(movies, this._filter);
+    const moviesByGenres = this._getMoviesAmountByGenre(movies);
     const genres = moviesByGenres.map((movie) => movie.genre);
 
     const chartData = ChartData.create(genres, moviesByGenres);
