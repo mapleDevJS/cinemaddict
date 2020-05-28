@@ -6,6 +6,8 @@ export const SortType = {
   RATING: `rating`
 };
 
+const LINK_TAG_NAME = `A`;
+
 export default class Sort extends AbstractSmart {
   constructor() {
     super();
@@ -26,32 +28,6 @@ export default class Sort extends AbstractSmart {
     return this._currentSortType;
   }
 
-  recoverListeners() {
-    this.setSortTypeChangeListener(this._sortTypeChangeListener);
-  }
-
-  setSortTypeChangeListener(listener) {
-    this._sortTypeChangeListener = listener;
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
-      if (evt.target.tagName !== `A`) {
-        return;
-      }
-
-      const sortType = SortType[evt.target.dataset.sortType];
-
-      if (this._currentSortType === sortType) {
-        return;
-      }
-
-      this._currentSortType = sortType;
-
-      listener(this._currentSortType);
-      super.rerender();
-    });
-  }
-
   _createSortItemMarkup(key, value) {
     return (
       `<li>
@@ -70,5 +46,31 @@ export default class Sort extends AbstractSmart {
       return this._createSortItemMarkup(key, SortType[key]);
     })
     .join(`\n`);
+  }
+
+  recoverListeners() {
+    this.setSortTypeChangeListener(this._sortTypeChangeListener);
+  }
+
+  setSortTypeChangeListener(listener) {
+    this._sortTypeChangeListener = listener;
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== LINK_TAG_NAME) {
+        return;
+      }
+
+      const sortType = SortType[evt.target.dataset.sortType];
+
+      if (this._currentSortType === sortType) {
+        return;
+      }
+
+      this._currentSortType = sortType;
+
+      listener(this._currentSortType);
+      super.rerender();
+    });
   }
 }

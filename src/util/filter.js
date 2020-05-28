@@ -1,4 +1,3 @@
-// import {FilterType, StatsFilterType} from "./consts";
 import moment from "moment";
 
 export const FilterType = {
@@ -8,7 +7,7 @@ export const FilterType = {
   FAVORITES: `favorites`
 };
 
-export const ExtraFilterType = {
+export const MenuType = {
   STATS: `stats`
 };
 
@@ -21,7 +20,7 @@ export const FilterNames = {
   FAVORITES: `Favourites`
 };
 
-export const ExtraFilterNames = {
+export const MenuItems = {
   STATS: `Stats`
 };
 
@@ -42,42 +41,42 @@ export const StatsFilterType = {
 };
 
 const Filter = {
-  ALL: (film) => film,
-  WATCHLIST: (film) => film.isInWatchlist,
-  HISTORY: (film) => film.isInHistory,
-  FAVORITES: (film) => film.isInFavorites,
-  STATS: (film) => film
+  ALL: (movie) => movie,
+  WATCHLIST: (movie) => movie.isInWatchlist,
+  HISTORY: (movie) => movie.isInHistory,
+  FAVORITES: (movie) => movie.isInFavorites,
+  STATS: (movie) => movie
 };
 
 const StatsFilter = {
-  ALL: (film) => film,
-  TODAY: (film) => moment(film.watchingDate).isSame(moment(), `day`),
-  WEEK: (film) => moment(film.watchingDate).isAfter(moment().subtract(7, `days`)),
-  MONTH: (film) => moment(film.watchingDate).isAfter(moment().subtract(1, `months`)),
-  YEAR: (film) => moment(film.watchingDate).isAfter(moment().subtract(1, `years`))
+  ALL: (movie) => movie,
+  TODAY: (movie) => moment(movie.watchingDate).isSame(moment(), `day`),
+  WEEK: (movie) => moment(movie.watchingDate).isAfter(moment().subtract(7, `days`)),
+  MONTH: (movie) => moment(movie.watchingDate).isAfter(moment().subtract(1, `months`)),
+  YEAR: (movie) => moment(movie.watchingDate).isAfter(moment().subtract(1, `years`))
 };
 
-export const getFilmsByFilter = (films, filterType) => {
+export const getMoviesByFilter = (movies, filterType) => {
   switch (filterType) {
     case FilterType.ALL:
-      return films.filter(Filter.ALL);
+      return movies.filter(Filter.ALL);
     case FilterType.WATCHLIST:
-      return films.filter(Filter.WATCHLIST);
+      return movies.filter(Filter.WATCHLIST);
     case FilterType.HISTORY:
-      return films.filter(Filter.HISTORY);
+      return movies.filter(Filter.HISTORY);
     case FilterType.FAVORITES:
-      return films.filter(Filter.FAVORITES);
+      return movies.filter(Filter.FAVORITES);
     case STATS:
-      return films.filter(Filter.ALL);
+      return movies.filter(Filter.ALL);
     case StatsFilterType.TODAY:
-      return films.filter(StatsFilter.TODAY);
+      return movies.filter(StatsFilter.TODAY);
     case StatsFilterType.WEEK:
-      return films.filter(StatsFilter.WEEK);
+      return movies.filter(StatsFilter.WEEK);
     case StatsFilterType.MONTH:
-      return films.filter(StatsFilter.MONTH);
+      return movies.filter(StatsFilter.MONTH);
     case StatsFilterType.YEAR:
-      return films.filter(StatsFilter.YEAR);
+      return movies.filter(StatsFilter.YEAR);
   }
 
-  return films;
+  return movies;
 };

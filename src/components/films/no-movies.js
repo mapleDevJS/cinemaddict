@@ -1,6 +1,6 @@
 import Abstract from "../abstract";
 
-export default class NoFilms extends Abstract {
+export default class NoMovies extends Abstract {
   getTemplate() {
     return (
       `<section class="films-list">

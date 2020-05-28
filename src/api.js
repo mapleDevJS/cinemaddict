@@ -16,9 +16,8 @@ const Status = {
 const checkStatus = (response) => {
   if (response.status >= Status.SUCCESS && response.status < Status.REDIRECTION) {
     return response;
-  } else {
-    throw new Error(`${response.status}: ${response.statusText}`);
   }
+  throw new Error(`${response.status}: ${response.statusText}`);
 };
 
 const API = class {
@@ -27,15 +26,26 @@ const API = class {
     this._authorization = authorization;
   }
 
-  getFilms() {
+  getMovies() {
     return this._load({url: `movies`})
       .then((response) => response.json())
       .then(Movie.parseMovies);
   }
 
-  getComments(films) {
-    const promises = films.map((film) => {
-      return this._load({url: `/comments/${film.id}`})
+  updateMovie(id, movie) {
+    return this._load({
+      url: `movies/${id}`,
+      method: Method.PUT,
+      body: JSON.stringify(movie.toRAW()),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json())
+      .then(Movie.parseMovie);
+  }
+
+  getComments(movies) {
+    const promises = movies.map((movie) => {
+      return this._load({url: `comments/${movie.id}`})
         .then((response) => response.json())
         .then(Comment.parseComments);
     });
@@ -43,15 +53,26 @@ const API = class {
     return Promise.all(promises);
   }
 
-  updateFilm(id, data) {
+  createComment(id, comment) {
     return this._load({
-      url: `/movies/${id}`,
-      method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
+      url: `comments/${id}`,
+      method: Method.POST,
+      body: JSON.stringify(comment),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json())
-      .then(Movie.parseMovie);
+      .then((data) => {
+        const newMovie = Movie.parseMovie(data[`movie`]);
+        const newComments = Comment.parseComments(data[`comments`]);
+        return {newMovie, newComments};
+      });
+  }
+
+  deleteComment(id) {
+    return this._load({
+      url: `comments/${id}`,
+      method: Method.DELETE
+    });
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

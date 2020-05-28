@@ -1,7 +1,7 @@
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export default class ChartData {
-  static create(genres, filmsByGenres) {
+  static create(genres, moviesByGenres) {
     return (
       {
         plugins: [ChartDataLabels],
@@ -9,7 +9,7 @@ export default class ChartData {
         data: {
           labels: genres,
           datasets: [{
-            data: filmsByGenres.map((it) => it.count),
+            data: moviesByGenres.map((it) => it.count),
             backgroundColor: `#ffe800`,
             hoverBackgroundColor: `#ffe800`,
             anchor: `start`,

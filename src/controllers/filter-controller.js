@@ -1,8 +1,7 @@
 import Filter from "../components/filter";
-import {FilterType, ExtraFilterType, FilterNames, ExtraFilterNames} from "../util/filter";
-
-import {render, replace} from "../util/dom-util";
-import {getFilmsByFilter} from "../util/filter";
+import {FilterType, MenuType, FilterNames, MenuItems} from "../util/filter";
+import {replace} from "../util/dom-util";
+import {getMoviesByFilter} from "../util/filter";
 
 export default class FilterController {
   constructor(container, moviesModel) {
@@ -21,36 +20,42 @@ export default class FilterController {
 
   render() {
     const container = this._container;
-    const films = this._moviesModel.films;
+    const movies = this._moviesModel.movies;
 
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         type: filterType,
         name: FilterNames[filterType.toUpperCase()],
-        count: getFilmsByFilter(films, filterType).length,
+        count: getMoviesByFilter(movies, filterType).length,
         active: filterType === this._activeFilterType,
       };
     });
 
-    const extraFilters = Object.values(ExtraFilterType).map((filterType) => {
+    const menuItems = Object.values(MenuType).map((menuType) => {
       return {
-        type: filterType,
-        name: ExtraFilterNames[filterType.toUpperCase()],
-        active: filterType === this._activeFilterType,
+        type: menuType,
+        name: MenuItems[menuType.toUpperCase()],
+        active: menuType === this._activeFilterType,
       };
     });
 
     const oldComponent = this._filterComponent;
 
-    this._filterComponent = new Filter(filters, extraFilters);
+    this._filterComponent = new Filter(filters, menuItems);
     this._filterComponent.setFilterChangeListener(this._onFilterChange);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
       this.setOnMenuItemClick(this._onMenuItemClick);
     } else {
-      render(container, this._filterComponent);
+      this._filterComponent.render(container);
     }
+  }
+
+  setOnMenuItemClick(listener) {
+    this._filterComponent.setFilterChangeListener(listener);
+
+    this._onMenuItemClick = listener;
   }
 
   _onFilterChange(filterType) {
@@ -66,11 +71,5 @@ export default class FilterController {
 
   _onDataChange() {
     this.render();
-  }
-
-  setOnMenuItemClick(listener) {
-    this._filterComponent.setFilterChangeListener(listener);
-
-    this._onMenuItemClick = listener;
   }
 }

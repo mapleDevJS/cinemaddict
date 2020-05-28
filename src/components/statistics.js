@@ -1,8 +1,8 @@
 import AbstractSmart from "./abstract-smart";
-import {getUserRank} from "./user-rank";
 import ChartData from "./chart-data";
 import Chart from "chart.js";
-import {getFilmsByFilter} from "../util/filter";
+import {getUserRank} from "./user-rank";
+import {getMoviesByFilter} from "../util/filter";
 
 const filterNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
 const DEFAULT_FILTER = `all-time`;
@@ -13,22 +13,21 @@ export default class Statistics extends AbstractSmart {
     super();
 
     this._moviesModel = moviesModel;
-    // this._films = moviesModel.films;
     this._chart = null;
-    // this.renderChart(this._films);
+
     this._filter = DEFAULT_FILTER;
     this._onFilterChange();
   }
 
   getTemplate() {
-    const films = getFilmsByFilter(this._moviesModel.films, this._filter);
+    const movies = getMoviesByFilter(this._moviesModel.movies, this._filter);
     const filterMarkup = this._createFilterMarkup(this._filter);
-    const watchedFilmsAmount = films.length;
-    const userRank = getUserRank(films);
-    const watchedFilms = films.filter((film) => film.isInHistory);
-    const totalFilmDuration = this._getTotalFilmDuration(watchedFilms);
-    const filmsByGenres = this._getFilmsAmountByGenre(films);
-    const topGenre = films.length ? filmsByGenres[0].genre : ``;
+    const watchedMoviesAmount = movies.length;
+    const userRank = getUserRank(movies);
+    const watchedMovies = movies.filter((movie) => movie.isInHistory);
+    const totalMovieDuration = this._getTotalMovieDuration(watchedMovies);
+    const moviesByGenres = this._getMoviesAmountByGenre(movies);
+    const topGenre = movies.length ? moviesByGenres[0].genre : ``;
 
     return (
       `<section class="statistic">
@@ -44,11 +43,11 @@ export default class Statistics extends AbstractSmart {
       <ul class="statistic__text-list">
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">You watched</h4>
-          <p class="statistic__item-text">${watchedFilmsAmount} <span class="statistic__item-description">movies</span></p>
+          <p class="statistic__item-text">${watchedMoviesAmount} <span class="statistic__item-description">movies</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>
-          <p class="statistic__item-text">${totalFilmDuration.hours} <span class="statistic__item-description">h</span> ${totalFilmDuration.minutes} <span class="statistic__item-description">m</span></p>
+          <p class="statistic__item-text">${totalMovieDuration.hours} <span class="statistic__item-description">h</span> ${totalMovieDuration.minutes} <span class="statistic__item-description">m</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Top genre</h4>
@@ -63,10 +62,7 @@ export default class Statistics extends AbstractSmart {
   }
 
   _getFilterIdByName(filterName) {
-    let filterId = ``;
-    filterId = (filterName === `All time`) ? `all-time` : filterName.toLowerCase();
-
-    return filterId;
+    return (filterName === `All time`) ? `all-time` : filterName.toLowerCase();
   }
 
   _createFilterMarkup(filter) {
@@ -87,51 +83,57 @@ export default class Statistics extends AbstractSmart {
     .join(`\n`);
   }
 
-  _getFilmGenres(films) {
-    return films.reduce((filmGenres, film) => {
-      film.genres.forEach((it) => {
-        if (!filmGenres.includes(it)) {
-          filmGenres.push(it);
+  _getMovieGenres(movies) {
+    return movies.reduce((movieGenres, movie) => {
+      movie.genres.forEach((it) => {
+        if (!movieGenres.includes(it)) {
+          movieGenres.push(it);
         }
       });
-      return filmGenres;
+      return movieGenres;
     }, []);
   }
 
-  _getFilmsAmountByGenre(films) {
-    const filmGenres = this._getFilmGenres(films);
+  _getMoviesAmountByGenre(movies) {
+    const movieGenres = this._getMovieGenres(movies);
 
-    return filmGenres.map((genre) => {
+    return movieGenres.map((genre) => {
       return {
         genre,
-        count: films.filter((film) => film.genres.includes(genre)).length,
+        count: movies.filter((movie) => movie.genres.includes(genre)).length,
       };
     }).sort((a, b) => b.count - a.count);
   }
 
-  _getTotalFilmDuration(films) {
-    let totalDuration = {
+  _getTotalMovieDuration(movies) {
+    const totalDuration = {
       hours: 0,
       minutes: 0,
     };
-    const totalFilmDuration = films.reduce((total, film) => total + film.runtime, 0);
-    totalDuration.hours = Math.floor(totalFilmDuration / 60);
-    totalDuration.minutes = totalFilmDuration % 60;
+    const totalMovieDuration = movies.reduce((total, movie) => total + movie.runtime, 0);
+    totalDuration.hours = Math.floor(totalMovieDuration / 60);
+    totalDuration.minutes = totalMovieDuration % 60;
     return totalDuration;
   }
 
   _getGenresCtx() {
     return this.getElement().querySelector(`.statistic__chart`);
   }
+  _renderChart(movies) {
+    const filteredMovies = getMoviesByFilter(movies, this._filter);
+    const moviesByGenres = this._getMoviesAmountByGenre(filteredMovies);
+    const genres = moviesByGenres.map((movie) => movie.genre);
 
-  _renderChart(films) {
-    const filteredFilms = getFilmsByFilter(films, this._filter);
-    const filmsByGenres = this._getFilmsAmountByGenre(filteredFilms);
-    const genres = filmsByGenres.map((film) => film.genre);
-
-    const chartData = ChartData.create(genres, filmsByGenres);
+    const chartData = ChartData.create(genres, moviesByGenres);
 
     return new Chart(this._getGenresCtx(), chartData);
+  }
+
+  _resetChart() {
+    if (this._chart) {
+      this._chart.destroy();
+      this._chart = null;
+    }
   }
 
   show() {
@@ -140,23 +142,16 @@ export default class Statistics extends AbstractSmart {
     this.rerender();
   }
 
-  recoverListeners() {
-    this._onFilterChange();
-  }
-
   rerender() {
     super.rerender();
 
     this._resetChart();
 
-    this._chart = this._renderChart(this._moviesModel.films);
+    this._chart = this._renderChart(this._moviesModel.movies);
   }
 
-  _resetChart() {
-    if (this._chart) {
-      this._chart.destroy();
-      this._chart = null;
-    }
+  recoverListeners() {
+    this._onFilterChange();
   }
 
   _onFilterChange() {
