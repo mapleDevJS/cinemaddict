@@ -135,7 +135,7 @@ export default class MovieController {
     this._filmDetailsComponent.setDeleteCommentClickListener((evt) => {
       evt.preventDefault();
 
-      const deleteButton = this._filmDetailsComponent.deleteButton;
+      const deleteButton = evt.target;
       const newMovie = Movie.clone(movie);
 
       const commentElement = evt.target.closest(`.film-details__comment`);
@@ -149,12 +149,13 @@ export default class MovieController {
 
           deleteButton.innerHTML = `Deleting...`;
           deleteButton.setAttribute(`disabled`, `true`);
+
+          this._onDataChange(movie, newMovie);
         })
         .catch(() => {
           this._shakeComment(commentElement);
         });
 
-      this._onDataChange(movie, newMovie);
     });
 
     this._filmDetailsComponent.setEmojiClickListener((evt) => {
