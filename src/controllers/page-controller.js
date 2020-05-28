@@ -77,7 +77,6 @@ export default class PageController {
     const newMovies = this._renderMovieCards(this._filmsListContainer, moviesToRender, this._onDataChange, this._onViewChange);
 
     this._shownMovieControllers = this._shownMovieControllers.concat(newMovies);
-    this._shownMoviesTot = this._shownMovieControllers.length;
   }
 
   _renderMovieCards(container, movies, onDataChange, onViewChange) {
@@ -218,7 +217,10 @@ export default class PageController {
             .forEach((movieController) => {
               const commentsToRender = this._commentsModel.getCommentsByMovie(newMovie);
               movieController.render(movie, commentsToRender);
-              this._updateMovies(this._shownMoviesTot);
+
+              if (oldMovie.comments.length === newMovie.comments.length) {
+                this._updateMovies(this._shownMoviesTot);
+              }
             });
         }
       });
