@@ -46,7 +46,7 @@ export default class PageController {
     this._onFilterChange = this._onFilterChange.bind(this);
 
     this._onButtonShowMoreClick = this._onButtonShowMoreClick.bind(this);
-    this._sortComponent.setSortTypeChangeListener(this._onSortTypeChange);
+    this._sortComponent.setTypeChangeListener(this._onSortTypeChange);
     this._moviesModel.setFilterChangeListener(this._onFilterChange);
   }
 
@@ -117,7 +117,7 @@ export default class PageController {
     if (this._filmsListTopRatedComponent) {
       remove(this._filmsListTopRatedComponent);
     }
-    const movies = this._moviesModel.movies;
+    const movies = this._moviesModel.getAllMovies();
 
     this._filmsListTopRatedComponent = new FilmsListExtra(SECTIONS.RATING);
     this._filmsListTopRatedComponent.render(this._container);
@@ -148,7 +148,7 @@ export default class PageController {
     this._filmsListMostCommentedComponent = new FilmsListExtra(SECTIONS.COMMENTS);
     this._filmsListMostCommentedComponent.render(this._container);
 
-    const movies = this._moviesModel.movies;
+    const movies = this._moviesModel.getAllMovies();
 
     const totalComments = movies.reduce((total, movie) => {
       total += movie.comments.length;
@@ -218,9 +218,9 @@ export default class PageController {
               const commentsToRender = this._commentsModel.getCommentsByMovie(newMovie);
               movieController.render(movie, commentsToRender);
 
-              if (oldMovie.comments.length === newMovie.comments.length) {
-                this._updateMovies(this._shownMoviesTot);
-              }
+              // if (oldMovie.comments.length === newMovie.comments.length) {
+              //   this._updateMovies(this._shownMoviesTot);
+              // }
             });
         }
       });

@@ -15,7 +15,7 @@ const UserRating = {
   }
 };
 
-export const getUserRank = (movies) => {
+const getUserRank = (movies) => {
   const rank = movies.reduce((total, movie) => {
     if (movie.isInHistory) {
       total++;
@@ -64,3 +64,5 @@ export default class UserRank extends AbstractSmart {
     super.rerender();
   }
 }
+
+export {getUserRank};

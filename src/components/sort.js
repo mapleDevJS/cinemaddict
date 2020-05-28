@@ -49,7 +49,7 @@ export default class Sort extends AbstractSmart {
   }
 
   recoverListeners() {
-    this.setSortTypeChangeListener(this._sortTypeChangeListener);
+    this.setTypeChangeListener(this._sortTypeChangeListener);
   }
 
   resetSortToDefault() {
@@ -57,7 +57,7 @@ export default class Sort extends AbstractSmart {
     this.rerender();
   }
 
-  setSortTypeChangeListener(listener) {
+  setTypeChangeListener(listener) {
     this._sortTypeChangeListener = listener;
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
