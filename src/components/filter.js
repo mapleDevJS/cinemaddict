@@ -37,12 +37,6 @@ export default class Filter extends Abstract {
 
       const filterName = Filter.getFilterNameByHash(evt.target.hash);
 
-
-      // if (filterName === ExtraFilterType.STATS) {
-      //   extralistener(filterName);
-      //   return;
-      // }
-
       listener(filterName);
     });
   }

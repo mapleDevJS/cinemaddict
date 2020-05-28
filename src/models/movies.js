@@ -1,8 +1,9 @@
-import {getFilmsByFilter, FilterType} from "../util/filter";
+import {getMoviesByFilter, FilterType} from "../util/filter";
 
 export default class MoviesModel {
   constructor() {
-    this._films = [];
+    this._movies = [];
+    // console.log(this._movies);
     this._comments = [];
     this._activeFilterType = FilterType.ALL;
 
@@ -10,36 +11,36 @@ export default class MoviesModel {
     this._filterChangeListeners = [];
   }
 
-  get filteredFilms() {
-    return getFilmsByFilter(this._films, this._activeFilterType);
+  get filteredMovies() {
+    return getMoviesByFilter(this._movies, this._activeFilterType);
   }
 
-  get films() {
-    return this._films;
+  get movies() {
+    return this._movies;
   }
 
-  set films(films = []) {
-    this._films = Array.from(films);
+  set movies(movies = []) {
+    this._movies = Array.from(movies);
     this._callListeners(this._dataChangeListeners);
   }
 
-  setFilter(filterType) {
-    this._activeFilterType = filterType;
-    this._callListeners(this._filterChangeListeners);
-  }
-
-  updateFilm(id, film) {
-    const index = this._films.findIndex((it) => it.id === id);
+  updateMovie(id, movie) {
+    const index = this._movies.findIndex((it) => it.id === id);
 
     if (index === -1) {
       return false;
     }
 
-    this._films = [].concat(this._films.slice(0, index), film, this._films.slice(index + 1));
+    this._movies = [].concat(this._movies.slice(0, index), movie, this._movies.slice(index + 1));
 
     this._callListeners(this._dataChangeListeners);
 
     return true;
+  }
+
+  setFilter(filterType) {
+    this._activeFilterType = filterType;
+    this._callListeners(this._filterChangeListeners);
   }
 
   setFilterChangeListener(listener) {

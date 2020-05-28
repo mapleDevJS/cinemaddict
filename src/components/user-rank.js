@@ -15,12 +15,12 @@ const UserRating = {
   }
 };
 
-export const getUserRank = (films) => {
-  const rank = films.reduce((acc, film) => {
-    if (film.isInHistory) {
-      acc++;
+export const getUserRank = (movies) => {
+  const rank = movies.reduce((total, movie) => {
+    if (movie.isInHistory) {
+      total++;
     }
-    return acc;
+    return total;
   }, 0);
 
   switch (true) {
@@ -44,7 +44,7 @@ export default class UserRank extends AbstractSmart {
 
     this._rank = getUserRank(moviesModel.films);
 
-    moviesModel.setDataChangeListener(() => this._onDataChange(moviesModel));
+    moviesModel.setDataChangeListener(() => this._onRankChange(moviesModel));
   }
 
   getTemplate() {
@@ -59,8 +59,8 @@ export default class UserRank extends AbstractSmart {
   recoverListeners() {
   }
 
-  _onDataChange(moviesModel) {
-    this._rank = getUserRank(moviesModel.films);
+  _onRankChange(moviesModel) {
+    this._rank = getUserRank(moviesModel.movies);
     super.rerender();
   }
 }

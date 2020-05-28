@@ -11,24 +11,24 @@ const CARD_CONTROLS = [
 const MAX_DESCRIPTION_LENGTH = 140;
 const MINUTES_IN_HOUR = 60;
 export default class FilmCard extends Abstract {
-  constructor(film) {
+  constructor(movie) {
     super();
-    this._film = film;
+    this._movie = movie;
   }
 
   getTemplate() {
     return (
       `<article class="film-card">
-        <h3 class="film-card__title">${this._film.title}</h3>
-        <p class="film-card__rating">${this._film.rating}</p>
+        <h3 class="film-card__title">${this._movie.title}</h3>
+        <p class="film-card__rating">${this._movie.rating}</p>
         <p class="film-card__info">
-          <span class="film-card__year">${moment(this._film.release).year()}</span>
-          <span class="film-card__duration">${this._getFilmDuration()}</span>
-          <span class="film-card__genre">${this._film.genres[0]}</span>
+          <span class="film-card__year">${moment(this._movie.release).year()}</span>
+          <span class="film-card__duration">${this._getMovieDuration()}</span>
+          <span class="film-card__genre">${this._movie.genres[0]}</span>
         </p>
-        <img src="./${this._film.poster}" alt="" class="film-card__poster">
+        <img src="./${this._movie.poster}" alt="" class="film-card__poster">
         <p class="film-card__description">${this._getDescription()}</p>
-        <a class="film-card__comments">${this._film.comments.length} ${pluralize(this._film.comments.length, [`Comment`, `Comments`])}</a>
+        <a class="film-card__comments">${this._movie.comments.length} ${pluralize(this._movie.comments.length, [`Comment`, `Comments`])}</a>
         <form class="film-card__controls">
           ${this._getButtonsMarkup()}
         </form>
@@ -88,19 +88,19 @@ export default class FilmCard extends Abstract {
   }
 
   _isClassActive(checkingClass) {
-    return this._film[checkingClass] ? `film-card__controls-item--active` : ``;
+    return this._movie[checkingClass] ? `film-card__controls-item--active` : ``;
   }
 
-  _getFilmDuration() {
-    return this._film.runtime >= MINUTES_IN_HOUR
-      ? moment.utc(moment.duration(this._film.runtime, `minutes`).asMilliseconds()).format(`h[h] mm[m]`)
-      : `${this._film.runtime}m`;
+  _getMovieDuration() {
+    return this._movie.runtime >= MINUTES_IN_HOUR
+      ? moment.utc(moment.duration(this._movie.runtime, `minutes`).asMilliseconds()).format(`h[h] mm[m]`)
+      : `${this._movie.runtime}m`;
   }
 
   _getDescription() {
-    return (this._film.description.length > MAX_DESCRIPTION_LENGTH)
-      ? `${this._film.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
-      : this._film.description;
+    return (this._movie.description.length > MAX_DESCRIPTION_LENGTH)
+      ? `${this._movie.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
+      : this._movie.description;
   }
 
   _getButtonsMarkup() {

@@ -27,15 +27,26 @@ const API = class {
     this._authorization = authorization;
   }
 
-  getFilms() {
+  getMovies() {
     return this._load({url: `movies`})
       .then((response) => response.json())
       .then(Movie.parseMovies);
   }
 
-  getComments(films) {
-    const promises = films.map((film) => {
-      return this._load({url: `comments/${film.id}`})
+  updateMovie(id, movie) {
+    return this._load({
+      url: `movies/${id}`,
+      method: Method.PUT,
+      body: JSON.stringify(movie.toRAW()),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json())
+      .then(Movie.parseMovie);
+  }
+
+  getComments(movies) {
+    const promises = movies.map((movie) => {
+      return this._load({url: `comments/${movie.id}`})
         .then((response) => response.json())
         .then(Comment.parseComments);
     });
@@ -51,7 +62,11 @@ const API = class {
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json())
-      .then(Comment.parseComment);
+      .then((data) => {
+        const movie = Movie.parseMovie(data[`movie`]);
+        const comments = Comment.parseComments(data[`comments`]);
+        return {movie, comments};
+      });
   }
 
   deleteComment(id) {
@@ -59,17 +74,6 @@ const API = class {
       url: `comments/${id}`,
       method: Method.DELETE
     });
-  }
-
-  updateFilm(id, data) {
-    return this._load({
-      url: `movies/${id}`,
-      method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
-      headers: new Headers({"Content-Type": `application/json`})
-    })
-      .then((response) => response.json())
-      .then(Movie.parseMovie);
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

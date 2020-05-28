@@ -2,7 +2,7 @@ import AbstractSmart from "./abstract-smart";
 import {getUserRank} from "./user-rank";
 import ChartData from "./chart-data";
 import Chart from "chart.js";
-import {getFilmsByFilter} from "../util/filter";
+import {getMoviesByFilter} from "../util/filter";
 
 const filterNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
 const DEFAULT_FILTER = `all-time`;
@@ -13,7 +13,7 @@ export default class Statistics extends AbstractSmart {
     super();
 
     this._moviesModel = moviesModel;
-    // this._films = moviesModel.films;
+    // this._films = moviesModel.movies;
     this._chart = null;
     // this.renderChart(this._films);
     this._filter = DEFAULT_FILTER;
@@ -21,14 +21,14 @@ export default class Statistics extends AbstractSmart {
   }
 
   getTemplate() {
-    const films = getFilmsByFilter(this._moviesModel.films, this._filter);
+    const movies = getMoviesByFilter(this._moviesModel.movies, this._filter);
     const filterMarkup = this._createFilterMarkup(this._filter);
-    const watchedFilmsAmount = films.length;
-    const userRank = getUserRank(films);
-    const watchedFilms = films.filter((film) => film.isInHistory);
-    const totalFilmDuration = this._getTotalFilmDuration(watchedFilms);
-    const filmsByGenres = this._getFilmsAmountByGenre(films);
-    const topGenre = films.length ? filmsByGenres[0].genre : ``;
+    const watchedFilmsAmount = movies.length;
+    const userRank = getUserRank(movies);
+    const watchedMovies = movies.filter((movie) => movie.isInHistory);
+    const totalFilmDuration = this._getTotalFilmDuration(watchedMovies);
+    const filmsByGenres = this._getFilmsAmountByGenre(movies);
+    const topGenre = movies.length ? filmsByGenres[0].genre : ``;
 
     return (
       `<section class="statistic">
@@ -87,36 +87,36 @@ export default class Statistics extends AbstractSmart {
     .join(`\n`);
   }
 
-  _getFilmGenres(films) {
-    return films.reduce((filmGenres, film) => {
+  _getMovieGenres(movies) {
+    return movies.reduce((movieGenres, film) => {
       film.genres.forEach((it) => {
-        if (!filmGenres.includes(it)) {
-          filmGenres.push(it);
+        if (!movieGenres.includes(it)) {
+          movieGenres.push(it);
         }
       });
-      return filmGenres;
+      return movieGenres;
     }, []);
   }
 
-  _getFilmsAmountByGenre(films) {
-    const filmGenres = this._getFilmGenres(films);
+  _getmoviesAmountByGenre(movies) {
+    const movieGenres = this._getMovieGenres(movies);
 
-    return filmGenres.map((genre) => {
+    return movieGenres.map((genre) => {
       return {
         genre,
-        count: films.filter((film) => film.genres.includes(genre)).length,
+        count: movies.filter((movie) => movie.genres.includes(genre)).length,
       };
     }).sort((a, b) => b.count - a.count);
   }
 
-  _getTotalFilmDuration(films) {
+  _getTotalMovieDuration(movies) {
     let totalDuration = {
       hours: 0,
       minutes: 0,
     };
-    const totalFilmDuration = films.reduce((total, film) => total + film.runtime, 0);
-    totalDuration.hours = Math.floor(totalFilmDuration / 60);
-    totalDuration.minutes = totalFilmDuration % 60;
+    const totalMovieDuration = movies.reduce((total, movie) => total + movie.runtime, 0);
+    totalDuration.hours = Math.floor(totalMovieDuration / 60);
+    totalDuration.minutes = totalMovieDuration % 60;
     return totalDuration;
   }
 
@@ -124,12 +124,12 @@ export default class Statistics extends AbstractSmart {
     return this.getElement().querySelector(`.statistic__chart`);
   }
 
-  _renderChart(films) {
-    const filteredFilms = getFilmsByFilter(films, this._filter);
-    const filmsByGenres = this._getFilmsAmountByGenre(filteredFilms);
-    const genres = filmsByGenres.map((film) => film.genre);
+  _renderChart(movies) {
+    const filteredMovies = getMoviesByFilter(movies, this._filter);
+    const moviesByGenres = this._getMoviesAmountByGenre(filteredMovies);
+    const genres = moviesByGenres.map((movie) => movie.genre);
 
-    const chartData = ChartData.create(genres, filmsByGenres);
+    const chartData = ChartData.create(genres, moviesByGenres);
 
     return new Chart(this._getGenresCtx(), chartData);
   }
@@ -149,7 +149,7 @@ export default class Statistics extends AbstractSmart {
 
     this._resetChart();
 
-    this._chart = this._renderChart(this._moviesModel.films);
+    this._chart = this._renderChart(this._moviesModel.movies);
   }
 
   _resetChart() {

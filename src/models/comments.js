@@ -14,10 +14,9 @@ export default class CommentsModel {
     this._callListeners(this._dataChangeListeners);
   }
 
-  getCommentsByFilm(film) {
-    return film.comments.map((id) => {
-      return this._comments.find((comment) => comment.id === id);
-    });
+  addComment(comment) {
+    this._comments = [].concat(comment, this._comments);
+    this._callListeners(this._dataChangeListeners);
   }
 
   removeComment(id) {
@@ -34,9 +33,10 @@ export default class CommentsModel {
     return true;
   }
 
-  addComment(comment) {
-    this._comments = [].concat(comment, this._comments);
-    this._callListeners(this._dataChangeListeners);
+  getCommentsByMovie(movie) {
+    return movie.comments.map((id) => {
+      return this._comments.find((comment) => comment.id === id);
+    });
   }
 
   setDataChangeListener(listener) {
