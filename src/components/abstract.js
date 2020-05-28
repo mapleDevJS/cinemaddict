@@ -2,6 +2,11 @@ import {createElement} from "../util/dom-util";
 
 const HIDDEN_CLASS = `visually-hidden`;
 
+const RenderPosition = {
+  AFTER_END: `afterend`,
+  BEFORE_END: `beforeend`
+};
+
 export default class Abstract {
   constructor() {
     if (new.target === Abstract) {
@@ -25,6 +30,22 @@ export default class Abstract {
 
   removeElement() {
     this._element = null;
+  }
+
+  render(container, place = RenderPosition.BEFORE_END) {
+    switch (place) {
+      case RenderPosition.AFTER_END:
+        container.prepend(this.getElement());
+        break;
+      case RenderPosition.BEFORE_END:
+        container.append(this.getElement());
+        break;
+    }
+  }
+
+  remove() {
+    this.getElement().remove();
+    this.removeElement();
   }
 
   show() {

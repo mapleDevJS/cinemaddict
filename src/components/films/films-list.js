@@ -1,8 +1,10 @@
 import Abstract from "../abstract";
 
 export default class FilmsList extends Abstract {
-  getFilmsListContainer() {
-    return this.getElement().querySelector(`.films-list__container`);
+  constructor() {
+    super();
+
+    this.filmsListElement = this.getElement().querySelector(`.films-list__container`);
   }
 
   getTemplate() {

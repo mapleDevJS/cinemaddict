@@ -1,6 +1,6 @@
-import {pluralize} from "../../util/util";
 import Abstract from "../abstract";
 import moment from "moment";
+import {getDuration, pluralize} from "../../util/util";
 
 const CARD_CONTROLS = [
   [`isInWatchlist`, `add-to-watchlist`, `Add to watchlist`],
@@ -9,7 +9,6 @@ const CARD_CONTROLS = [
 ];
 
 const MAX_DESCRIPTION_LENGTH = 140;
-const MINUTES_IN_HOUR = 60;
 export default class FilmCard extends Abstract {
   constructor(movie) {
     super();
@@ -23,8 +22,8 @@ export default class FilmCard extends Abstract {
         <p class="film-card__rating">${this._movie.rating}</p>
         <p class="film-card__info">
           <span class="film-card__year">${moment(this._movie.release).year()}</span>
-          <span class="film-card__duration">${this._getMovieDuration()}</span>
-          <span class="film-card__genre">${this._movie.genres[0]}</span>
+          <span class="film-card__duration">${getDuration(this._movie.runtime)}</span>
+          <span class="film-card__genre">${this._movie.genres.length ? this._movie.genres[0] : ``}</span>
         </p>
         <img src="./${this._movie.poster}" alt="" class="film-card__poster">
         <p class="film-card__description">${this._getDescription()}</p>
@@ -34,6 +33,34 @@ export default class FilmCard extends Abstract {
         </form>
       </article>`
     );
+  }
+
+  _createButtonMarkup(checkingClass, key, value) {
+    return (
+      `<button
+        class="
+          film-card__controls-item
+          button
+          film-card__controls-item--${key} ${this._isClassActive(checkingClass)}">
+        ${value}
+      </button>`
+    );
+  }
+
+  _isClassActive(checkingClass) {
+    return this._movie[checkingClass] ? `film-card__controls-item--active` : ``;
+  }
+
+  _getDescription() {
+    return (this._movie.description.length > MAX_DESCRIPTION_LENGTH)
+      ? `${this._movie.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
+      : this._movie.description;
+  }
+
+  _getButtonsMarkup() {
+    return CARD_CONTROLS
+      .map(([checkingClass, key, value]) => this._createButtonMarkup(checkingClass, key, value))
+      .join(`\n`);
   }
 
   setPosterClickListener(listener) {
@@ -73,39 +100,5 @@ export default class FilmCard extends Abstract {
       evt.preventDefault();
       listener();
     });
-  }
-
-  _createButtonMarkup(checkingClass, key, value) {
-    return (
-      `<button
-        class="
-          film-card__controls-item
-          button
-          film-card__controls-item--${key} ${this._isClassActive(checkingClass)}">
-        ${value}
-      </button>`
-    );
-  }
-
-  _isClassActive(checkingClass) {
-    return this._movie[checkingClass] ? `film-card__controls-item--active` : ``;
-  }
-
-  _getMovieDuration() {
-    return this._movie.runtime >= MINUTES_IN_HOUR
-      ? moment.utc(moment.duration(this._movie.runtime, `minutes`).asMilliseconds()).format(`h[h] mm[m]`)
-      : `${this._movie.runtime}m`;
-  }
-
-  _getDescription() {
-    return (this._movie.description.length > MAX_DESCRIPTION_LENGTH)
-      ? `${this._movie.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
-      : this._movie.description;
-  }
-
-  _getButtonsMarkup() {
-    return CARD_CONTROLS
-      .map(([checkingClass, key, value]) => this._createButtonMarkup(checkingClass, key, value))
-      .join(`\n`);
   }
 }

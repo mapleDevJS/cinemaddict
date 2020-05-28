@@ -16,9 +16,8 @@ const Status = {
 const checkStatus = (response) => {
   if (response.status >= Status.SUCCESS && response.status < Status.REDIRECTION) {
     return response;
-  } else {
-    throw new Error(`${response.status}: ${response.statusText}`);
   }
+  throw new Error(`${response.status}: ${response.statusText}`);
 };
 
 const API = class {
@@ -63,9 +62,9 @@ const API = class {
     })
       .then((response) => response.json())
       .then((data) => {
-        const movie = Movie.parseMovie(data[`movie`]);
-        const comments = Comment.parseComments(data[`comments`]);
-        return {movie, comments};
+        const newMovie = Movie.parseMovie(data[`movie`]);
+        const newComments = Comment.parseComments(data[`comments`]);
+        return {newMovie, newComments};
       });
   }
 

@@ -3,8 +3,8 @@ import {getMoviesByFilter, FilterType} from "../util/filter";
 export default class MoviesModel {
   constructor() {
     this._movies = [];
-    // console.log(this._movies);
     this._comments = [];
+
     this._activeFilterType = FilterType.ALL;
 
     this._dataChangeListeners = [];

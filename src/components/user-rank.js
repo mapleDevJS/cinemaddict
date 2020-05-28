@@ -42,7 +42,7 @@ export default class UserRank extends AbstractSmart {
   constructor(moviesModel) {
     super();
 
-    this._rank = getUserRank(moviesModel.films);
+    this._rank = getUserRank(moviesModel.movies);
 
     moviesModel.setDataChangeListener(() => this._onRankChange(moviesModel));
   }

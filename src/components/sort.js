@@ -26,6 +26,26 @@ export default class Sort extends AbstractSmart {
     return this._currentSortType;
   }
 
+  _createSortItemMarkup(key, value) {
+    return (
+      `<li>
+        <a href="#"
+          data-sort-type="${key}"
+          class="sort__button ${this._currentSortType === value ? `sort__button--active` : ``}"
+        >
+          Sort by ${value}
+        </a>
+      </li>`
+    );
+  }
+
+  _getSortMarkup() {
+    return Object.keys(SortType).map((key) => {
+      return this._createSortItemMarkup(key, SortType[key]);
+    })
+    .join(`\n`);
+  }
+
   recoverListeners() {
     this.setSortTypeChangeListener(this._sortTypeChangeListener);
   }
@@ -50,25 +70,5 @@ export default class Sort extends AbstractSmart {
       listener(this._currentSortType);
       super.rerender();
     });
-  }
-
-  _createSortItemMarkup(key, value) {
-    return (
-      `<li>
-        <a href="#"
-          data-sort-type="${key}"
-          class="sort__button ${this._currentSortType === value ? `sort__button--active` : ``}"
-        >
-          Sort by ${value}
-        </a>
-      </li>`
-    );
-  }
-
-  _getSortMarkup() {
-    return Object.keys(SortType).map((key) => {
-      return this._createSortItemMarkup(key, SortType[key]);
-    })
-    .join(`\n`);
   }
 }

@@ -1,8 +1,10 @@
 import API from "./api.js";
+import Header from "./components/header.js";
 import CommentsModel from "./models/comments";
 import Films from "./components/films/films";
 import FilterController from "./controllers/filter-controller";
 import Loading from "./components/loading";
+import Main from "./components/main";
 import MoviesModel from "./models/movies";
 import PageController from "./controllers/page-controller";
 import Sort from "./components/sort";
@@ -10,63 +12,70 @@ import Footer from "./components/footer";
 import Statistics from "./components/statistics";
 import UserRank from "./components/user-rank";
 
-import {render, remove} from "./util/dom-util";
-
-const AUTHORIZATION = `Basic 10o37Jfjb2iu47yerhM#`;
+const AUTHORIZATION = `Basic ldhfhdfnkwehfh7t#`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
 
-const STATS = `stats`;
-
 const api = new API(END_POINT, AUTHORIZATION);
+
+const STATS = `stats`;
 
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 
-const siteHeaderElement = document.querySelector(`.header`);
-const siteMainElement = document.querySelector(`.main`);
-const siteFooterElement = document.querySelector(`.footer`);
+const headerComponent = new Header();
+headerComponent.render(document.body);
 
-render(siteHeaderElement, new UserRank(moviesModel));
+const mainComponent = new Main();
+mainComponent.render(document.body);
 
-const filterController = new FilterController(siteMainElement, moviesModel);
+const userRankComponent = new UserRank(moviesModel);
+
+const footerComponent = new Footer();
+
+const filterController = new FilterController(mainComponent.getElement(), moviesModel);
 filterController.render();
 
 const sortComponent = new Sort();
-render(siteMainElement, sortComponent);
+sortComponent.render(mainComponent.getElement());
 
 const loadingComponent = new Loading();
-render(siteMainElement, loadingComponent);
+loadingComponent.render(mainComponent.getElement());
 
 const filmsComponent = new Films();
 const pageController = new PageController(filmsComponent, sortComponent, moviesModel, commentsModel, api);
 
-render(siteMainElement, filmsComponent);
+filmsComponent.render(mainComponent.getElement());
 
 const statisticsComponent = new Statistics(moviesModel);
-render(siteMainElement, statisticsComponent);
+statisticsComponent.render(mainComponent.getElement());
 statisticsComponent.hide();
 
-api.getFilms()
-  .then((films) => {
-    moviesModel.films = films;
+api.getMovies()
+  .then((movies) => {
+    moviesModel.movies = movies;
 
-    api.getComments(films)
+    userRankComponent.render(headerComponent.getElement());
+
+    footerComponent.setMoviesInDatabase(moviesModel.movies);
+    footerComponent.render(document.body);
+
+    api.getComments(movies)
       .then((comments) => {
         commentsModel.comments = [].concat(...comments);
+
+        loadingComponent.remove();
         pageController.render();
-        render(siteFooterElement, new Footer(moviesModel));
-        remove(loadingComponent);
       });
   });
 
 filterController.setOnMenuItemClick((menuItem) => {
   if (menuItem === STATS) {
-    pageController.hide();
+    filmsComponent.hide();
     sortComponent.hide();
     statisticsComponent.show();
   } else {
     statisticsComponent.hide();
     sortComponent.show();
-    pageController.show();
+    filmsComponent.show();
   }
 });

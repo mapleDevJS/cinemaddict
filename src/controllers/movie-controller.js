@@ -1,7 +1,7 @@
 import FilmDetails from "../components/films/film-details";
 import FilmCard from "../components/films/film-card";
 import Movie from "../models/movie";
-import {render, remove, replace} from "../util/dom-util";
+import {remove, replace} from "../util/dom-util";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 const MILLISECONDS_COUNT = 1000;
@@ -28,17 +28,15 @@ export default class MovieController {
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
 
-    // this._body = document.querySelector(`body`);
-
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
-  render(film, comments) {
+  render(movie, comments) {
     const oldFilmCardComponent = this._filmCardComponent;
     const oldFilmDetailsComponent = this._filmDetailsComponent;
 
-    this._filmCardComponent = new FilmCard(film);
-    this._filmDetailsComponent = new FilmDetails(film, comments);
+    this._filmCardComponent = new FilmCard(movie);
+    this._filmDetailsComponent = new FilmDetails(movie, comments);
 
     this._filmCardComponent.setPosterClickListener(() => {
       this._openFilmDetails();
@@ -56,69 +54,75 @@ export default class MovieController {
     });
 
     this._filmCardComponent.setAddToWatchlistClickListener(() => {
-      const newFilm = Movie.clone(film);
-      newFilm.isInWatchlist = !film.isInWatchlist;
+      const newMovie = Movie.clone(movie);
+      newMovie.isInWatchlist = !movie.isInWatchlist;
 
-      this._onDataChange(this, film, newFilm);
+      this._onDataChange(movie, newMovie);
     });
 
     this._filmCardComponent.setAlreadyWatchedClickListener(() => {
-      const newFilm = Movie.clone(film);
-      newFilm.isInHistory = !film.isInHistory;
-      newFilm.watchingDate = new Date();
+      const newMovie = Movie.clone(movie);
+      newMovie.isInHistory = !movie.isInHistory;
 
-      this._onDataChange(this, film, newFilm);
+      if (newMovie.watchingDate) {
+        newMovie.watchingDate = null;
+      } else {
+        newMovie.watchingDate = new Date();
+      }
+
+      this._onDataChange(movie, newMovie);
     });
 
     this._filmCardComponent.setAddToFavouriteClickListener(() => {
-      const newFilm = Movie.clone(film);
-      newFilm.isInFavorites = !film.isInFavorites;
+      const newMovie = Movie.clone(movie);
+      newMovie.isInFavorites = !movie.isInFavorites;
 
-      this._onDataChange(this, film, newFilm);
+      this._onDataChange(movie, newMovie);
 
     });
 
     this._filmDetailsComponent.setCloseButtonClickListener(() => this._closeFilmDetails());
 
     this._filmDetailsComponent.setAddToWatchlistClickListener(() => {
-      const newFilm = Movie.clone(film);
-      newFilm.isInWatchlist = !film.isInWatchlist;
+      const newMovie = Movie.clone(movie);
+      newMovie.isInWatchlist = !movie.isInWatchlist;
 
-      this._onDataChange(this, film, newFilm);
+      this._onDataChange(movie, newMovie);
     });
 
     this._filmDetailsComponent.setAlreadyWatchedClickListener(() => {
-      const newFilm = Movie.clone(film);
-      newFilm.isInHistory = !film.isInHistory;
+      const newMovie = Movie.clone(movie);
+      newMovie.isInHistory = !movie.isInHistory;
 
-      this._onDataChange(this, film, newFilm);
+      this._onDataChange(movie, newMovie);
     });
 
     this._filmDetailsComponent.setAddToFavouriteClickListener(() => {
-      const newFilm = Movie.clone(film);
-      newFilm.isInFavorites = !film.isInFavorites;
+      const newMovie = Movie.clone(movie);
+      newMovie.isInFavorites = !movie.isInFavorites;
 
-      this._onDataChange(this, film, newFilm);
+      this._onDataChange(movie, newMovie);
     });
 
     this._filmDetailsComponent.setAddNewCommentListener((evt) => {
       this._filmDetailsComponent.getCommentInput().style.border = `none`;
       if (isCmdEnterKeysCode(evt)) {
         const newComment = this._filmDetailsComponent.getNewComment();
-        // const form = this._filmDetailsComponent.getForm();
 
         if (newComment) {
-          const newFilm = Movie.clone(film);
+          this._api.createComment(movie.id, newComment)
+            .then(({newMovie, newComments}) => {
+              const commentsInModel = new Set(this._commentsModel.comments.map((comment) => comment.id));
 
-          this._api.createComment(newFilm.id, newComment)
-            .then(() => {
-              newFilm.comments.concat(newComment.id);
-              const formELements = this._filmDetailsComponent.getFormElements();
+              newComments.filter((comment) => !commentsInModel.has(comment.id))
+                .forEach((comment) => this._commentsModel.addComment(comment));
+
+              const formELements = this._filmDetailsComponent.formElements;
               formELements.forEach((element) => {
                 element.setAttribute(`disabled`, `disabled`);
               });
 
-              this._onDataChange(this, film, newFilm);
+              this._onDataChange(movie, newMovie);
             })
             .catch(() => {
               this.shake();
@@ -130,17 +134,19 @@ export default class MovieController {
 
     this._filmDetailsComponent.setDeleteCommentClickListener((evt) => {
       evt.preventDefault();
-      const deleteButton = this._filmDetailsComponent.getDeleteButton();
-      const newFilm = Movie.clone(film);
+
+      const deleteButton = this._filmDetailsComponent.deleteButton;
+      const newMovie = Movie.clone(movie);
 
       const commentElement = evt.target.closest(`.film-details__comment`);
       const removeCommentId = commentElement.dataset.commentId;
 
       this._api.deleteComment(removeCommentId)
         .then(() => {
-          newFilm.comments = film.comments.filter((id) => {
+          newMovie.comments = movie.comments.filter((id) => {
             return id !== removeCommentId;
           });
+
           deleteButton.innerHTML = `Deleting...`;
           deleteButton.setAttribute(`disabled`, `true`);
         })
@@ -148,12 +154,12 @@ export default class MovieController {
           this._shakeComment(commentElement);
         });
 
-      this._onDataChange(this, film, newFilm);
+      this._onDataChange(movie, newMovie);
     });
 
     this._filmDetailsComponent.setEmojiClickListener((evt) => {
       const currentEmoji = evt.target.value;
-      const emojiContainer = this._filmDetailsComponent.getEmojiContainer();
+      const emojiContainer = this._filmDetailsComponent.emojiContainer;
       emojiContainer.innerHTML = `<img src="images/emoji/${currentEmoji}.png" width="55" height="55" alt="emoji-${currentEmoji}">`;
     });
 
@@ -161,7 +167,7 @@ export default class MovieController {
       replace(this._filmCardComponent, oldFilmCardComponent);
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
     } else {
-      render(this._container, this._filmCardComponent);
+      this._filmCardComponent.render(this._container);
     }
   }
 
@@ -177,6 +183,16 @@ export default class MovieController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
+  shake() {
+    this._filmDetailsComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
+    this._filmCardComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
+
+    setTimeout(() => {
+      this._filmDetailsComponent.getElement().style.animation = ``;
+      this._filmCardComponent.getElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
   _openFilmDetails() {
     this._onViewChange();
     document.body.appendChild(this._filmDetailsComponent.getElement());
@@ -189,16 +205,6 @@ export default class MovieController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     remove(this._filmDetailsComponent);
     this._mode = Mode.DEFAULT;
-  }
-
-  shake() {
-    this._filmDetailsComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
-    this._filmCardComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
-
-    setTimeout(() => {
-      this._filmDetailsComponent.getElement().style.animation = ``;
-      this._filmCardComponent.getElement().style.animation = ``;
-    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _shakeComment(currentComment) {

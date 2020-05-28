@@ -1,8 +1,8 @@
 import Filter from "../components/filter";
 import {FilterType, ExtraFilterType, FilterNames, ExtraFilterNames} from "../util/filter";
 
-import {render, replace} from "../util/dom-util";
-import {getFilmsByFilter} from "../util/filter";
+import {replace} from "../util/dom-util";
+import {getMoviesByFilter} from "../util/filter";
 
 export default class FilterController {
   constructor(container, moviesModel) {
@@ -21,13 +21,13 @@ export default class FilterController {
 
   render() {
     const container = this._container;
-    const films = this._moviesModel.films;
+    const movies = this._moviesModel.movies;
 
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         type: filterType,
         name: FilterNames[filterType.toUpperCase()],
-        count: getFilmsByFilter(films, filterType).length,
+        count: getMoviesByFilter(movies, filterType).length,
         active: filterType === this._activeFilterType,
       };
     });
@@ -49,8 +49,14 @@ export default class FilterController {
       replace(this._filterComponent, oldComponent);
       this.setOnMenuItemClick(this._onMenuItemClick);
     } else {
-      render(container, this._filterComponent);
+      this._filterComponent.render(container);
     }
+  }
+
+  setOnMenuItemClick(listener) {
+    this._filterComponent.setFilterChangeListener(listener);
+
+    this._onMenuItemClick = listener;
   }
 
   _onFilterChange(filterType) {
@@ -68,9 +74,5 @@ export default class FilterController {
     this.render();
   }
 
-  setOnMenuItemClick(listener) {
-    this._filterComponent.setFilterChangeListener(listener);
 
-    this._onMenuItemClick = listener;
-  }
 }
