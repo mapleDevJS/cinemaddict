@@ -105,7 +105,7 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setAddNewCommentListener((evt) => {
-      this._filmDetailsComponent.commentInput().style.border = `none`;
+      this._filmDetailsComponent.commentInput.style.border = `none`;
       if (isCmdEnterKeysCode(evt)) {
         const newComment = this._filmDetailsComponent.getNewComment();
 
