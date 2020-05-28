@@ -1,7 +1,7 @@
 import AbstractSmart from "./abstract-smart";
-import {getUserRank} from "./user-rank";
 import ChartData from "./chart-data";
 import Chart from "chart.js";
+import {getUserRank} from "./user-rank";
 import {getMoviesByFilter} from "../util/filter";
 
 const filterNames = [`All time`, `Today`, `Week`, `Month`, `Year`];

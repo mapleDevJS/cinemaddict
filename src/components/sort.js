@@ -6,6 +6,8 @@ export const SortType = {
   RATING: `rating`
 };
 
+const LINK_TAG_NAME = `A`;
+
 export default class Sort extends AbstractSmart {
   constructor() {
     super();
@@ -55,7 +57,7 @@ export default class Sort extends AbstractSmart {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
-      if (evt.target.tagName !== `A`) {
+      if (evt.target.tagName !== LINK_TAG_NAME) {
         return;
       }
 

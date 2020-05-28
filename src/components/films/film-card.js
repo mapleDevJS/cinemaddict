@@ -1,12 +1,7 @@
 import Abstract from "../abstract";
 import moment from "moment";
+import {CARD_CONTROLS} from "../../util/consts";
 import {getDuration, pluralize} from "../../util/util";
-
-const CARD_CONTROLS = [
-  [`isInWatchlist`, `add-to-watchlist`, `Add to watchlist`],
-  [`isInHistory`, `mark-as-watched`, `Mark as watched`],
-  [`isInFavorites`, `favorite`, `Mark as favorite`]
-];
 
 const MAX_DESCRIPTION_LENGTH = 140;
 export default class FilmCard extends Abstract {
@@ -35,6 +30,18 @@ export default class FilmCard extends Abstract {
     );
   }
 
+  _getDescription() {
+    return (this._movie.description.length > MAX_DESCRIPTION_LENGTH)
+      ? `${this._movie.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
+      : this._movie.description;
+  }
+
+  _getButtonsMarkup() {
+    return CARD_CONTROLS
+      .map(([checkingClass, key, value]) => this._createButtonMarkup(checkingClass, key, value))
+      .join(`\n`);
+  }
+
   _createButtonMarkup(checkingClass, key, value) {
     return (
       `<button
@@ -49,18 +56,6 @@ export default class FilmCard extends Abstract {
 
   _isClassActive(checkingClass) {
     return this._movie[checkingClass] ? `film-card__controls-item--active` : ``;
-  }
-
-  _getDescription() {
-    return (this._movie.description.length > MAX_DESCRIPTION_LENGTH)
-      ? `${this._movie.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
-      : this._movie.description;
-  }
-
-  _getButtonsMarkup() {
-    return CARD_CONTROLS
-      .map(([checkingClass, key, value]) => this._createButtonMarkup(checkingClass, key, value))
-      .join(`\n`);
   }
 
   setPosterClickListener(listener) {

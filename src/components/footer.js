@@ -1,9 +1,10 @@
 import Abstract from "./abstract";
 
 export default class Footer extends Abstract {
-  constructor() {
+  constructor(moviesModel) {
     super();
-    this._moviesInDatabase = ``;
+
+    this._moviesModel = moviesModel;
   }
 
   getTemplate() {
@@ -11,13 +12,9 @@ export default class Footer extends Abstract {
       `<footer class="footer">
         <section class="footer__logo logo logo--smaller">Cinemaddict</section>
         <section class="footer__statistics">
-          <p>${this._moviesInDatabase} movies inside</p>
+          <p>${this._moviesModel.movies.length} movies inside</p>
         </section>
       </footer>`
     );
-  }
-
-  setMoviesInDatabase(movies) {
-    this._moviesInDatabase = movies.length;
   }
 }

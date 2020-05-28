@@ -30,7 +30,7 @@ mainComponent.render(document.body);
 
 const userRankComponent = new UserRank(moviesModel);
 
-const footerComponent = new Footer();
+const footerComponent = new Footer(moviesModel);
 
 const filterController = new FilterController(mainComponent.getElement(), moviesModel);
 filterController.render();
@@ -56,7 +56,6 @@ api.getMovies()
 
     userRankComponent.render(headerComponent.getElement());
 
-    footerComponent.setMoviesInDatabase(moviesModel.movies);
     footerComponent.render(document.body);
 
     api.getComments(movies)

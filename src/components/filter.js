@@ -1,25 +1,26 @@
 import Abstract from "./abstract";
 import {FilterType} from "../util/filter";
 
+const LINK_TAG_NAME = `A`;
+
 export default class Filter extends Abstract {
-  constructor(filters, extraFilters) {
+  constructor(filters, menuItems) {
     super();
 
     this._filters = filters;
-    this._extraFilters = extraFilters;
+    this._menuItems = menuItems;
   }
-
 
   getTemplate() {
     const filtersMarkup = this._filters.map((filter) => this._createFilterMarkup(filter)).join(`\n`);
-    const extraFilterMarkup = this._extraFilters.map((filter) => this._createExtraFilterMarkup(filter)).join(`\n`);
+    const menuMarkup = this._menuItems.map((filter) => this._createMenuMarkup(filter)).join(`\n`);
 
     return (
       `<nav class="main-navigation">
         <div class="main-navigation__items">
           ${filtersMarkup}
         </div>
-        ${extraFilterMarkup}
+        ${menuMarkup}
       </nav>`
     );
   }
@@ -34,7 +35,7 @@ export default class Filter extends Abstract {
     );
   }
 
-  _createExtraFilterMarkup({type, name, active}) {
+  _createMenuMarkup({type, name, active}) {
     return (
       `<a href="#${type}" class="main-navigation__additional ${active ? `main-navigation__additional--active` : ``}">
         ${name}
@@ -57,7 +58,7 @@ export default class Filter extends Abstract {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
-      if (evt.target.tagName !== `A`) {
+      if (evt.target.tagName !== LINK_TAG_NAME) {
         return;
       }
 

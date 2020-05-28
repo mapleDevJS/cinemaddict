@@ -1,10 +1,6 @@
 import Abstract from "./abstract";
 
 export default class Header extends Abstract {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return (
       `<header class="header">

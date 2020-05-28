@@ -26,6 +26,7 @@ export default class FilmDetails extends AbstractSmart {
     this.emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
     this.formElements = this.getElement().querySelectorAll(`button, input, textarea`);
     this.deleteButton = this.getElement().querySelector(`film-details__comment-delete`);
+    this.commentInput = this.getElement().querySelector(`.film-details__comment-input`);
   }
 
   getTemplate() {
@@ -113,15 +114,6 @@ export default class FilmDetails extends AbstractSmart {
       };
     }
   }
-
-  getDeleteButton() {
-    return this.getElement().querySelector(`film-details__comment-delete`);
-  }
-
-  getCommentInput() {
-    return this.getElement().querySelector(`.film-details__comment-input`);
-  }
-
 
   _getCommentMarkup({id, author, comment, date, emotion}) {
     return (

@@ -1,4 +1,3 @@
-// import {FilterType, StatsFilterType} from "./consts";
 import moment from "moment";
 
 export const FilterType = {
@@ -8,7 +7,7 @@ export const FilterType = {
   FAVORITES: `favorites`
 };
 
-export const ExtraFilterType = {
+export const MenuType = {
   STATS: `stats`
 };
 
@@ -21,7 +20,7 @@ export const FilterNames = {
   FAVORITES: `Favourites`
 };
 
-export const ExtraFilterNames = {
+export const MenuItems = {
   STATS: `Stats`
 };
 
