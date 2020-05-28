@@ -78,7 +78,6 @@ export default class MovieController {
       newMovie.isInFavorites = !movie.isInFavorites;
 
       this._onDataChange(movie, newMovie);
-
     });
 
     this._filmDetailsComponent.setCloseButtonClickListener(() => this._closeFilmDetails());
@@ -106,6 +105,8 @@ export default class MovieController {
 
     this._filmDetailsComponent.setAddNewCommentListener((evt) => {
       this._filmDetailsComponent.commentInput.style.border = `none`;
+
+
       if (isCmdEnterKeysCode(evt)) {
         const newComment = this._filmDetailsComponent.getNewComment();
 
@@ -217,8 +218,8 @@ export default class MovieController {
   }
 
   _addCommentFieldBorder() {
-    this._filmDetailsComponent.commentInput().style.border = `2px solid red`;
-    this._filmDetailsComponent.commentInput().removeAttribute(`disabled`);
+    this._filmDetailsComponent.commentInput.style.border = `2px solid red`;
+    this._filmDetailsComponent.commentInput.removeAttribute(`disabled`);
   }
 
   _onEscKeyDown(evt) {
