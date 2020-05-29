@@ -2,9 +2,7 @@ import FilmDetails from "../components/films/film-details";
 import FilmCard from "../components/films/film-card";
 import Movie from "../models/movie";
 import {remove, replace} from "../util/dom-util";
-
-const SHAKE_ANIMATION_TIMEOUT = 600;
-const MILLISECONDS_COUNT = 1000;
+import {SHAKE_ANIMATION_TIMEOUT} from "../util/consts";
 
 export const Mode = {
   DEFAULT: `default`,
@@ -186,12 +184,12 @@ export default class MovieController {
   }
 
   shake() {
-    this._filmDetailsComponent.setStyleAnimation(`shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`);
-    this._filmCardComponent.setStyleAnimation(`shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`);
+    this._filmDetailsComponent.shake();
+    this._filmCardComponent.shake();
 
     setTimeout(() => {
-      this._filmDetailsComponent.setStyleAnimation(``);
-      this._filmCardComponent.setStyleAnimation(``);
+      this._filmDetailsComponent.resetShaking();
+      this._filmCardComponent.resetShaking();
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 

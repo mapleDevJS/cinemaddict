@@ -2,6 +2,7 @@ import AbstractSmartComponent from "../abstract-smart";
 import {encode} from 'he';
 import moment from "moment";
 import {getFullDate, getDuration, pluralize} from "../../util/util";
+import {SHAKE_ANIMATION_TIMEOUT, MILLISECONDS_COUNT} from "../../util/consts";
 
 const CARD_CONTROLS = [
   [`isInWatchlist`, `watchlist`, `Add to watchlist`],
@@ -115,8 +116,12 @@ export default class FilmDetails extends AbstractSmartComponent {
     }
   }
 
-  setStyleAnimation(style) {
-    this.getElement().style.animation = style;
+  shake() {
+    this.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
+  }
+
+  resetShaking() {
+    this.getElement().style.animation = ``;
   }
 
   _getCommentMarkup({id, author, comment, date, emotion}) {

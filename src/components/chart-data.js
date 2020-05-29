@@ -7,55 +7,53 @@ const Color = {
   LABEL: `#ffffff`
 };
 
-const Chart = {
+const CHART = {
   TYPE: `horizontalBar`,
   POSITION: `start`
 };
 
-const Size = {
+const SIZE = {
   BAR: 24,
   OFFSET: 40,
   FONT: 20
 };
 
-const Axe = {
-  PADDING: 100
-};
+const AXE_PADDING = 100;
 
 export default class ChartData {
   static create(genres, moviesByGenres) {
     return (
       {
         plugins: [ChartDataLabels],
-        type: Chart.TYPE,
+        type: CHART.TYPE,
         data: {
           labels: genres,
           datasets: [{
             data: moviesByGenres.map((it) => it.count),
             backgroundColor: Color.BACKGROUND,
             hoverBackgroundColor: Color.HOVER,
-            anchor: Chart.POSITION,
-            barThickness: Size.BAR
+            anchor: CHART.POSITION,
+            barThickness: SIZE.BAR
           }]
         },
         options: {
           plugins: {
             datalabels: {
               font: {
-                size: Size.FONT
+                size: SIZE.FONT
               },
               color: Color.LABEL,
-              anchor: Chart.POSITION,
-              align: Chart.POSITION,
-              offset: Size.OFFSET,
+              anchor: CHART.POSITION,
+              align: CHART.POSITION,
+              offset: SIZE.OFFSET,
             }
           },
           scales: {
             yAxes: [{
               ticks: {
                 fontColor: Color.FONT,
-                padding: Axe.PADDING,
-                fontSize: Size.FONT
+                padding: AXE_PADDING,
+                fontSize: SIZE.FONT
               },
               gridLines: {
                 display: false,

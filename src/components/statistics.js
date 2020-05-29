@@ -2,9 +2,15 @@ import AbstractSmartComponent from "./abstract-smart";
 import ChartData from "./chart-data";
 import Chart from "chart.js";
 import {getUserRank} from "./user-rank";
-import {getMoviesByFilter, StatsFilterNames, StatsFilterType} from "../util/filter";
+import {getMoviesByFilter, StatsFilterType} from "../util/filter";
 
-const filterNames = Object.values(StatsFilterNames);
+const StatsFilterNames = {
+  ALL: `All time`,
+  TODAY: `Today`,
+  WEEK: `Week`,
+  MONTH: `Month`,
+  YEAR: `Year`
+};
 
 const DEFAULT_FILTER = StatsFilterType.ALL;
 const SERVER_URL = `https://echo.htmlacademy.ru/`;
@@ -67,7 +73,8 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _createFilterMarkup(filter) {
-    return filterNames
+
+    return Object.values(StatsFilterNames)
     .map((name) => {
       return (
         `<input type="radio"

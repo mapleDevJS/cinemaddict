@@ -11,3 +11,6 @@ export const CARD_CONTROLS = [
 
 export const MINUTES_IN_HOUR = 60;
 
+export const SHAKE_ANIMATION_TIMEOUT = 600;
+export const MILLISECONDS_COUNT = 1000;
+

@@ -22,14 +22,6 @@ export const MenuItems = {
   STATS: `Stats`
 };
 
-export const StatsFilterNames = {
-  ALL: `All time`,
-  TODAY: `Today`,
-  WEEK: `Week`,
-  MONTH: `Month`,
-  YEAR: `Year`
-};
-
 export const StatsFilterType = {
   ALL: `all-time`,
   TODAY: `today`,
