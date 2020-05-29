@@ -1,39 +1,61 @@
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+const Color = {
+  BACKGROUND: `#ffe800`,
+  HOVER: `#ffe800`,
+  FONT: `#ffffff`,
+  LABEL: `#ffffff`
+};
+
+const Chart = {
+  TYPE: `horizontalBar`,
+  POSITION: `start`
+};
+
+const Size = {
+  BAR: 24,
+  OFFSET: 40,
+  FONT: 20
+};
+
+const Axe = {
+  PADDING: 100
+};
+
 export default class ChartData {
   static create(genres, moviesByGenres) {
     return (
       {
         plugins: [ChartDataLabels],
-        type: `horizontalBar`,
+        type: Chart.TYPE,
         data: {
           labels: genres,
           datasets: [{
             data: moviesByGenres.map((it) => it.count),
-            backgroundColor: `#ffe800`,
-            hoverBackgroundColor: `#ffe800`,
-            anchor: `start`,
-            barThickness: 24
+            backgroundColor: Color.BACKGROUND,
+            hoverBackgroundColor: Color.HOVER,
+            anchor: Chart.POSITION,
+            barThickness: Size.BAR
           }]
         },
         options: {
           plugins: {
             datalabels: {
               font: {
-                size: 20
+                size: Size.FONT
               },
-              color: `#ffffff`,
-              anchor: `start`,
-              align: `start`,
-              offset: 40,
+              color: Color.LABEL,
+              anchor: Chart.POSITION,
+              align: Chart.POSITION,
+              offset: Size.OFFSET,
             }
           },
           scales: {
             yAxes: [{
               ticks: {
-                fontColor: `#ffffff`,
-                padding: 100,
-                fontSize: 20
+                fontColor: Color.FONT,
+                padding: Axe.PADDING,
+                fontSize: Size.FONT
               },
               gridLines: {
                 display: false,
