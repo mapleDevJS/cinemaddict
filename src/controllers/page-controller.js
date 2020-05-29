@@ -217,10 +217,6 @@ export default class PageController {
             .forEach((movieController) => {
               const commentsToRender = this._commentsModel.getCommentsByMovie(newMovie);
               movieController.render(movie, commentsToRender);
-
-              // if (oldMovie.comments.length === newMovie.comments.length) {
-              //   this._updateMovies(this._shownMoviesTot);
-              // }
             });
         }
       });
