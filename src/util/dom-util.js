@@ -1,8 +1,3 @@
-export const RenderPosition = {
-  AFTER_END: `afterend`,
-  BEFORE_END: `beforeend`
-};
-
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;

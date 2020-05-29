@@ -11,13 +11,14 @@ import Sort from "./components/sort";
 import Footer from "./components/footer";
 import Statistics from "./components/statistics";
 import UserRank from "./components/user-rank";
+import {MenuType} from "./util/filter";
 
 const AUTHORIZATION = `Basic ldhfhdfnkwehfh7t#`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
 
 const api = new API(END_POINT, AUTHORIZATION);
 
-const STATS = `stats`;
+// const STATS = `stats`;
 
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
@@ -68,7 +69,7 @@ api.getMovies()
   });
 
 filterController.setOnMenuItemClick((menuItem) => {
-  if (menuItem === STATS) {
+  if (menuItem === MenuType.STATS) {
     filmsComponent.hide();
     sortComponent.hide();
     statisticsComponent.show();

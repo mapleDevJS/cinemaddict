@@ -11,8 +11,6 @@ export const MenuType = {
   STATS: `stats`
 };
 
-export const STATS = `stats`;
-
 export const FilterNames = {
   ALL: `All movies`,
   WATCHLIST: `Watchlist`,
@@ -44,8 +42,7 @@ const Filter = {
   ALL: (movie) => movie,
   WATCHLIST: (movie) => movie.isInWatchlist,
   HISTORY: (movie) => movie.isInHistory,
-  FAVORITES: (movie) => movie.isInFavorites,
-  STATS: (movie) => movie
+  FAVORITES: (movie) => movie.isInFavorites
 };
 
 const StatsFilter = {
@@ -66,7 +63,7 @@ export const getMoviesByFilter = (movies, filterType) => {
       return movies.filter(Filter.HISTORY);
     case FilterType.FAVORITES:
       return movies.filter(Filter.FAVORITES);
-    case STATS:
+    case MenuType.STATS:
       return movies.filter(Filter.ALL);
     case StatsFilterType.TODAY:
       return movies.filter(StatsFilter.TODAY);
