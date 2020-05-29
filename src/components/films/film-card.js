@@ -1,6 +1,6 @@
 import AbstractComponent from "../abstract";
 import moment from "moment";
-import {CARD_CONTROLS, SHAKE_ANIMATION_TIMEOUT, MILLISECONDS_COUNT} from "../../util/consts";
+import {CARD_CONTROLS} from "../../util/consts";
 import {getDuration, pluralize} from "../../util/util";
 
 const MAX_DESCRIPTION_LENGTH = 140;
@@ -56,14 +56,6 @@ export default class FilmCard extends AbstractComponent {
 
   _isClassActive(checkingClass) {
     return this._movie[checkingClass] ? `film-card__controls-item--active` : ``;
-  }
-
-  shake() {
-    this.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
-  }
-
-  resetShaking() {
-    this.getElement().style.animation = ``;
   }
 
   setPosterClickListener(listener) {
