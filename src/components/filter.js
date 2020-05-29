@@ -54,6 +54,10 @@ export default class Filter extends AbstractComponent {
     return ``;
   }
 
+  _getFilterNameByHash(hash) {
+    return hash.substring(1, hash.length);
+  }
+
   setFilterChangeListener(listener) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
@@ -62,13 +66,9 @@ export default class Filter extends AbstractComponent {
         return;
       }
 
-      const filterName = Filter.getFilterNameByHash(evt.target.hash);
+      const filterName = this._getFilterNameByHash(evt.target.hash);
 
       listener(filterName);
     });
-  }
-
-  static getFilterNameByHash(hash) {
-    return hash.substring(1, hash.length);
   }
 }
