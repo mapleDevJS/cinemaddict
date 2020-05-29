@@ -2,10 +2,11 @@ import AbstractSmartComponent from "./abstract-smart";
 import ChartData from "./chart-data";
 import Chart from "chart.js";
 import {getUserRank} from "./user-rank";
-import {getMoviesByFilter} from "../util/filter";
+import {getMoviesByFilter, StatsFilterNames, StatsFilterType} from "../util/filter";
 
-const filterNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
-const DEFAULT_FILTER = `all-time`;
+const filterNames = Object.values(StatsFilterNames);
+
+const DEFAULT_FILTER = StatsFilterType.ALL;
 const SERVER_URL = `https://echo.htmlacademy.ru/`;
 
 export default class Statistics extends AbstractSmartComponent {
