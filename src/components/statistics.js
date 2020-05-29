@@ -22,9 +22,9 @@ export default class Statistics extends AbstractSmartComponent {
   getTemplate() {
     const movies = getMoviesByFilter(this._moviesModel.movies, this._filter);
     const filterMarkup = this._createFilterMarkup(this._filter);
-    const watchedMoviesAmount = movies.length;
-    const userRank = getUserRank(this._moviesModel.getAllMovies());
     const watchedMovies = movies.filter((movie) => movie.isInHistory);
+    const watchedMoviesAmount = watchedMovies.length;
+    const userRank = getUserRank(this._moviesModel.getAllMovies());
     const totalMovieDuration = this._getTotalMovieDuration(watchedMovies);
     const moviesByGenres = this._getMoviesAmountByGenre(movies);
     const topGenre = movies.length ? moviesByGenres[0].genre : ``;
