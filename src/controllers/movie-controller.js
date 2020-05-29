@@ -186,12 +186,12 @@ export default class MovieController {
   }
 
   shake() {
-    this._filmDetailsComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
-    this._filmCardComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
+    this._filmDetailsComponent.setStyleAnimation(`shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`);
+    this._filmCardComponent.setStyleAnimation(`shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`);
 
     setTimeout(() => {
-      this._filmDetailsComponent.getElement().style.animation = ``;
-      this._filmCardComponent.getElement().style.animation = ``;
+      this._filmDetailsComponent.setStyleAnimation(``);
+      this._filmCardComponent.setStyleAnimation(``);
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 

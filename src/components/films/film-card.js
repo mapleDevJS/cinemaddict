@@ -58,6 +58,10 @@ export default class FilmCard extends AbstractComponent {
     return this._movie[checkingClass] ? `film-card__controls-item--active` : ``;
   }
 
+  setStyleAnimation(style) {
+    this.getElement().style.animation = style;
+  }
+
   setPosterClickListener(listener) {
     this.getElement().querySelector(`.film-card__poster`)
       .addEventListener(`click`, listener);

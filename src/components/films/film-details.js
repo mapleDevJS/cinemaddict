@@ -115,6 +115,10 @@ export default class FilmDetails extends AbstractSmartComponent {
     }
   }
 
+  setStyleAnimation(style) {
+    this.getElement().style.animation = style;
+  }
+
   _getCommentMarkup({id, author, comment, date, emotion}) {
     return (
       `<li class="film-details__comment" data-comment-id="${id}">
