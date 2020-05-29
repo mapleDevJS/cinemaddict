@@ -18,8 +18,6 @@ const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
 
 const api = new API(END_POINT, AUTHORIZATION);
 
-// const STATS = `stats`;
-
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 

@@ -60,7 +60,7 @@ export default class UserRank extends AbstractSmartComponent {
   }
 
   _onRankChange(moviesModel) {
-    this._rank = getUserRank(moviesModel.movies);
+    this._rank = getUserRank(moviesModel.getAllMovies());
     super.rerender();
   }
 }
