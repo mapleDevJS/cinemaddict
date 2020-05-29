@@ -1,4 +1,4 @@
-import AbstractSmart from "../abstract-smart";
+import AbstractSmartComponent from "../abstract-smart";
 import {encode} from 'he';
 import moment from "moment";
 import {getFullDate, getDuration, pluralize} from "../../util/util";
@@ -16,7 +16,7 @@ const EMOJIS = [
   `angry`
 ];
 
-export default class FilmDetails extends AbstractSmart {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(movie, comments) {
     super();
 

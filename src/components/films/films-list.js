@@ -1,6 +1,6 @@
-import Abstract from "../abstract";
+import AbstractComponent from "../abstract";
 
-export default class FilmsList extends Abstract {
+export default class FilmsList extends AbstractComponent {
   constructor() {
     super();
 

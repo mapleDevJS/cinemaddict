@@ -1,4 +1,4 @@
-import AbstractSmart from "./abstract-smart";
+import AbstractSmartComponent from "./abstract-smart";
 
 export const SortType = {
   DEFAULT: `default`,
@@ -8,7 +8,7 @@ export const SortType = {
 
 const LINK_TAG_NAME = `A`;
 
-export default class Sort extends AbstractSmart {
+export default class Sort extends AbstractSmartComponent {
   constructor() {
     super();
 

@@ -1,8 +1,8 @@
-import Abstract from "./abstract";
+import AbstractComponent from "./abstract";
 
-export default class AbstractSmart extends Abstract {
+export default class AbstractSmartComponent extends AbstractComponent {
   recoverListeners() {
-    throw new Error(`Abstract method not implemented: recoverListeners`);
+    throw new Error(`AbstractComponent method not implemented: recoverListeners`);
   }
 
   rerender() {

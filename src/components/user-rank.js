@@ -1,4 +1,4 @@
-import AbstractSmart from "./abstract-smart";
+import AbstractSmartComponent from "./abstract-smart";
 
 const UserRating = {
   NOVICE: {
@@ -38,7 +38,7 @@ const getUserRank = (movies) => {
   }
 };
 
-export default class UserRank extends AbstractSmart {
+export default class UserRank extends AbstractSmartComponent {
   constructor(moviesModel) {
     super();
 

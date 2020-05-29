@@ -1,4 +1,4 @@
-import AbstractSmart from "./abstract-smart";
+import AbstractSmartComponent from "./abstract-smart";
 import ChartData from "./chart-data";
 import Chart from "chart.js";
 import {getUserRank} from "./user-rank";
@@ -8,7 +8,7 @@ const filterNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
 const DEFAULT_FILTER = `all-time`;
 const SERVER_URL = `https://echo.htmlacademy.ru/`;
 
-export default class Statistics extends AbstractSmart {
+export default class Statistics extends AbstractSmartComponent {
   constructor(moviesModel) {
     super();
 

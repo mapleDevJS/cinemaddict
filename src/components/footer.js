@@ -1,6 +1,6 @@
-import Abstract from "./abstract";
+import AbstractComponent from "./abstract";
 
-export default class Footer extends Abstract {
+export default class Footer extends AbstractComponent {
   constructor(moviesModel) {
     super();
 

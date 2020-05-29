@@ -1,9 +1,9 @@
-import Abstract from "./abstract";
+import AbstractComponent from "./abstract";
 import {FilterType} from "../util/filter";
 
 const LINK_TAG_NAME = `A`;
 
-export default class Filter extends Abstract {
+export default class Filter extends AbstractComponent {
   constructor(filters, menuItems) {
     super();
 

@@ -1,6 +1,6 @@
-import Abstract from "./abstract";
+import AbstractComponent from "./abstract";
 
-export default class Header extends Abstract {
+export default class Header extends AbstractComponent {
   getTemplate() {
     return (
       `<header class="header">
