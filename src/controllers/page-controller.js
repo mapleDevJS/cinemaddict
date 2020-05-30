@@ -1,7 +1,7 @@
 import ButtonShowMore from "../components/films/button-showmore";
 import FilmsList from "../components/films/films-list";
 import FilmsListExtra from "../components/films/films-list-extra";
-import MovieController from "./movie-controller";
+import MovieController, {Mode} from "./movie-controller";
 import NoMovies from "../components/films/no-movies";
 import {getDateFromString} from "../util/util";
 import {remove} from "../util/dom-util";
@@ -207,12 +207,12 @@ export default class PageController {
     this._shownMovieControllers = [];
   }
 
-  _onDataChange(oldMovie, newMovie) {
+  _onDataChange(oldMovie, newMovie, mode) {
     this._api.updateMovie(oldMovie.id, newMovie)
       .then((movie) => {
         const isSuccess = this._moviesModel.updateMovie(oldMovie.id, movie);
         if (isSuccess) {
-          if (oldMovie.comments !== newMovie.comments) {
+          if (mode === Mode.DETAILS) {
             this._shownMovieControllers
             .filter((controller) => controller._filmCardComponent._movie.id === oldMovie.id)
             .forEach((movieController) => {
