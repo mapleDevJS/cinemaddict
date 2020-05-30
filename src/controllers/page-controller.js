@@ -243,11 +243,13 @@ export default class PageController {
   _onButtonShowMoreClick() {
     const movies = this._moviesModel.movies;
 
-    const prevMoviesCount = this._shownMoviesTot;
     this._shownMoviesTot = this._shownMoviesTot + TOT_MOVIES.BY_BUTTON;
 
-    const sortedMovies = this._getSortedMovies(movies, this._sortComponent.getSortType(), prevMoviesCount, this._shownMoviesTot);
+    const sortedMovies = this._getSortedMovies(movies, this._sortComponent.getSortType(), 0, this._shownMoviesTot);
+
+    this._removeMovies();
     this._renderMovies(sortedMovies);
+
 
     if (this._shownMoviesTot >= movies.length) {
       remove(this._buttonShowMore);
