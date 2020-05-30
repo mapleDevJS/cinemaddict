@@ -1,5 +1,5 @@
 import Filter from "../components/filter";
-import {FilterType, MenuType, FilterNames, MenuItems} from "../util/filter";
+import {FilterType, MenuType, FilterNames} from "../util/filter";
 import {replace} from "../util/dom-util";
 import {getMoviesByFilter} from "../util/filter";
 
@@ -34,7 +34,7 @@ export default class FilterController {
     const menuItems = Object.values(MenuType).map((menuType) => {
       return {
         type: menuType,
-        name: MenuItems[menuType.toUpperCase()],
+        name: menuType.charAt(0).toUpperCase() + menuType.slice(1),
         active: menuType === this._activeFilterType,
       };
     });

@@ -18,10 +18,6 @@ export const FilterNames = {
   FAVORITES: `Favourites`
 };
 
-export const MenuItems = {
-  STATS: `Stats`
-};
-
 export const StatsFilterType = {
   ALL: `all-time`,
   TODAY: `today`,
