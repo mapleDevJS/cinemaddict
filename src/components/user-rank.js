@@ -3,7 +3,7 @@ import AbstractSmartComponent from "./abstract-smart-component";
 const UserRating = {
   NOVICE: {
     rank: `Novice`,
-    from: 0,
+    from: 1,
   },
   FUN: {
     rank: `Fan`,
