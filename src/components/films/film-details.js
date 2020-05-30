@@ -1,4 +1,4 @@
-import AbstractSmartComponent from "../abstract-smart";
+import AbstractSmartComponent from "../abstract-smart-component";
 import {encode} from 'he';
 import moment from "moment";
 import {getFullDate, getDuration, pluralize} from "../../util/util";

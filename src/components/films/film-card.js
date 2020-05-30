@@ -1,4 +1,4 @@
-import AbstractComponent from "../abstract";
+import AbstractComponent from "../abstract-component";
 import moment from "moment";
 import {CARD_CONTROLS} from "../../util/consts";
 import {getDuration, pluralize} from "../../util/util";

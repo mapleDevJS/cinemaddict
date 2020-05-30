@@ -1,4 +1,4 @@
-import AbstractSmartComponent from "./abstract-smart";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const UserRating = {
   NOVICE: {

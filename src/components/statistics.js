@@ -1,4 +1,4 @@
-import AbstractSmartComponent from "./abstract-smart";
+import AbstractSmartComponent from "./abstract-smart-component";
 import ChartData from "./chart-data";
 import Chart from "chart.js";
 import {getUserRank} from "./user-rank";

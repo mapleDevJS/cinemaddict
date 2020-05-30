@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract";
+import AbstractComponent from "./abstract-component";
 import {FilterType} from "../util/filter";
 
 const LINK_TAG_NAME = `A`;
