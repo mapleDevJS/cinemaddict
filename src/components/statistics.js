@@ -29,7 +29,7 @@ export default class Statistics extends AbstractSmartComponent {
   getTemplate() {
     const movies = getMoviesByFilter(this._moviesModel.movies, this._filter);
     const filterMarkup = this._createFilterMarkup(this._filter);
-    const watchedMovies = movies.filter((movie) => movie.isInHistory);
+    const watchedMovies = this._getWatchedMovies(movies);
     const watchedMoviesAmount = watchedMovies.length;
     const userRank = getUserRank(this._moviesModel.getAllMovies());
     const totalMovieDuration = this._getTotalMovieDuration(watchedMovies);
@@ -129,12 +129,17 @@ export default class Statistics extends AbstractSmartComponent {
   }
   _renderChart(movies) {
     movies = getMoviesByFilter(movies, this._filter);
-    const moviesByGenres = this._getMoviesAmountByGenre(movies);
+    const watchedMovies = this._getWatchedMovies(movies);
+    const moviesByGenres = this._getMoviesAmountByGenre(watchedMovies);
     const genres = moviesByGenres.map((movie) => movie.genre);
 
     const chartData = ChartData.create(genres, moviesByGenres);
 
     return new Chart(this._getGenresCtx(), chartData);
+  }
+
+  _getWatchedMovies(movies) {
+    return movies.filter((movie) => movie.isInHistory);
   }
 
   _resetChart() {
@@ -155,7 +160,7 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._resetChart();
 
-    this._chart = this._renderChart(this._moviesModel.movies);
+    this._chart = this._renderChart(this._moviesModel.getAllMovies());
   }
 
   recoverListeners() {
