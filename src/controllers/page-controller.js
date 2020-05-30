@@ -218,10 +218,8 @@ export default class PageController {
             .forEach((movieController) => {
               const commentsToRender = this._commentsModel.getCommentsByMovie(newMovie);
               movieController.render(movie, commentsToRender);
-              // this._updateMovies(this._shownMoviesTot);
             });
             this._renderMostCommentedMovies();
-            // return;
           } else {
             this._updateMovies(this._shownMoviesTot);
           }
