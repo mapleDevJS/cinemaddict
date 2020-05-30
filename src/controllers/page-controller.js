@@ -212,16 +212,19 @@ export default class PageController {
       .then((movie) => {
         const isSuccess = this._moviesModel.updateMovie(oldMovie.id, movie);
         if (isSuccess) {
-          this._shownMovieControllers
+          if (oldMovie.comments !== newMovie.comments) {
+            this._shownMovieControllers
             .filter((controller) => controller._filmCardComponent._movie.id === oldMovie.id)
             .forEach((movieController) => {
               const commentsToRender = this._commentsModel.getCommentsByMovie(newMovie);
               movieController.render(movie, commentsToRender);
-
-              if (oldMovie.comments !== newMovie.comments) {
-                this._renderMostCommentedMovies();
-              }
+              // this._updateMovies(this._shownMoviesTot);
             });
+            this._renderMostCommentedMovies();
+            // return;
+          } else {
+            this._updateMovies(this._shownMoviesTot);
+          }
         }
       });
   }
@@ -254,6 +257,9 @@ export default class PageController {
     if (this._shownMoviesTot >= movies.length) {
       remove(this._buttonShowMore);
     }
+
+    this._renderTopRatedMovies();
+    this._renderMostCommentedMovies();
   }
 
   _onFilterChange() {
