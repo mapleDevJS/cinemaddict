@@ -212,7 +212,9 @@ export default class PageController {
       .then((movie) => {
         const isSuccess = this._moviesModel.updateMovie(oldMovie.id, movie);
         if (isSuccess) {
-          if (mode === Mode.DETAILS) {
+          const isAllMoviesShown = (this._moviesModel.movies.length === this._moviesModel.getAllMovies().length);
+
+          if (mode === Mode.DETAILS || isAllMoviesShown) {
             this._shownMovieControllers
             .filter((controller) => controller._filmCardComponent._movie.id === oldMovie.id)
             .forEach((movieController) => {
