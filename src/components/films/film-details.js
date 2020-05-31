@@ -29,7 +29,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this._currentEmoji = null;
 
-    this._formELements = this.getElement().querySelectorAll(`button, input, textarea`);
+    this._formElements = this.getElement().querySelectorAll(`button, input, textarea`);
     this._commentInput = this.getElement().querySelector(`.film-details__comment-input`);
   }
 
@@ -149,7 +149,10 @@ export default class FilmDetails extends AbstractSmartComponent {
       Array.from(commentButtonList).forEach((button) => button.addEventListener(`click`, listener));
     }
 
-    this.deleteButtonClickListener = listener;
+    this.deleteButtonClickListener = (evt) => {
+      evt.preventDefault();
+      listener();
+    };
   }
 
   setEmojiClickListener(listener) {
@@ -194,7 +197,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   lockForm() {
-    this._formELements.forEach((element) => {
+    this._formElements.forEach((element) => {
       element.setAttribute(`disabled`, `disabled`);
     });
   }

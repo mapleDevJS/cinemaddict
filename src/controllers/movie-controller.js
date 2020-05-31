@@ -148,7 +148,6 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setDeleteCommentClickListener((evt) => {
-      evt.preventDefault();
       this._filmDetailsComponent.lockDeleteButton(evt);
       this._filmDetailsComponent.setProgressForDeleteButton(evt);
 
