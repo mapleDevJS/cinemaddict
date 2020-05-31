@@ -2,6 +2,7 @@ import AbstractSmartComponent from "../abstract-smart-component";
 import {encode} from 'he';
 import moment from "moment";
 import {getFullDate, getDuration, pluralize} from "../../util/util";
+import {createElement} from "../../util/dom-util";
 import {SHAKE_ANIMATION_TIMEOUT, MILLISECONDS_COUNT} from "../../util/consts";
 
 const CARD_CONTROLS = [
@@ -24,7 +25,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._movie = movie;
     this._comments = comments;
 
-    this.emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
+    this._currentEmoji = null;
+
     this.formElements = this.getElement().querySelectorAll(`button, input, textarea`);
     this.deleteButton = this.getElement().querySelector(`film-details__comment-delete`);
     this.commentInput = this.getElement().querySelector(`.film-details__comment-input`);
@@ -99,7 +101,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   getNewComment() {
-    const emojiElement = this.emojiContainer.firstElementChild;
+    const emojiElement = this.getElement().querySelector(`.film-details__add-emoji-label`).firstElementChild;
 
     const emotion = emojiElement ? emojiElement.alt.substring((`emoji-`).length) : null;
 
@@ -114,6 +116,18 @@ export default class FilmDetails extends AbstractSmartComponent {
         date: new Date()
       };
     }
+  }
+
+  setEmoji(emoji) {
+    this._currentEmoji = emoji;
+
+    const emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
+
+    if (emojiContainer.firstElementChild) {
+      emojiContainer.removeChild(emojiContainer.firstElementChild);
+    }
+
+    emojiContainer.appendChild(createElement(this._getCurrentEmojiMarkup()));
   }
 
   shake() {
@@ -210,6 +224,14 @@ export default class FilmDetails extends AbstractSmartComponent {
     return EMOJIS.map((emoji) =>
       this._getEmoji(emoji)
     ).join(`\n`);
+  }
+
+  _getCurrentEmojiMarkup() {
+    if (this._currentEmoji) {
+      return (`<img src="images/emoji/${this._currentEmoji}.png" width="55" height="55" alt="emoji-${this._currentEmoji}"></img>`);
+    } else {
+      return ``;
+    }
   }
 
   _isChecked(checkingClass) {

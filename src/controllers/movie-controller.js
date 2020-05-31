@@ -102,8 +102,7 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setAddNewCommentListener((evt) => {
-      this._filmDetailsComponent.commentInput.style.border = `none`;
-
+      evt.target.style.border = `none`;
 
       if (isCmdEnterKeysCode(evt)) {
         const newComment = this._filmDetailsComponent.getNewComment();
@@ -158,9 +157,7 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setEmojiClickListener((evt) => {
-      const currentEmoji = evt.target.value;
-      const emojiContainer = this._filmDetailsComponent.emojiContainer;
-      emojiContainer.innerHTML = `<img src="images/emoji/${currentEmoji}.png" width="55" height="55" alt="emoji-${currentEmoji}">`;
+      this._filmDetailsComponent.setEmoji(evt.target.value);
     });
 
     if (oldFilmDetailsComponent && oldFilmCardComponent) {
@@ -192,17 +189,15 @@ export default class MovieController {
   }
 
   _openFilmDetails() {
-    this._onViewChange();
     document.body.appendChild(this._filmDetailsComponent.getElement());
     this._mode = Mode.DETAILS;
     this._filmDetailsComponent.recoverListeners();
-    document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _closeFilmDetails() {
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
     remove(this._filmDetailsComponent);
-    this._mode = Mode.DEFAULT;
+    // this._filmDetailsComponent.setEmoji(null);
+    this. _mode = Mode.DEFAULT;
   }
 
   _shakeComment(currentComment) {
