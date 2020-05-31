@@ -62,11 +62,7 @@ export default class MovieController {
       const newMovie = Movie.clone(movie);
       newMovie.isInHistory = !movie.isInHistory;
 
-      if (newMovie.watchingDate) {
-        newMovie.watchingDate = null;
-      } else {
-        newMovie.watchingDate = new Date();
-      }
+      newMovie.watchingDate = newMovie.isInHistory ? new Date() : null;
 
       this._onDataChange(movie, newMovie, this._mode);
     });
@@ -90,6 +86,8 @@ export default class MovieController {
     this._filmDetailsComponent.setAlreadyWatchedClickListener(() => {
       const newMovie = Movie.clone(movie);
       newMovie.isInHistory = !movie.isInHistory;
+
+      newMovie.watchingDate = newMovie.isInHistory ? new Date() : null;
 
       this._onDataChange(movie, newMovie, this._mode);
     });
@@ -198,6 +196,10 @@ export default class MovieController {
     remove(this._filmDetailsComponent);
     // this._filmDetailsComponent.setEmoji(null);
     this. _mode = Mode.DEFAULT;
+  }
+
+  _getWatchingDate(flag) {
+    return flag ? new Date() : null;
   }
 
   _shakeComment(currentComment) {
