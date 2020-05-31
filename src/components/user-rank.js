@@ -15,6 +15,7 @@ const UserRating = {
   }
 };
 
+
 const getUserRank = (movies) => {
   const rank = movies.reduce((total, movie) => {
     if (movie.isInHistory) {
@@ -47,6 +48,9 @@ export default class UserRank extends AbstractSmartComponent {
     moviesModel.setDataChangeListener(() => this._onRankChange(moviesModel));
   }
 
+  recoverListeners() {
+  }
+
   getTemplate() {
     return (
       `<section class="header__profile profile">
@@ -54,9 +58,6 @@ export default class UserRank extends AbstractSmartComponent {
         <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
       </section>`
     );
-  }
-
-  recoverListeners() {
   }
 
   _onRankChange(moviesModel) {

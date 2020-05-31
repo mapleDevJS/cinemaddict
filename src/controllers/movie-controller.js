@@ -2,7 +2,7 @@ import FilmDetails from "../components/films/film-details";
 import FilmCard from "../components/films/film-card";
 import Movie from "../models/movie";
 import {remove, replace} from "../util/dom-util";
-import {SHAKE_ANIMATION_TIMEOUT, MILLISECONDS_COUNT} from "../util/consts";
+import {isEscKey} from "../util/util";
 
 export const Mode = {
   DEFAULT: `default`,
@@ -36,19 +36,40 @@ export default class MovieController {
     this._filmCardComponent = new FilmCard(movie);
     this._filmDetailsComponent = new FilmDetails(movie, comments);
 
+    this._setFilmCardsListeners(movie);
+    this._setFilmDetailsListeners(movie);
+
+    if (oldFilmDetailsComponent && oldFilmCardComponent) {
+      replace(this._filmCardComponent, oldFilmCardComponent);
+      replace(this._filmDetailsComponent, oldFilmDetailsComponent);
+    } else {
+      this._filmCardComponent.render(this._container);
+    }
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._closeFilmDetails();
+    }
+  }
+
+  destroy() {
+    remove(this._filmDetailsComponent);
+    remove(this._filmCardComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _setFilmCardsListeners(movie) {
     this._filmCardComponent.setPosterClickListener(() => {
-      this._openFilmDetails();
-      document.addEventListener(`keydown`, this._onEscKeyDown);
+      this._onFilmCardElementClick();
     });
 
     this._filmCardComponent.setTitleClickListener(() => {
-      this._openFilmDetails();
-      document.addEventListener(`keydown`, this._onEscKeyDown);
+      this._onFilmCardElementClick();
     });
 
     this._filmCardComponent.setCommentsClickListener(() => {
-      this._openFilmDetails();
-      document.addEventListener(`keydown`, this._onEscKeyDown);
+      this._onFilmCardElementClick();
     });
 
     this._filmCardComponent.setAddToWatchlistClickListener(() => {
@@ -73,7 +94,9 @@ export default class MovieController {
 
       this._onDataChange(movie, newMovie, this._mode);
     });
+  }
 
+  _setFilmDetailsListeners(movie) {
     this._filmDetailsComponent.setCloseButtonClickListener(() => this._closeFilmDetails());
 
     this._filmDetailsComponent.setAddToWatchlistClickListener(() => {
@@ -100,9 +123,10 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setAddNewCommentListener((evt) => {
-      evt.target.style.border = `none`;
+      this._filmDetailsComponent.resetStyleBorder();
 
       if (isCmdEnterKeysCode(evt)) {
+        this._filmDetailsComponent.lockForm();
         const newComment = this._filmDetailsComponent.getNewComment();
 
         if (newComment) {
@@ -112,11 +136,6 @@ export default class MovieController {
 
               newComments.filter((comment) => !commentsInModel.has(comment.id))
                 .forEach((comment) => this._commentsModel.addComment(comment));
-
-              const formELements = this._filmDetailsComponent.formElements;
-              formELements.forEach((element) => {
-                element.setAttribute(`disabled`, `disabled`);
-              });
 
               this._onDataChange(movie, newMovie, this._mode);
             })
@@ -130,60 +149,28 @@ export default class MovieController {
 
     this._filmDetailsComponent.setDeleteCommentClickListener((evt) => {
       evt.preventDefault();
+      this._filmDetailsComponent.lockDeleteButton(evt);
+      this._filmDetailsComponent.setProgressForDeleteButton(evt);
 
-      const deleteButton = evt.target;
       const newMovie = Movie.clone(movie);
+      const removingCommentId = this._filmDetailsComponent.getCommentId(evt);
 
-      const commentElement = evt.target.closest(`.film-details__comment`);
-      const removeCommentId = commentElement.dataset.commentId;
-
-      this._api.deleteComment(removeCommentId)
+      this._api.deleteComment(removingCommentId)
         .then(() => {
           newMovie.comments = movie.comments.filter((id) => {
-            return id !== removeCommentId;
+            return id !== removingCommentId;
           });
-
-          deleteButton.innerHTML = `Deleting...`;
-          deleteButton.setAttribute(`disabled`, `true`);
-
           this._onDataChange(movie, newMovie, this._mode);
         })
         .catch(() => {
-          this._shakeComment(commentElement);
+          this._filmDetailsComponent.shake();
         });
 
     });
 
     this._filmDetailsComponent.setEmojiClickListener((evt) => {
-      this._filmDetailsComponent.setEmoji(evt.target.value);
+      this._filmDetailsComponent.setEmoji(evt);
     });
-
-    if (oldFilmDetailsComponent && oldFilmCardComponent) {
-      replace(this._filmCardComponent, oldFilmCardComponent);
-      replace(this._filmDetailsComponent, oldFilmDetailsComponent);
-    } else {
-      this._filmCardComponent.render(this._container);
-    }
-  }
-
-  setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._closeFilmDetails();
-    }
-  }
-
-  destroy() {
-    remove(this._filmDetailsComponent);
-    remove(this._filmCardComponent);
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
-  }
-
-  shake() {
-    this._filmDetailsComponent.shake();
-
-    setTimeout(() => {
-      this._filmDetailsComponent.resetShaking();
-    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _openFilmDetails() {
@@ -194,7 +181,6 @@ export default class MovieController {
 
   _closeFilmDetails() {
     remove(this._filmDetailsComponent);
-    // this._filmDetailsComponent.setEmoji(null);
     this. _mode = Mode.DEFAULT;
   }
 
@@ -202,23 +188,18 @@ export default class MovieController {
     return flag ? new Date() : null;
   }
 
-  _shakeComment(currentComment) {
-    currentComment.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / MILLISECONDS_COUNT}s`;
-
-    setTimeout(() => {
-      currentComment.style.animation = ``;
-    }, SHAKE_ANIMATION_TIMEOUT);
+  _addCommentFieldBorder() {
+    this._filmDetailsComponent.setStyleBorder();
+    this._filmDetailsComponent.unlockForm();
   }
 
-  _addCommentFieldBorder() {
-    this._filmDetailsComponent.commentInput.style.border = `2px solid red`;
-    this._filmDetailsComponent.commentInput.removeAttribute(`disabled`);
+  _onFilmCardElementClick() {
+    this._openFilmDetails();
+    document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _onEscKeyDown(evt) {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
+    if (isEscKey(evt)) {
       this._closeFilmDetails();
     }
   }

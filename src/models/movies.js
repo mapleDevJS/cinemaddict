@@ -15,13 +15,13 @@ export default class MoviesModel {
     return getMoviesByFilter(this._movies, this._activeFilterType);
   }
 
-  getAllMovies() {
-    return this._movies;
-  }
-
   set movies(movies = []) {
     this._movies = Array.from(movies);
     this._callListeners(this._dataChangeListeners);
+  }
+
+  getAllMovies() {
+    return this._movies;
   }
 
   updateMovie(id, movie) {

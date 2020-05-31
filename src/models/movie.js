@@ -1,9 +1,9 @@
 export default class Movie {
-  constructor(data) {
-    const filmInfo = data.film_info;
-    const userDetails = data.user_details;
+  constructor(movie) {
+    const filmInfo = movie.film_info;
+    const userDetails = movie.user_details;
 
-    this.id = data.id;
+    this.id = movie.id;
     this.title = filmInfo.title;
     this.original = filmInfo.alternative_title;
     this.rating = filmInfo.total_rating;
@@ -17,7 +17,7 @@ export default class Movie {
     this.runtime = filmInfo.runtime;
     this.genres = filmInfo.genre;
     this.description = filmInfo.description;
-    this.comments = data.comments;
+    this.comments = movie.comments;
     this.isInWatchlist = userDetails.watchlist;
     this.isInHistory = userDetails.already_watched;
     this.isInFavorites = userDetails.favorite;
@@ -54,15 +54,15 @@ export default class Movie {
     };
   }
 
-  static parseMovie(data) {
-    return new Movie(data);
+  static parseMovie(movie) {
+    return new Movie(movie);
   }
 
-  static parseMovies(data) {
-    return data.map(Movie.parseMovie);
+  static parseMovies(movie) {
+    return movie.map(Movie.parseMovie);
   }
 
-  static clone(data) {
-    return new Movie(data.toRAW(true));
+  static clone(movie) {
+    return new Movie(movie.toRAW(true));
   }
 }

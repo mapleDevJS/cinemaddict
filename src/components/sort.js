@@ -16,6 +16,14 @@ export default class Sort extends AbstractSmartComponent {
     this._sortTypeChangeListener = null;
   }
 
+  get sortType() {
+    return this._currentSortType;
+  }
+
+  recoverListeners() {
+    this.setTypeChangeListener(this._sortTypeChangeListener);
+  }
+
   getTemplate() {
     return (
       `<ul class="sort">
@@ -24,35 +32,7 @@ export default class Sort extends AbstractSmartComponent {
     );
   }
 
-  getSortType() {
-    return this._currentSortType;
-  }
-
-  _createSortItemMarkup(key, value) {
-    return (
-      `<li>
-        <a href="#"
-          data-sort-type="${key}"
-          class="sort__button ${this._currentSortType === value ? `sort__button--active` : ``}"
-        >
-          Sort by ${value}
-        </a>
-      </li>`
-    );
-  }
-
-  _getSortMarkup() {
-    return Object.keys(SortType).map((key) => {
-      return this._createSortItemMarkup(key, SortType[key]);
-    })
-    .join(`\n`);
-  }
-
-  recoverListeners() {
-    this.setTypeChangeListener(this._sortTypeChangeListener);
-  }
-
-  resetSortToDefault() {
+  resetSortType() {
     this._currentSortType = SortType.DEFAULT;
     this.rerender();
   }
@@ -77,5 +57,25 @@ export default class Sort extends AbstractSmartComponent {
       listener(this._currentSortType);
       super.rerender();
     });
+  }
+
+  _createSortItemMarkup(key, value) {
+    return (
+      `<li>
+        <a href="#"
+          data-sort-type="${key}"
+          class="sort__button ${this._currentSortType === value ? `sort__button--active` : ``}"
+        >
+          Sort by ${value}
+        </a>
+      </li>`
+    );
+  }
+
+  _getSortMarkup() {
+    return Object.keys(SortType).map((key) => {
+      return this._createSortItemMarkup(key, SortType[key]);
+    })
+    .join(`\n`);
   }
 }

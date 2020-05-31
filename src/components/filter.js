@@ -25,6 +25,20 @@ export default class Filter extends AbstractComponent {
     );
   }
 
+  setFilterChangeListener(listener) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== LINK_TAG_NAME) {
+        return;
+      }
+
+      const filterName = this._getFilterNameByHash(evt.target.hash);
+
+      listener(filterName);
+    });
+  }
+
   _createFilterMarkup({type, name, count, active}) {
     return (
       `<a href="#${type}"
@@ -56,19 +70,5 @@ export default class Filter extends AbstractComponent {
 
   _getFilterNameByHash(hash) {
     return hash.substring(1, hash.length);
-  }
-
-  setFilterChangeListener(listener) {
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
-      if (evt.target.tagName !== LINK_TAG_NAME) {
-        return;
-      }
-
-      const filterName = this._getFilterNameByHash(evt.target.hash);
-
-      listener(filterName);
-    });
   }
 }

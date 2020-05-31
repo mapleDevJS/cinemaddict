@@ -3,6 +3,7 @@ import ChartData from "./chart-data";
 import Chart from "chart.js";
 import {getUserRank} from "./user-rank";
 import {getMoviesByFilter, StatsFilterType} from "../util/filter";
+import {MINUTES_IN_HOUR} from "../util/consts";
 
 const StatsFilterNames = {
   ALL: `All time`,
@@ -23,6 +24,24 @@ export default class Statistics extends AbstractSmartComponent {
     this._chart = null;
 
     this._filter = DEFAULT_FILTER;
+    this._onFilterChange();
+  }
+
+  show() {
+    super.show();
+
+    this.rerender();
+  }
+
+  rerender() {
+    super.rerender();
+
+    this._resetChart();
+
+    this._chart = this._renderChart(this._moviesModel.getAllMovies());
+  }
+
+  recoverListeners() {
     this._onFilterChange();
   }
 
@@ -92,14 +111,13 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _getMovieGenres(movies) {
-    return movies.reduce((movieGenres, movie) => {
-      movie.genres.forEach((it) => {
-        if (!movieGenres.includes(it)) {
-          movieGenres.push(it);
-        }
-      });
-      return movieGenres;
-    }, []);
+    const genres = new Set();
+
+    movies.map((movie) => {
+      return movie.genres.forEach((genre) => genres.add(genre));
+    });
+
+    return Array.from(genres);
   }
 
   _getMoviesAmountByGenre(movies) {
@@ -119,8 +137,8 @@ export default class Statistics extends AbstractSmartComponent {
       minutes: 0,
     };
     const totalMovieDuration = movies.reduce((total, movie) => total + movie.runtime, 0);
-    totalDuration.hours = Math.floor(totalMovieDuration / 60);
-    totalDuration.minutes = totalMovieDuration % 60;
+    totalDuration.hours = Math.floor(totalMovieDuration / MINUTES_IN_HOUR);
+    totalDuration.minutes = totalMovieDuration % MINUTES_IN_HOUR;
     return totalDuration;
   }
 
@@ -147,24 +165,6 @@ export default class Statistics extends AbstractSmartComponent {
       this._chart.destroy();
       this._chart = null;
     }
-  }
-
-  show() {
-    super.show();
-
-    this.rerender();
-  }
-
-  rerender() {
-    super.rerender();
-
-    this._resetChart();
-
-    this._chart = this._renderChart(this._moviesModel.getAllMovies());
-  }
-
-  recoverListeners() {
-    this._onFilterChange();
   }
 
   _onFilterChange() {

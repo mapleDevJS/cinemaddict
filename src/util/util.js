@@ -1,5 +1,5 @@
 import moment from "moment";
-import {MINUTES_IN_HOUR} from "./consts";
+import {BUTTON, MINUTES_IN_HOUR} from "./consts";
 
 export const pluralize = (count, variants) => {
   return (count === 1) ? variants[0] : variants[1];
@@ -21,4 +21,8 @@ export const getDuration = (timeInMinutes) => {
 
 export const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+export const isEscKey = (evt) => {
+  return evt.key === BUTTON.ESCAPE || evt.key === BUTTON.ESC;
 };

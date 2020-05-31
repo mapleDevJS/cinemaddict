@@ -1,10 +1,10 @@
 export default class Comment {
-  constructor(data) {
-    this.id = data.id;
-    this.author = data.author;
-    this.comment = data.comment;
-    this.date = data.date;
-    this.emotion = data.emotion;
+  constructor(comment) {
+    this.id = comment.id;
+    this.author = comment.author;
+    this.comment = comment.comment;
+    this.date = comment.date;
+    this.emotion = comment.emotion;
   }
 
   toRAW(clone = false) {
@@ -17,15 +17,15 @@ export default class Comment {
     };
   }
 
-  static parseComment(data) {
-    return new Comment(data);
+  static parseComment(comment) {
+    return new Comment(comment);
   }
 
-  static parseComments(data) {
-    return data.map(Comment.parseComment);
+  static parseComments(comment) {
+    return comment.map(Comment.parseComment);
   }
 
-  static clone(data) {
-    return new Comment(data.toRAW(true));
+  static clone(comment) {
+    return new Comment(comment.toRAW(true));
   }
 }

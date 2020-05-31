@@ -33,7 +33,7 @@ export default class CommentsModel {
     return true;
   }
 
-  getCommentsByMovie(movie) {
+  getMovieComments(movie) {
     return movie.comments.map((id) => {
       return this._comments.find((comment) => comment.id === id);
     });
