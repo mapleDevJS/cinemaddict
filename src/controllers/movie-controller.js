@@ -30,6 +30,7 @@ export default class MovieController {
   }
 
   render(movie, comments) {
+    this._movie = movie;
     const oldFilmCardComponent = this._filmCardComponent;
     const oldFilmDetailsComponent = this._filmDetailsComponent;
 
@@ -148,8 +149,8 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setDeleteCommentClickListener((evt) => {
-      this._filmDetailsComponent.lockDeleteButton(evt);
-      this._filmDetailsComponent.setProgressForDeleteButton(evt);
+      // this._filmDetailsComponent.lockDeleteButton();
+      // this._filmDetailsComponent.setProgressForDeleteButton();
 
       const newMovie = Movie.clone(movie);
       const removingCommentId = this._filmDetailsComponent.getCommentId(evt);
@@ -181,6 +182,9 @@ export default class MovieController {
   _closeFilmDetails() {
     remove(this._filmDetailsComponent);
     this. _mode = Mode.DEFAULT;
+
+    const newMovie = Movie.clone(this._movie);
+    this._onDataChange(this._movie, newMovie, this._mode);
   }
 
   _getWatchingDate(flag) {

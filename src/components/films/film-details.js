@@ -30,6 +30,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._currentEmoji = null;
 
     this._formElements = this.getElement().querySelectorAll(`button, input, textarea`);
+    this._deleteButton = this.getElement().querySelector(`film-details__comment-delete`);
     this._commentInput = this.getElement().querySelector(`.film-details__comment-input`);
   }
 
@@ -187,8 +188,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._commentInput.style.border = `none`;
   }
 
-  setProgressForDeleteButton(evt) {
-    evt.target.innerHTML = PROGRESS_DELETE_BUTTON;
+  setProgressForDeleteButton() {
+    this._deleteButton.innerHTML = PROGRESS_DELETE_BUTTON;
   }
 
   getCommentId(evt) {
@@ -206,8 +207,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._commentInput.removeAttribute(`disabled`);
   }
 
-  lockDeleteButton(evt) {
-    evt.target.setAttribute(`disabled`, `true`);
+  lockDeleteButton() {
+    this._deleteButton.setAttribute(`disabled`, `true`);
   }
 
   setEmoji(evt) {

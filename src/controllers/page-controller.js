@@ -190,6 +190,8 @@ export default class PageController {
   }
 
   _updateMovies(count) {
+    console.log(this._shownMoviesTotal);
+
     this._removeMovies();
     const moviesToRender = this._getSortedMovies(this._moviesModel.movies, this._sortComponent.sortType, 0, count);
 
@@ -220,7 +222,7 @@ export default class PageController {
             });
             this._renderMostCommentedMovies();
           } else {
-            this._shownMoviesTotal = this._shownControllers.length;
+            // this._shownMoviesTotal = this._shownControllers.length;
             this._updateMovies(this._shownMoviesTotal);
           }
         }
@@ -263,7 +265,8 @@ export default class PageController {
   _onFilterChange() {
     this._sortComponent.resetSortType();
 
-    this._updateMovies(QUANTITY_MOVIES.ON_START);
+    this._shownMoviesTotal = QUANTITY_MOVIES.ON_START;
+    this._updateMovies(this._shownMoviesTotal);
   }
 
   _onViewChange() {
