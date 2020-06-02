@@ -1,7 +1,7 @@
 import FilmDetails from "../components/films/film-details";
 import FilmCard from "../components/films/film-card";
 import Movie from "../models/movie";
-import {remove, replace} from "../util/dom-util";
+import {replace} from "../util/dom-util";
 import {isEscKey} from "../util/util";
 
 export const Mode = {
@@ -55,8 +55,8 @@ export default class MovieController {
   }
 
   destroy() {
-    remove(this._filmDetailsComponent);
-    remove(this._filmCardComponent);
+    this._filmDetailsComponent.remove();
+    this._filmCardComponent.remove();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
@@ -176,7 +176,7 @@ export default class MovieController {
   }
 
   _closeFilmDetails() {
-    remove(this._filmDetailsComponent);
+    this._filmDetailsComponent.remove();
     this. _mode = Mode.DEFAULT;
 
     const newMovie = Movie.clone(this._movie);

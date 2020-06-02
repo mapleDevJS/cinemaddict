@@ -4,7 +4,6 @@ import FilmsListExtra from "../components/films/films-list-extra";
 import MovieController, {Mode} from "./movie-controller";
 import NoMovies from "../components/films/no-movies";
 import {getDateFromString} from "../util/util";
-import {remove} from "../util/dom-util";
 import {SortType} from "../components/sort";
 import {QUANTITY_MOVIES} from "../util/consts";
 
@@ -90,7 +89,7 @@ export default class PageController {
   }
 
   _renderButtonShowMore() {
-    remove(this._buttonShowMore);
+    this._buttonShowMore.remove();
 
     if (this._shownMoviesTotal >= this._moviesModel.movies.length) {
       return;
@@ -114,7 +113,7 @@ export default class PageController {
 
   _renderTopRatedMovies() {
     if (this._filmsListTopRatedComponent) {
-      remove(this._filmsListTopRatedComponent);
+      this._filmsListTopRatedComponent.remove();
     }
     const movies = this._moviesModel.getAllMovies();
 
@@ -141,7 +140,7 @@ export default class PageController {
 
   _renderMostCommentedMovies() {
     if (this._filmsListMostCommentedComponent) {
-      remove(this._filmsListMostCommentedComponent);
+      this._filmsListMostCommentedComponent.remove();
     }
 
     this._filmsListMostCommentedComponent = new FilmsListExtra(SECTIONS.COMMENTS);
@@ -252,7 +251,7 @@ export default class PageController {
 
 
     if (this._shownMoviesTotal >= movies.length) {
-      remove(this._buttonShowMore);
+      this._buttonShowMore.remove();
     }
 
     this._renderTopRatedMovies();
