@@ -30,8 +30,10 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._currentEmoji = null;
 
     this._formElements = this.getElement().querySelectorAll(`button, input, textarea`);
-    this._deleteButton = this.getElement().querySelector(`film-details__comment-delete`);
     this._commentInput = this.getElement().querySelector(`.film-details__comment-input`);
+
+    this._commentDeleteClickListener = null;
+    this._onCommentDeleteButtonClick = this._onCommentDeleteButtonClick.bind(this);
   }
 
   recoverListeners() {
@@ -39,9 +41,9 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.setAddToWatchlistClickListener(this.addToWatchlistClickListener);
     this.setAlreadyWatchedClickListener(this.alreadyWatchedClickListener);
     this.setAddToFavouriteClickListener(this.addToFavouriteClickListener);
-    this.setDeleteCommentClickListener(this.deleteButtonClickListener);
     this.setAddNewCommentListener(this.addNewCommentListener);
     this.setEmojiClickListener(this.emojiClickListener);
+    this.setDeleteCommentClickListener(this._commentDeleteClickListener);
   }
 
   getTemplate() {
@@ -55,52 +57,41 @@ export default class FilmDetails extends AbstractSmartComponent {
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
               <img class="film-details__poster-img" src="./${this._movie.poster}" alt="">
-
               <p class="film-details__age">${this._movie.age}+</p>
             </div>
-
             <div class="film-details__info">
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
                   <h3 class="film-details__title">${this._movie.title}</h3>
                   <p class="film-details__title-original">${this._movie.original}</p>
                 </div>
-
                 <div class="film-details__rating">
                   <p class="film-details__total-rating">${this._movie.rating}</p>
                 </div>
               </div>
-
               <table class="film-details__table">
                 ${this._getMovieDetails()}
               </table>
-
               <p class="film-details__film-description">
                 ${this._movie.description}
               </p>
             </div>
           </div>
-
           <section class="film-details__controls">
             ${this._getButtonsMarkup()}
           </section>
         </div>
-
         <div class="form-details__bottom-container">
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._movie.comments.length}</span></h3>
-
             <ul class="film-details__comments-list">
               ${this._getComments()}
             </ul>
-
             <div class="film-details__new-comment">
               <div for="add-emoji" class="film-details__add-emoji-label"></div>
-
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
               </label>
-
               <div class="film-details__emoji-list">
                 ${this._getEmojiMarkup()}
               </div>
@@ -143,17 +134,25 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setDeleteCommentClickListener(listener) {
+    this._commentDeleteClickListener = listener;
 
-    const commentButtonList = this._element.querySelectorAll(`.film-details__comment-delete`);
+    const commentButtonList = this._element.querySelectorAll(`.film-details__comment-delete`) || [];
 
-    if (commentButtonList) {
-      Array.from(commentButtonList).forEach((button) => button.addEventListener(`click`, listener));
+    Array.from(commentButtonList).forEach((button) => button.addEventListener(`click`, this._onCommentDeleteButtonClick));
+  }
+
+  _onCommentDeleteButtonClick(evt) {
+    evt.preventDefault();
+
+    this._setProgressForDeleteButton(evt.target);
+
+    if (typeof this._commentDeleteClickListener === `function`) {
+      this._commentDeleteClickListener(evt);
     }
+  }
 
-    this.deleteButtonClickListener = (evt) => {
-      evt.preventDefault();
-      listener();
-    };
+  _setProgressForDeleteButton(button) {
+    button.innerHTML = PROGRESS_DELETE_BUTTON;
   }
 
   setEmojiClickListener(listener) {
@@ -188,10 +187,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._commentInput.style.border = `none`;
   }
 
-  setProgressForDeleteButton() {
-    this._deleteButton.innerHTML = PROGRESS_DELETE_BUTTON;
-  }
-
   getCommentId(evt) {
     const commentElement = evt.target.closest(`.film-details__comment`);
     return commentElement.dataset.commentId;
@@ -205,10 +200,6 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   unlockForm() {
     this._commentInput.removeAttribute(`disabled`);
-  }
-
-  lockDeleteButton() {
-    this._deleteButton.setAttribute(`disabled`, `true`);
   }
 
   setEmoji(evt) {
@@ -277,7 +268,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       },
       {
         name: pluralize(this._movie.actors.length, [`Actor`, `Actors`]),
-        value: this._movie.actors
+        value: this._movie.actors.join(`, `)
       },
       {
         name: `Release`,

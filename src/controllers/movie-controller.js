@@ -141,7 +141,7 @@ export default class MovieController {
               this._onDataChange(movie, newMovie, this._mode);
             })
             .catch(() => {
-              this.shake();
+              this._filmDetailsComponent.shake();
               this._addCommentFieldBorder();
             });
         }
@@ -149,9 +149,6 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setDeleteCommentClickListener((evt) => {
-      // this._filmDetailsComponent.lockDeleteButton();
-      // this._filmDetailsComponent.setProgressForDeleteButton();
-
       const newMovie = Movie.clone(movie);
       const removingCommentId = this._filmDetailsComponent.getCommentId(evt);
 

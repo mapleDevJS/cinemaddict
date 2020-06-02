@@ -190,8 +190,6 @@ export default class PageController {
   }
 
   _updateMovies(count) {
-    console.log(this._shownMoviesTotal);
-
     this._removeMovies();
     const moviesToRender = this._getSortedMovies(this._moviesModel.movies, this._sortComponent.sortType, 0, count);
 

@@ -10,7 +10,7 @@ export const getDateFromString = (date) => {
 };
 
 export const getFullDate = (date) => {
-  return moment(date).format(`Do MMMM YYYY`);
+  return moment(date).format(`D MMMM YYYY`);
 };
 
 export const getDuration = (timeInMinutes) => {
