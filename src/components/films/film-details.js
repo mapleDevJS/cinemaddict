@@ -137,9 +137,9 @@ export default class FilmDetails extends AbstractSmartComponent {
   setDeleteCommentClickListener(listener) {
     this._commentDeleteClickListener = listener;
 
-    const commentButtonList = this._element.querySelectorAll(`.film-details__comment-delete`) || [];
+    const commentButtons = this._element.querySelectorAll(`.film-details__comment-delete`) || [];
 
-    Array.from(commentButtonList).forEach((button) => button.addEventListener(`click`, this._onCommentDeleteButtonClick));
+    Array.from(commentButtons).forEach((button) => button.addEventListener(`click`, this._onCommentDeleteButtonClick));
   }
 
   getNewComment() {
@@ -232,7 +232,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   _getMovieDetails() {
-    const dataList = [
+    const movieDetails = [
       {
         name: `Director`,
         value: this._movie.director
@@ -263,7 +263,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       },
     ];
 
-    return dataList
+    return movieDetails
       .map(({name, value}) => {
         return (
           `<tr class="film-details__row">

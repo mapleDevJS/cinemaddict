@@ -1,4 +1,4 @@
-import ButtonShowMore from "../components/films/button-showmore";
+import ButtonShowMore from "../components/films/button-show-more";
 import FilmsList from "../components/films/films-list";
 import FilmsListExtra from "../components/films/films-list-extra";
 import MovieController, {Mode} from "./movie-controller";

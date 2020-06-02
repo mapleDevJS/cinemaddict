@@ -2,7 +2,7 @@ import AbstractComponent from "../abstract-component";
 import moment from "moment";
 import {getDuration, pluralize} from "../../util/util";
 
-export const CARD_CONTROLS = [
+const CARD_CONTROLS = [
   [`isInWatchlist`, `add-to-watchlist`, `Add to watchlist`],
   [`isInHistory`, `mark-as-watched`, `Mark as watched`],
   [`isInFavorites`, `favorite`, `Mark as favorite`]
