@@ -220,7 +220,6 @@ export default class PageController {
             });
             this._renderMostCommentedMovies();
           } else {
-            // this._shownMoviesTotal = this._shownControllers.length;
             this._updateMovies(this._shownMoviesTotal);
           }
         }

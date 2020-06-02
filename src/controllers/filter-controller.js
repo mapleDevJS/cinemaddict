@@ -22,22 +22,8 @@ export default class FilterController {
   render() {
     const movies = this._moviesModel.getAllMovies();
 
-    const filters = Object.values(FilterType).map((filterType) => {
-      return {
-        type: filterType,
-        name: FilterNames[filterType.toUpperCase()],
-        count: getMoviesByFilter(movies, filterType).length,
-        active: filterType === this._activeFilterType,
-      };
-    });
-
-    const menuItems = Object.values(MenuType).map((menuType) => {
-      return {
-        type: menuType,
-        name: capitalize(menuType),
-        active: menuType === this._activeFilterType,
-      };
-    });
+    const filters = this._createFilters(movies);
+    const menuItems = this._createMenuItems();
 
     const oldComponent = this._filterComponent;
 
@@ -56,6 +42,27 @@ export default class FilterController {
     this._filterComponent.setFilterChangeListener(listener);
 
     this._onMenuItemClick = listener;
+  }
+
+  _createFilters(movies) {
+    return Object.values(FilterType).map((filterType) => {
+      return {
+        type: filterType,
+        name: FilterNames[filterType.toUpperCase()],
+        count: getMoviesByFilter(movies, filterType).length,
+        active: filterType === this._activeFilterType,
+      };
+    });
+  }
+
+  _createMenuItems() {
+    return Object.values(MenuType).map((menuType) => {
+      return {
+        type: menuType,
+        name: capitalize(menuType),
+        active: menuType === this._activeFilterType,
+      };
+    });
   }
 
   _onFilterChange(filterType) {

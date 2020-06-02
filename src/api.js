@@ -61,9 +61,9 @@ export default class API {
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json())
-      .then((data) => {
-        const newMovie = Movie.parseMovie(data[`movie`]);
-        const newComments = Comment.parseComments(data[`comments`]);
+      .then((comments) => {
+        const newMovie = Movie.parseMovie(comments[`movie`]);
+        const newComments = Comment.parseComments(comments[`comments`]);
         return {newMovie, newComments};
       });
   }

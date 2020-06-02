@@ -124,13 +124,14 @@ export default class MovieController {
     });
 
     this._filmDetailsComponent.setAddNewCommentListener((evt) => {
-      this._filmDetailsComponent.resetStyleBorder();
+      this._filmDetailsComponent.setCommentFormValid(false);
 
       if (isCmdEnterKeysCode(evt)) {
-        this._filmDetailsComponent.lockForm();
+
         const newComment = this._filmDetailsComponent.getNewComment();
 
         if (newComment) {
+          this._filmDetailsComponent.setFormLocked(true);
           this._api.createComment(movie.id, newComment)
             .then(({newMovie, newComments}) => {
               const commentsInModel = new Set(this._commentsModel.comments.map((comment) => comment.id));
@@ -144,6 +145,8 @@ export default class MovieController {
               this._filmDetailsComponent.shake();
               this._addCommentFieldBorder();
             });
+        } else {
+          this._filmDetailsComponent.shake();
         }
       }
     });
@@ -163,10 +166,6 @@ export default class MovieController {
           this._filmDetailsComponent.shake();
         });
 
-    });
-
-    this._filmDetailsComponent.setEmojiClickListener((evt) => {
-      this._filmDetailsComponent.setEmoji(evt);
     });
   }
 
@@ -189,8 +188,8 @@ export default class MovieController {
   }
 
   _addCommentFieldBorder() {
-    this._filmDetailsComponent.setStyleBorder();
-    this._filmDetailsComponent.unlockForm();
+    this._filmDetailsComponent.setCommentFormValid(true);
+    this._filmDetailsComponent.setFormLocked(false);
   }
 
   _onFilmCardElementClick() {

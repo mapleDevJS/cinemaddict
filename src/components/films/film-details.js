@@ -34,6 +34,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this._commentDeleteClickListener = null;
     this._onCommentDeleteButtonClick = this._onCommentDeleteButtonClick.bind(this);
+    this._onEmojiClickListener = this._onEmojiClickListener.bind(this);
   }
 
   recoverListeners() {
@@ -42,8 +43,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.setAlreadyWatchedClickListener(this.alreadyWatchedClickListener);
     this.setAddToFavouriteClickListener(this.addToFavouriteClickListener);
     this.setAddNewCommentListener(this.addNewCommentListener);
-    this.setEmojiClickListener(this.emojiClickListener);
     this.setDeleteCommentClickListener(this._commentDeleteClickListener);
+    this._setEmojiClickListener(this._onEmojiClickListener);
   }
 
   getTemplate() {
@@ -141,26 +142,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     Array.from(commentButtonList).forEach((button) => button.addEventListener(`click`, this._onCommentDeleteButtonClick));
   }
 
-  _onCommentDeleteButtonClick(evt) {
-    evt.preventDefault();
-
-    this._setProgressForDeleteButton(evt.target);
-
-    if (typeof this._commentDeleteClickListener === `function`) {
-      this._commentDeleteClickListener(evt);
-    }
-  }
-
-  _setProgressForDeleteButton(button) {
-    button.innerHTML = PROGRESS_DELETE_BUTTON;
-  }
-
-  setEmojiClickListener(listener) {
-    this.emojiClickListener = listener;
-    this.getElement().querySelector(`.film-details__emoji-list`)
-    .addEventListener(`change`, this.emojiClickListener);
-  }
-
   getNewComment() {
     const emojiElement = this.getElement().querySelector(`.film-details__add-emoji-label`).firstElementChild;
 
@@ -179,39 +160,18 @@ export default class FilmDetails extends AbstractSmartComponent {
     }
   }
 
-  setStyleBorder() {
-    this._commentInput.style.border = `2px solid red`;
+  setCommentFormValid(isValid) {
+    this._commentInput.style.border = (isValid) ? `2px solid red` : `none`;
   }
 
-  resetStyleBorder() {
-    this._commentInput.style.border = `none`;
-  }
-
-  getCommentId(evt) {
-    const commentElement = evt.target.closest(`.film-details__comment`);
-    return commentElement.dataset.commentId;
-  }
-
-  lockForm() {
-    this._formElements.forEach((element) => {
-      element.setAttribute(`disabled`, `disabled`);
-    });
-  }
-
-  unlockForm() {
-    this._commentInput.removeAttribute(`disabled`);
-  }
-
-  setEmoji(evt) {
-    this._currentEmoji = evt.target.value;
-
-    const emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
-
-    if (emojiContainer.firstElementChild) {
-      emojiContainer.removeChild(emojiContainer.firstElementChild);
+  setFormLocked(locked) {
+    if (locked) {
+      this._formElements.forEach((element) => {
+        element.setAttribute(`disabled`, `disabled`);
+      });
+    } else {
+      this._commentInput.removeAttribute(`disabled`);
     }
-
-    emojiContainer.appendChild(createElement(this._getCurrentEmojiMarkup()));
   }
 
   shake() {
@@ -220,6 +180,21 @@ export default class FilmDetails extends AbstractSmartComponent {
     setTimeout(() => {
       this._resetShaking();
     }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  getCommentId(evt) {
+    const commentElement = evt.target.closest(`.film-details__comment`);
+    return commentElement.dataset.commentId;
+  }
+
+  _setProgressForDeleteButton(button) {
+    button.innerHTML = PROGRESS_DELETE_BUTTON;
+  }
+
+  _setEmojiClickListener(listener) {
+    this.emojiClickListener = listener;
+    this.getElement().querySelector(`.film-details__emoji-list`)
+    .addEventListener(`change`, this.emojiClickListener);
   }
 
   _resetShaking() {
@@ -337,5 +312,27 @@ export default class FilmDetails extends AbstractSmartComponent {
     return CARD_CONTROLS
       .map(([checkingClass, key, value]) => this._getButton(checkingClass, key, value))
       .join(`\n`);
+  }
+
+  _onCommentDeleteButtonClick(evt) {
+    evt.preventDefault();
+
+    this._setProgressForDeleteButton(evt.target);
+
+    if (typeof this._commentDeleteClickListener === `function`) {
+      this._commentDeleteClickListener(evt);
+    }
+  }
+
+  _onEmojiClickListener(evt) {
+    this._currentEmoji = evt.target.value;
+
+    const emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
+
+    if (emojiContainer.firstElementChild) {
+      emojiContainer.removeChild(emojiContainer.firstElementChild);
+    }
+
+    emojiContainer.appendChild(createElement(this._getCurrentEmojiMarkup()));
   }
 }
