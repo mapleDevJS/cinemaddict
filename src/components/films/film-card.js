@@ -1,7 +1,12 @@
 import AbstractComponent from "../abstract-component";
 import moment from "moment";
-import {CARD_CONTROLS} from "../../util/consts";
 import {getDuration, pluralize} from "../../util/util";
+
+export const CARD_CONTROLS = [
+  [`isInWatchlist`, `add-to-watchlist`, `Add to watchlist`],
+  [`isInHistory`, `mark-as-watched`, `Mark as watched`],
+  [`isInFavorites`, `favorite`, `Mark as favorite`]
+];
 
 const MAX_DESCRIPTION_LENGTH = 140;
 export default class FilmCard extends AbstractComponent {
