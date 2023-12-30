@@ -291,7 +291,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   _getCurrentEmojiMarkup() {
     if (this._currentEmoji) {
-      return (`<img src="images/emoji/${this._currentEmoji}.png" width="55" height="55" alt="emoji-${this._currentEmoji}"></img>`);
+      return (`<img src="images/emoji/${this._currentEmoji}.png" width="55" height="55" alt="emoji-${this._currentEmoji}"/>`);
     } else {
       return ``;
     }
