@@ -11,7 +11,7 @@ export default class Comment {
     return {
       "id": this.id,
       "author": this.author,
-      "comment": clone ? this.comments : this.comments.map((id) => id),
+      "comment": clone ? this.comment : this.comment.map((id) => id),
       "date": this.date,
       "emotion": this.emotion
     };
