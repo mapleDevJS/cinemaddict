@@ -75,13 +75,14 @@ export default class API {
     });
   }
 
-  _load({url, method = Method.GET, body = null, headers = new Headers()}) {
-    headers.append(`Authorization`, this._authorization);
+    _load({url, method = Method.GET, body = null, headers = new Headers()}) {
+        this._addAuthHeader(headers);
 
-    return fetch(`${this._endPoint}/${url}`, {method, body, headers})
-      .then(checkStatus)
-      .catch((err) => {
-        throw err;
-      });
-  }
+        return fetch(`${this._endPoint}/${url}`, {method, body, headers})
+            .then(checkStatus);
+    }
+
+    _addAuthHeader(headers) {
+        headers.append(`Authorization`, this._authorization);
+    }
 }
