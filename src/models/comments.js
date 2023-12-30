@@ -9,7 +9,7 @@ export default class CommentsModel {
     return this._comments;
   }
 
-  set comments(comments = []) {
+  set comments(comments) {
     this._comments = Array.from(comments);
     this._callListeners(this._dataChangeListeners);
   }
