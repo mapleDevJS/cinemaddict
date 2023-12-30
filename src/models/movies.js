@@ -15,7 +15,7 @@ export default class MoviesModel {
     return getMoviesByFilter(this._movies, this._activeFilterType);
   }
 
-  set movies(movies = []) {
+  set movies(movies) {
     this._movies = Array.from(movies);
     this._callListeners(this._dataChangeListeners);
   }
