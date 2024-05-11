@@ -14,7 +14,7 @@ import UserRank from "./components/user-rank";
 import {MenuType} from "./util/filter";
 
 const AUTHORIZATION = `Basic sv74dlm5qor`;
-const END_POINT = `https://19.ecmascript.pages.academy/cinemaddict`;
+const END_POINT = `https://17.ecmascript.htmlacademy.pro/cinemaddict`;
 
 const api = new API(END_POINT, AUTHORIZATION);
 
