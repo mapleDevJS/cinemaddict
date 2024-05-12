@@ -11,13 +11,7 @@ module.exports = {
   },
   devtool: `source-map`,
   devServer: {
-    contentBase: path.join(__dirname, `public`),
     compress: true,
-    watchContentBase: true,
-    watchOptions: {
-      aggregateTimeout: 100,
-      ignored: /node_modules/
-    }
   },
   plugins: [
     new MomentLocalesPlugin()
