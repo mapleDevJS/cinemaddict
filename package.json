@@ -24,6 +24,6 @@
     "chartjs-plugin-datalabels": "0.7.0",
     "he": "1.2.0",
     "moment": "2.29.4",
-    "webpack-dev-server": "^5.0.4"
+    "webpack-dev-server": "^5.2.7"
   }
 }
